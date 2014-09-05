@@ -115,7 +115,29 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 		gl::drawSolidRect( Rectf( -2.0, -2.0, 2.0, 2.0 ) + point );
 	}
 	
-	//draw lines between points depending on their segment type
+	// draw point along the curve
+	gl::color( 1, 0, 1 );
+	float pos = ( getElapsedSeconds() * 0.25f );
+	pos -= floor( pos );
+	
+	vec2 pt = path.getPosition( pos );
+	gl::drawSolidCircle( pt, 4.0 );
+	
+	//
+	gl::color( 0, 1, 1 );
+	pt = path.getTangent( pos );
+	gl::drawSolidCircle( pt, 4.0 );
+	
+	/*//draw lines between points depending on their segment type
+	gl::color( 1, 0, 1 );
+	console() << " --- " << endl;
+	for( int i = 0; i < path.getSegments().size(); i++ ) {
+		auto segment = path.getSegments()[i];
+//		path.getSegmentTangent(size_t segment, float t)
+		console() << segment << endl;
+//		vec2 point = path.getPoint( i );
+//		gl::drawSolidRect( Rectf( -2.0, -2.0, 2.0, 2.0 ) + point );
+	}*/
 }
 
 CINDER_APP_NATIVE( Path2DSamplesApp, RendererGl )

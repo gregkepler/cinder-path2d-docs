@@ -5020,9 +5020,9 @@ t1408820218
 s459637
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp
-c00000000540349B400000000000009B4
-t1409501620
-s2484
+c0000000054099DC40000000000000C68
+t1409916356
+s3176
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/Info.plist
 c0000000053F8E3FA0000000000000462
@@ -5035,7 +5035,7 @@ t1408820218
 s301
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app
-t1409501611
+t1409916350
 s102
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/Info.plist
@@ -5043,8 +5043,8 @@ t1408820244
 s1499
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples
-t1409501632
-s5382572
+t1409916361
+s5394020
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/PkgInfo
 t1408820244
@@ -5060,8 +5060,8 @@ t1408820244
 s176
 
 N/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o
-t1409501629
-s1952100
+t1409916357
+s1954028
 
 N/var/folders/q_/mfhl3g2s1fd0hc2f4d8h64tr0000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode/SharedPrecompiledHeaders/Path2DSamples_Prefix-dykogzvadyesxgfyjrbrqlsckkos/Path2DSamples_Prefix.pch.pch
 t1409499283
@@ -5072,11 +5072,11 @@ r0
 
 CCheck dependencies
 r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependenciesff06493c81b3b941^b954493c81b3b941^---0#1#1#--18"Check dependencies36"EA6BEB4C-A295-4562-9A17-3DC9A0F8C3E2-
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependenciesbd1aac44d5b9b941^2d79ac44d5b9b941^---0#1#1#--18"Check dependencies36"C3E9410A-E42B-4157-8B96-3AF6B54DD442-
 
 CCompileC build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s431194428.294243
-e431194429.467609
+s431609156.683800
+e431609157.850486
 r1
 xCompileC
 xbuild/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o
@@ -5088,8 +5088,8 @@ xcom.apple.compilers.llvm.clang.1_0.compiler
 d/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp
 d/Users/grego/Documents/CodeDepot/C++/cinder-next/include/cinder/app/AppNative.h
 d/Users/grego/Documents/CodeDepot/C++/cinder-next/include/cinder/app/RendererGl.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection109"Compile /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp265"CompileC build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilera6624b3c81b3b941^9ab6773d81b3b941^---0#0#1#-19%DVTDocumentLocation2@108"file:///Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp0000000000000000^3643"CompileC build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-generated-files.hmap -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-own-target-headers.hmap -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-all-target-headers.hmap -iquote /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-project-headers.hmap -iquote../../../../cinder-next/include -iquote../include -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/include -I../../../../cinder-next/boost -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/DerivedSources/x86_64 -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/DerivedSources -F/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -include /var/folders/q_/mfhl3g2s1fd0hc2f4d8h64tr0000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode/SharedPrecompiledHeaders/Path2DSamples_Prefix-dykogzvadyesxgfyjrbrqlsckkos/Path2DSamples_Prefix.pch -MMD -MT dependencies -MF /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.d --serialize-diagnostics /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.dia -c /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp -o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o36"247DCB14-2EEE-4AF9-B149-C0728A0872DA-
-b25ED648D-97A4-4B4C-B501-725FB617B340
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection109"Compile /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp265"CompileC build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilera31daf44d5b9b941^e4bad945d5b9b941^---0#0#1#-19%DVTDocumentLocation2@108"file:///Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp0000000000000000^3643"CompileC build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-generated-files.hmap -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-own-target-headers.hmap -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-all-target-headers.hmap -iquote /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Path2DSamples-project-headers.hmap -iquote../../../../cinder-next/include -iquote../include -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/include -I../../../../cinder-next/boost -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/DerivedSources/x86_64 -I/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/DerivedSources -F/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -include /var/folders/q_/mfhl3g2s1fd0hc2f4d8h64tr0000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode/SharedPrecompiledHeaders/Path2DSamples_Prefix-dykogzvadyesxgfyjrbrqlsckkos/Path2DSamples_Prefix.pch -MMD -MT dependencies -MF /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.d --serialize-diagnostics /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.dia -c /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/src/Path2DSamplesApp.cpp -o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamplesApp.o36"D7B22F15-BC21-4AB7-9043-18A6070AFCC0-
+b77FA323C-9010-42F8-A7C4-A9036D5A6640
 
 CCpResource /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/resources/CinderApp.icns build/Debug/Path2DSamples.app/Contents/Resources/CinderApp.icns
 s430513044.974886
@@ -5102,8 +5102,8 @@ lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection68"Copy bu
 b3445EA43-409B-402F-8295-AA557D3D7461
 
 CLd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples normal x86_64
-s431194429.469643
-e431194432.832306
+s431609157.852489
+e431609161.167932
 r1
 xLd
 x/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples
@@ -5129,10 +5129,6 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
@@ -5163,11 +5159,15 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreText.framework/CoreText
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ImageIO.framework/ImageIO
@@ -5189,8 +5189,8 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection146"Link /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples75"Ld build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples normal x86_643d47783d81b3b941^8812d54081b3b941^---0#0#1#--1488"Ld build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples normal x86_64    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    export MACOSX_DEPLOYMENT_TARGET=10.8    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -F/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -filelist /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamples.LinkFileList -mmacosx-version-min=10.8 -dead_strip ../../../../cinder-next/lib/libcinder_d.a -stdlib=libc++ -framework AVFoundation -framework CoreMedia -framework Cocoa -framework OpenGL -framework CoreVideo -framework QTKit -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker -dependency_info -Xlinker /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamples_dependency_info.dat -o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples36"EE286CF6-6918-4AD0-98FA-4B993AE23D64-
-b25ED648D-97A4-4B4C-B501-725FB617B340
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection146"Link /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples75"Ld build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples normal x86_64c748da45d5b9b941^f8fe2a49d5b9b941^---0#0#1#--1488"Ld build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples normal x86_64    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    export MACOSX_DEPLOYMENT_TARGET=10.8    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -F/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug -filelist /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamples.LinkFileList -mmacosx-version-min=10.8 -dead_strip ../../../../cinder-next/lib/libcinder_d.a -stdlib=libc++ -framework AVFoundation -framework CoreMedia -framework Cocoa -framework OpenGL -framework CoreVideo -framework QTKit -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker -dependency_info -Xlinker /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Path2DSamples.build/Debug/Path2DSamples.build/Objects-normal/x86_64/Path2DSamples_dependency_info.dat -o /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/MacOS/Path2DSamples36"BD9EDCE9-570F-434A-825F-9479059032FD-
+b77FA323C-9010-42F8-A7C4-A9036D5A6640
 
 CProcessInfoPlistFile /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app/Contents/Info.plist /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/Info.plist
 s430513044.972005
@@ -6135,11 +6135,11 @@ lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection35"Precomp
 b223A3C90-737A-4C05-A6CE-3D8B1C44F49F
 
 CTouch /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app
-s431194432.833129
-e431194432.837832
+s431609161.168788
+e431609161.171970
 r1
 xTouch
 x/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection118"Touch /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app35"Touch build/Debug/Path2DSamples.app7650d54081b3b941^677dd64081b3b941^---0#0#1#--261"Touch build/Debug/Path2DSamples.app    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    /usr/bin/touch -c /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app36"7D9A700B-D290-44A3-8BAB-E143366EB40A-
-b25ED648D-97A4-4B4C-B501-725FB617B340
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection118"Touch /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app35"Touch build/Debug/Path2DSamples.app423f2b49d5b9b941^cc072c49d5b9b941^---0#0#1#--261"Touch build/Debug/Path2DSamples.app    cd /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode    /usr/bin/touch -c /Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/cinder/Path2DSamples/xcode/build/Debug/Path2DSamples.app36"F257B3AB-C0A6-4CED-9008-CA992F284FA5-
+b77FA323C-9010-42F8-A7C4-A9036D5A6640
 
