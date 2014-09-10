@@ -101,6 +101,8 @@ void Path2DSamplesApp::draw()
 	}
 	// draw outlines
 	// draw solid
+	
+	console() << " _ " << endl;
 }
 
 void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
@@ -193,10 +195,12 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	static vec2	calcCubicBezierPos( const vec2 p[4], float t );
 	static vec2	calcCubicBezierDerivative( const vec2 p[4], float t );*/
 	
+
 	{
 		gl::color( 0, 0, 0 );
-		float time = path.calcNormalizedTime( getElapsedSeconds() * 0.25 );		// should this be used when getting position based on time?
-//		float time = path.calcTimeForDistance( getElapsedSeconds() * 0.25 );	// is this based on the actual curve? No. It's based on distance of the current part of the arc or something?
+//		float time = path.calcNormalizedTime( getElapsedSeconds() * 0.25 );		// should this be used when getting position based on time?
+		float time = path.calcTimeForDistance( getElapsedSeconds() * 20.0 );		// distance based. so 100 is 100 pixels along the path. It loops. Returns a time
+		console() << getElapsedSeconds() * 20.0 << " " << time << endl;
 		vec2 pos = path.getPosition( time );
 		gl::drawSolidCircle( pos, 2.0 );
 	}
@@ -208,7 +212,28 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	// position based on teh actual curve?
 //	path.calcTimeForDistance(float distance)
 	
+	// draw a path (and close it)
+	// draw a bunch of points within an area
+	// if they are wihtint the path (contains set to 1 color. If not, another)
+	//path.contains(const vec2 &pt)
 	
+	//path.getSegmentRelativeT(float t, size_t *segment, float *relativeT)
+	
+	//path.segmentSolveTimeForDistance(size_t segment, float segmentLength, float segmentRelativeDistance, float tolerance, int maxIterations)
+	
+	//path.sSegmentTypePointCounts
+	//path.subdivide();
+	///path.transformCopy(const MatrixAffine2f &matrix)
+	
+	// simple drawing
+	
+	// drawing and adding points after
+	
+	// drawing and then moving handles
+	
+	
+	
+	// idea: draw path that then controls sound - pitch, volume, and other stuff - using the curve
 }
 
 CINDER_APP_NATIVE( Path2DSamplesApp, RendererGl )
