@@ -2,6 +2,10 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Path2d.h"
+#include "cinder/Text.h"
+#include "cinder/CinderMath.h"
+#include "cinder/Rand.h"
+//#include "cinder/CinderGlm.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -9,6 +13,7 @@ using namespace std;
 
 class Path2DSamplesApp : public AppNative {
   public:
+	void prepareSettings(Settings *settings) override;
 	void setup() override;
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
@@ -20,7 +25,15 @@ class Path2DSamplesApp : public AppNative {
 	Path2d path3;
 	Path2d path4;
 	Path2d path5;
+	Path2d path6;	// test for contains
+//	std::vector<vec2>	intersectPts;
+	std::vector<std::pair<vec2,vec2>>	intersectPts;	// pt and velocity
 };
+
+void Path2DSamplesApp::prepareSettings( Settings *settings )
+{
+	settings->setWindowSize( 800, 600 );
+}
 
 void Path2DSamplesApp::setup()
 {
@@ -41,16 +54,33 @@ void Path2DSamplesApp::setup()
 	}
 	
 	// curveTo
-	path3.moveTo( zero<vec2>() );
+	path3.moveTo( vec2( 0 ) );
 	path3.curveTo( vec2( 25.0, 0.0 ), vec2( 50.0, 25.0 ), vec2( 50.0, 50.0 ) );
 	
 	// arc & arcTo
 //	path4.moveTo( zero<vec2>() );
-	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, pi<float>() );
+	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, pi );
 	
 	path5.moveTo( vec2( 0.0, 0.0 ) );
 	// end point, tangent position, radius
 	path5.arcTo( vec2( 50.0, 50.0 ), vec2( 50.0, 0.0 ), 50.0 );
+	
+	// path for contains
+	path6.moveTo( vec2( 0.0, 0.0 ) );
+	path6.quadTo( vec2( 80.0, 30.0), vec2( 100, 50) );
+	path6.quadTo( vec2( 180.0, 50.0), vec2( 210.0, 20.0) );
+	path6.quadTo( vec2( 270.0, 10.0), vec2( 280.0, 100.0) );
+	path6.quadTo( vec2( 200.0, 150.0), vec2( 140.0, 100.0) );
+	path6.quadTo( vec2( 100.0, 150.0), vec2( 50.0, 80.0) );
+	path6.close();
+	
+	for( int i = 0; i < 50; i++ ) {
+		auto bounds = path6.calcBoundingBox();
+		std::pair<vec2, vec2> pair;
+		pair.first = vec2( randFloat( bounds.x1 , bounds.x2), randFloat( bounds.y1, bounds.y2 ) );
+		pair.second = vec2( randFloat( -1, 1), randFloat( -1, 1) );
+		intersectPts.push_back( pair );
+	}
 	
 	// snowflake using 
 	
@@ -62,6 +92,35 @@ void Path2DSamplesApp::mouseDown( MouseEvent event )
 
 void Path2DSamplesApp::update()
 {
+	auto bounds = path6.calcBoundingBox();
+	for( auto &pt : intersectPts ){
+		vec2 &pos = pt.first;
+		vec2 &vel = pt.second;
+		pos += vel;
+		
+		if( pos.x > bounds.x2 || pos.x < bounds.x1 ) {
+			pos.x -= vel.x;
+			pt.second.x *= -1.0;
+		}
+		
+		if( pos.y > bounds.y2 || pos.y < bounds.y1 ) {
+			pos.y -= vel.y;
+			pt.second.y *= -1.0;
+		}
+	}
+			
+	
+//			pt.second *= vec2( -1, 1 );
+//		}
+		/*
+		if( pos.y > bounds.y2 || pos.y < bounds.y1 )
+			pt.second *= vec2( 1, -1 );
+		*/
+		
+//		Color ptColor = ( path6.contains( pt ) ) ? Color( 0, 1, 0 ) : Color( 1, 0, 0 );
+//		gl::color( ptColor );
+//		gl::drawSolidCircle( pt, 2.0 );
+	
 }
 
 void Path2DSamplesApp::draw()
@@ -99,10 +158,28 @@ void Path2DSamplesApp::draw()
 		gl::translate( vec2( 350.0, 300.0 ) );
 		drawPath( path5 );
 	}
+	
+	{
+		gl::ScopedMatrices mtrx;
+		gl::translate( vec2( 50.0, 400.0 ) );
+		
+		gl::color( Color( 1, 0 ,0 ) );
+		gl::draw( path6 );
+
+		
+		for( auto &pt : intersectPts ){
+			Color ptColor = ( path6.contains( pt.first ) ) ? Color( 0, 1, 0 ) : Color( 1, 0, 0 );
+			gl::color( ptColor );
+			gl::drawSolidCircle( pt.first, 2.0 );
+		}
+		
+		gl::color( 1, 1, 1, 0.2);
+		gl::drawSolidRect( path6.calcBoundingBox() );
+	}
 	// draw outlines
 	// draw solid
 	
-	console() << " _ " << endl;
+//	console() << " _ " << endl;
 }
 
 void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
@@ -200,7 +277,7 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 		gl::color( 0, 0, 0 );
 //		float time = path.calcNormalizedTime( getElapsedSeconds() * 0.25 );		// should this be used when getting position based on time?
 		float time = path.calcTimeForDistance( getElapsedSeconds() * 20.0 );		// distance based. so 100 is 100 pixels along the path. It loops. Returns a time
-		console() << getElapsedSeconds() * 20.0 << " " << time << endl;
+//		console() << getElapsedSeconds() * 20.0 << " " << time << endl;
 		vec2 pos = path.getPosition( time );
 		gl::drawSolidCircle( pos, 2.0 );
 	}
@@ -209,8 +286,6 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	//path.calcSegmentLength( segment number, min, max )
 	// highlight  0.25 - 0.75 or each segment
 	
-	// position based on teh actual curve?
-//	path.calcTimeForDistance(float distance)
 	
 	// draw a path (and close it)
 	// draw a bunch of points within an area
