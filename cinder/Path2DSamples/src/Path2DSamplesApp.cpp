@@ -59,7 +59,8 @@ void Path2DSamplesApp::setup()
 	
 	// arc & arcTo
 //	path4.moveTo( zero<vec2>() );
-	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, pi );
+//	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, glm::pi<float> );
+	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
 	
 	path5.moveTo( vec2( 0.0, 0.0 ) );
 	// end point, tangent position, radius
@@ -83,6 +84,7 @@ void Path2DSamplesApp::setup()
 	}
 	
 	// snowflake using 
+	
 	
 }
 
@@ -189,6 +191,7 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	// draw path
 	gl::draw( path );
 	
+	
 	//draw points
 	gl::color( 1, 1, 0 );
 	for( int i = 0; i < path.getPoints().size(); i++ ) {
@@ -206,6 +209,10 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	
 	vec2 pt = path.getPosition( pos );
 	gl::drawSolidCircle( pt, 4.0 );
+	
+
+	gl::drawLine( pt, pt + normalize(path.getTangent( pos )) * 25.0f );
+	gl::drawLine( pt, pt - normalize(path.getTangent( pos )) * 25.0f );
 	
 	//
 //	gl::color( 0, 1, 1 );
@@ -248,12 +255,14 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 //		vec2 point = path.getPoint( i );
 //		gl::drawSolidRect( Rectf( -2.0, -2.0, 2.0, 2.0 ) + point );
 		
-		if( segment == Path2d::SegmentType::MOVETO || segment == Path2d::SegmentType::LINETO )
+		/*if( segment == Path2d::SegmentType::MOVETO || segment == Path2d::SegmentType::LINETO )
 			ptCount += 1;
 		if( segment == Path2d::SegmentType::CUBICTO )
 			ptCount += 3;
 		if( segment == Path2d::SegmentType::QUADTO )
-			ptCount += 2;
+			ptCount += 2;*/
+		
+		ptCount += path.sSegmentTypePointCounts[segment];
 	}
 	
 	
@@ -282,23 +291,41 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 		gl::drawSolidCircle( pos, 2.0 );
 	}
 	
+	
+	// subdivides curves into points. You can construct a simplified curve that way
+	auto subdivided = path.subdivide( 0.1 );
+	for( auto d : subdivided ) {
+		gl::color( 0, 1, 1 );
+		gl::drawStrokedCircle( d, 3.0 );
+	}
+	
+	
+	// move over a bit and dot affine matric copies and rotate
+	{
+		gl::ScopedMatrices mtrx;
+		gl::translate( path.calcBoundingBox().getWidth(), 0 );
+		
+		for( int i = 0; i < 8; i++ ){
+			MatrixAffine2<float> affineMtrx;
+			affineMtrx.scale( 0.25 );
+			affineMtrx.rotate( ( ( M_PI * 2) / 8 ) * i );
+			auto pathCopy = path.transformCopy( affineMtrx );
+			gl::draw( pathCopy );
+		}
+	}
+	
+	
 	//
 	//path.calcSegmentLength( segment number, min, max )
 	// highlight  0.25 - 0.75 or each segment
 	
+//	path.getSegmentRelativeT(float t, size_t *segment, float *relativeT) // used internally when getting positions. tangents, etx
 	
-	// draw a path (and close it)
-	// draw a bunch of points within an area
-	// if they are wihtint the path (contains set to 1 color. If not, another)
-	//path.contains(const vec2 &pt)
+	//path.segmentSolveTimeForDistance(size_t segment, float segmentLength, float segmentRelativeDistance, float tolerance, int maxIterations) // should use calcNormalizedTime or calcTimeForDistance
 	
-	//path.getSegmentRelativeT(float t, size_t *segment, float *relativeT)
+	// draw tangent along with percent point
+//	path.getTangent(float t)
 	
-	//path.segmentSolveTimeForDistance(size_t segment, float segmentLength, float segmentRelativeDistance, float tolerance, int maxIterations)
-	
-	//path.sSegmentTypePointCounts
-	//path.subdivide();
-	///path.transformCopy(const MatrixAffine2f &matrix)
 	
 	// simple drawing
 	
