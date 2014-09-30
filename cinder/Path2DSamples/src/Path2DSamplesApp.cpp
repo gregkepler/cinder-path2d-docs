@@ -28,6 +28,7 @@ class Path2DSamplesApp : public AppNative {
 	Path2d path6;	// test for contains
 //	std::vector<vec2>	intersectPts;
 	std::vector<std::pair<vec2,vec2>>	intersectPts;	// pt and velocity
+	std::vector<Path2dCalcCache>		pathCaches;
 };
 
 void Path2DSamplesApp::prepareSettings( Settings *settings )
@@ -75,6 +76,7 @@ void Path2DSamplesApp::setup()
 	path6.quadTo( vec2( 100.0, 150.0), vec2( 50.0, 80.0) );
 	path6.close();
 	
+	// points to look for intersection
 	for( int i = 0; i < 50; i++ ) {
 		auto bounds = path6.calcBoundingBox();
 		std::pair<vec2, vec2> pair;
@@ -82,6 +84,22 @@ void Path2DSamplesApp::setup()
 		pair.second = vec2( randFloat( -1, 1), randFloat( -1, 1) );
 		intersectPts.push_back( pair );
 	}
+	
+	
+	// move over a bit and dot affine matric copies and rotate
+	{
+		int amount = 10;
+		
+		for( int i = 0; i < amount; i++ ){
+			MatrixAffine2<float> affineMtrx;
+			affineMtrx.scale( 0.3 );
+			affineMtrx.rotate( ( ( M_PI * 2) / 8 ) * i );
+			auto pathCopy = path2.transformCopy( affineMtrx );
+			pathCaches.emplace_back( pathCopy );
+		}
+	}
+
+	
 	
 	// snowflake using 
 	
@@ -130,6 +148,8 @@ void Path2DSamplesApp::draw()
 	gl::enableAlphaBlending();
 	
 	gl::clear( Color( 0, 0, 0 ) );
+	
+	gl::lineWidth( 1.0 );
 		
 	{
 		gl::ScopedMatrices mtrx;
@@ -178,6 +198,44 @@ void Path2DSamplesApp::draw()
 		gl::color( 1, 1, 1, 0.2);
 		gl::drawSolidRect( path6.calcBoundingBox() );
 	}
+	
+	gl::lineWidth( 2.0 );
+	
+	{
+		gl::ScopedMatrices mtrx;
+		gl::translate( vec2( 600, 400 ) );
+		
+		float timePos =  ( getElapsedSeconds() * 10.0f );
+		int amt = 10;
+	
+			
+		for( int i = 0; i < pathCaches.size()-1; i++ ) {
+			auto path1 = pathCaches[i];
+			
+			Path2dCalcCache path2 = pathCaches[i + 1];
+			
+			
+			float time = timePos;
+			
+			for( int j = 0; j < amt; j++ ) {
+				time += 20.0;
+				float time1 = path1.calcTimeForDistance( time );
+				vec2 pt1 = path1.getPosition( time1 );
+			
+				float time2 = path2.calcTimeForDistance( time );
+				vec2 pt2 = path2.getPosition( time2 );
+				
+				gl::color( 1, 1, 1, 1);
+				gl::drawLine( pt1, pt2 );
+
+
+		}
+			gl::color( 1, 1, 1, 0.2);
+			gl::draw(path1.getPath2d());
+		}
+		
+	}
+	
 	// draw outlines
 	// draw solid
 	
@@ -323,9 +381,10 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	
 	//path.segmentSolveTimeForDistance(size_t segment, float segmentLength, float segmentRelativeDistance, float tolerance, int maxIterations) // should use calcNormalizedTime or calcTimeForDistance
 	
-	// draw tangent along with percent point
-//	path.getTangent(float t)
+
 	
+	
+	// Path2d article
 	
 	// simple drawing
 	
