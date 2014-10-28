@@ -11,17 +11,18 @@
 	// var papers = [];
 
 	window.app = {
-		moveto_lineto: {
+		lineto: {
 			// div: null,
 			canvas: null,
 			paperScope: null,
 			tool: null,
 			init: function(){
+
 				// var paper = window.paper;
 				// paper.install(window);
 				// window.paper.set
 				papers[0] = new paper.PaperScope();
-				papers[0].setup($('#moveto-lineto')[0]);
+				papers[0].setup($('#lineto')[0]);
 
 				// draw the initial path
 				var _paper = papers[0];
@@ -133,7 +134,7 @@
 	}
 
 	$(document).ready( function(){
-		if($( '#moveto-lineto' ).size() > 0) {window.app.moveto_lineto.init();}
+		if($( '#lineto' ).size() > 0) {window.app.lineto.init();}
 		if($( '#output' ).size() > 0) {window.app.output.init();}
 		if($( '#quadto' ).size() > 0) {window.app.quadto.init();}	
 	});
