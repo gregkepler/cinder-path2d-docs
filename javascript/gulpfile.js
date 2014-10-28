@@ -4,7 +4,7 @@ var nib = require( 'nib' )
 
 gulp.task( 'styles', function() {
     
-    return gulp.src( [ '/**/*.styl'] )
+    return gulp.src( [ 'stylus/*.styl'] )
 
         .pipe( stylus({
             import: [ 'nib' ],
@@ -16,7 +16,7 @@ gulp.task( 'styles', function() {
 
 gulp.task( 'watch', [ 'styles' ], function() {
     
-    gulp.watch( SOURCE + '/**/*.styl', [ 'styles' ] )
+    gulp.watch( 'stylus/*.styl', [ 'styles' ] )
 
 })
 
