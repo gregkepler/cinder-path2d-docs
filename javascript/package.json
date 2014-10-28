@@ -1,0 +1,13 @@
+{
+  "name": "cinder-path2d",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-stylus": "^1.3.3",
+    "nib": "^1.0.3"
+  }
+}
