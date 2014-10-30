@@ -2,45 +2,43 @@
 		
 	// array of paper scope
 	var papers = [];
+	var COLOR_LINE_TO = '#00FF00';
+	var COLOR_QUAD_TO = '#0000FF';
+	var COLOR_CUBIC_TO = '#FFFF00';
 	// var paper = window.paper;
 // console.log(paper);
 
 	
 
-	// var Point = paper.Point;
-	// var papers = [];
-
 	window.app = {
+
 		lineto: {
-			// div: null,
+			
 			canvas: null,
 			paperScope: null,
 			tool: null,
 			init: function(){
 
-				// var paper = window.paper;
-				// paper.install(window);
-				// window.paper.set
-				papers[0] = new paper.PaperScope();
-				papers[0].setup($('#lineto')[0]);
+				var curPaper = new paper.PaperScope();
+				curPaper.setup($('#lineto')[0]);
+				papers.push( curPaper );
 
 				// draw the initial path
-				var _paper = papers[0];
-				var path = new _paper.Path();
-					path.strokeColor = '#ff0000';
-					path.moveTo( new _paper.Point(50.0, 50.0) );
-					path.lineTo( new _paper.Point(150.0, 150.0) );
-					path.lineTo( new _paper.Point(250.0, 50.0));
-					path.lineTo( new _paper.Point(350.0, 150.0) );
-					path.lineTo( new _paper.Point(450.0, 50.0) );
-				_paper.view.draw();
+				var path = new curPaper.Path();
+					path.strokeColor = COLOR_LINE_TO;
+					path.moveTo( new curPaper.Point(50.0, 50.0) );
+					path.lineTo( new curPaper.Point(150.0, 150.0) );
+					path.lineTo( new curPaper.Point(250.0, 50.0));
+					path.lineTo( new curPaper.Point(350.0, 150.0) );
+					path.lineTo( new curPaper.Point(450.0, 50.0) );
+				curPaper.view.draw();
 				
-				tool = new _paper.Tool();
+				tool = new curPaper.Tool();
 				tool.onMouseMove = function(event) {
-					_paper.project.activeLayer.selected = false;
-					log("item", event);
+					curPaper.project.activeLayer.selected = false;
+					// log("item", event);
 					if (event.item) {
-						log("select item");
+						// log("select item");
 						event.item.selected = true;
 
 					}
@@ -54,9 +52,10 @@
 					fill: true,
 					tolerance: 5
 				};
+
 				tool.onMouseDown = function(event) {
 					segment = path = null;
-					var hitResult = _paper.project.hitTest(event.point, hitOptions);
+					var hitResult = curPaper.project.hitTest(event.point, hitOptions);
 					if (!hitResult)
 						return;
 
@@ -83,49 +82,75 @@
 
 					app.output.update( path );
 				}
+
+				app.output.update( path );
 			}
 		},
+
 		quadto: {
+
 			div: null,
+
 			canvas: null,
+
 			init: function(){
-				// this.div = $( '#quadto' );
-				// this.canvas = document.getElementById('paperCanvas');
+				
+				var curPaper = new paper.PaperScope();
+				curPaper.setup($('#quadto')[0]);
+				papers.push( curPaper );
 
-				papers[1] = new paper.PaperScope();
-				papers[1].setup($('#quadto')[0]);
-				var _paper = papers[1];
-				var path = new _paper.Path();
+				
+				var path = new curPaper.Path();
 
-				path.strokeColor = '#ff0000';
-				path.moveTo( new _paper.Point(50.0, 50.0) );
-				path.lineTo( new _paper.Point(150.0, 150.0) );
-				path.lineTo( new _paper.Point(250.0, 50.0));
-				path.lineTo( new _paper.Point(350.0, 150.0) );
-				path.lineTo( new _paper.Point(450.0, 50.0) );
-				_paper.view.draw();
+				/*path.strokeColor = '#ff0000';
+				path.moveTo( new curPaper.Point(50.0, 50.0) );
+				path.lineTo( new curPaper.Point(150.0, 150.0) );
+				path.lineTo( new curPaper.Point(250.0, 50.0));
+				path.lineTo( new curPaper.Point(350.0, 150.0) );
+				path.lineTo( new curPaper.Point(450.0, 50.0) );
+				curPaper.view.draw();*/
+
+
+				// quadTo - waves
+				var waveWidth = 100.0;
+				path.moveTo( new curPaper.Point(0.0, 50.0) );
+				path.strokeColor = COLOR_QUAD_TO;
+				for( var i = 0; i < 5; i++ ) {
+					var startX = i * waveWidth;
+					path.quadraticCurveTo( new curPaper.Point( startX, 0.0 ), new curPaper.Point( startX + waveWidth / 2.0, 0.0 ) );
+					path.quadraticCurveTo( new curPaper.Point( startX + waveWidth / 2.0, 50.0 ), new curPaper.Point( startX + waveWidth, 50.0 ) );
+
+				}
+				curPaper.view.draw();
 			}
 		},
+
 		output: {
+
 			div: null,
+
 			init: function(){
 				div = $( '#output' );
 			},
+
 			update: function( path ){
-				log(path);
+
 				var segments = path.segments;
+				log( "segments", segments );
 				var p = "mPath";
 				var code = "Path2d mPath;<br>";
+
 				for(var i=0; i<segments.length; i++){
 					var segment = segments[i];
-					log(segment.point);
-					if(i == 0){
+					console.log( segment, segment.point);
 
+					if(i == 0){
 						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );<br>" 
 					}else{
 						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );<br>" 
 					}
 				}
+
 				code += "gl::draw( mPath );";
 				div.html( code );
 				log(code);
@@ -134,8 +159,8 @@
 	}
 
 	$(document).ready( function(){
-		if($( '#lineto' ).size() > 0) {window.app.lineto.init();}
 		if($( '#output' ).size() > 0) {window.app.output.init();}
+		if($( '#lineto' ).size() > 0) {window.app.lineto.init();}
 		if($( '#quadto' ).size() > 0) {window.app.quadto.init();}	
 	});
 	
