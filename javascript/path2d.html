@@ -28,16 +28,22 @@
                 
                 [INSERT INTERACTIVE POINT AND SEGMENT DISPLAY]
                 <div>
-                    <div><a href="#">LineTo</a> | <a href="#">QuadTo</a> | <a href="#">CubicTo</a> | <a href="#">Combined</a></div>
+                    <div><a href="#" onClick='javascript:show("lineTo")'>LineTo</a> | 
+                        <a href="#" onClick='javascript:show("quadTo")'>QuadTo</a> | 
+                        <a href="#" onClick='javascript:show("cubicTo")'>CubicTo</a> | 
+                        <a href="#" onClick='javascript:show("combined")'>Combined</a></div>
                     <canvas id="lineto" width="500" height="300"></canvas>
-                    <pre><code id="output" class="language-c++"></code></pre>
+                    <pre><code id="output" class="language-cpp"></code></pre>
                 </div>
 
-                <div>
+                <canvas id="quadto" width="500" height="300"></canvas>
+                <!-- <div>
                     <canvas id="lineto" width="500" height="300"></canvas>
                     <canvas id="quadto" width="500" height="300"></canvas>
-                    <pre><code id="output" class="language-c++"></code></pre>
-                </div>
+                    <pre><code id="output" class="language-cpp">
+                        
+                    </code></pre>
+                </div> -->
         
                 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
                 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>

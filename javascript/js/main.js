@@ -131,31 +131,38 @@
 
 			init: function(){
 				div = $( '#output' );
+				// div.html( Prism.highlight( "", Prism.languages.cpp ) );
 			},
 
 			update: function( path ){
 
 				var segments = path.segments;
-				log( "segments", segments );
+				log( "segments", segments, segments.length );
 				var p = "mPath";
-				var code = "Path2d mPath;<br>";
+				var code = "Path2d mPath;\n";
 
 				for(var i=0; i<segments.length; i++){
 					var segment = segments[i];
-					console.log( segment, segment.point);
+					// console.log( segment, segment.point);
 
 					if(i == 0){
-						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );<br>" 
+						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n" 
 					}else{
-						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );<br>" 
+						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n" 
 					}
 				}
 
 				code += "gl::draw( mPath );";
-				div.html( code );
-				log(code);
+				// div.html( code );
+				div.html( Prism.highlight( code, Prism.languages.cpp ) );
+
+				log( code, Prism.highlight( code, Prism.languages.cpp ) );
 			}
 		}
+	}
+
+	this.show = function( module ){
+		console.log( "show", module ); 
 	}
 
 	$(document).ready( function(){
