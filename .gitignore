@@ -32,3 +32,5 @@ docs/doxygen/cinder.tag
 
 node_modules/
 build/
+**/*.css
+npm-debug.log

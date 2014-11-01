@@ -161,11 +161,31 @@
 		}
 	}
 
-	this.show = function( module ){
-		console.log( "show", module ); 
+	this.show = function( moduleName ){
+		console.log( "show", moduleName ); 
+
+		// remove active from any active canvases
+		var elements = document.querySelectorAll( "canvas" );
+		Array.prototype.forEach.call(elements, function(el, i){
+			removeClass( el, "active" );
+		});
+
+		// make the specified canvas active
+		console.log( document.querySelectorAll('canvas#' + moduleName ) );
+		$('canvas#' + moduleName).addClass( "active" );
 	}
 
+	function removeClass( el, className ){
+		if (el.classList)
+		  el.classList.remove(className);
+		else
+		  el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+	}
+
+
 	$(document).ready( function(){
+
+		// create the following interactive displays
 		if($( '#output' ).size() > 0) {window.app.output.init();}
 		if($( '#lineto' ).size() > 0) {window.app.lineto.init();}
 		if($( '#quadto' ).size() > 0) {window.app.quadto.init();}	

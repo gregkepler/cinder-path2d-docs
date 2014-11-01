@@ -1,0 +1,21 @@
+{
+  "name": "cinder-path2d",
+  "version": "0.0.0",
+  "private": true,
+  "authors": [
+    "Greg Kepler <greg@gregkepler.com>"
+  ],
+  "license": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+    "underscore": "~1.7.0",
+    "paper": "^0.9.20"
+  },
+  "dependencies": {
+   
+  }
+}
