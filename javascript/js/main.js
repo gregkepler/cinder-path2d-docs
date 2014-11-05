@@ -7,10 +7,93 @@
 	var COLOR_CUBIC_TO = '#FFFF00';
 	// var paper = window.paper;
 // console.log(paper);
-
 	
+	// all sketches should extend this
+	var Path2dSketch = function( _canvas, _output ) {
 
+		this.canvas = _canvas;
+		this.output = _output;
+		this.paths = [];
+		this.curPaper;
+		this.tool;
+		this.selectedSegment;
+		this.selectedPath;
+		this.selectedPoint;
+
+		this.hitOptions = {
+			segments: true,
+			stroke: true,
+			fill: true,
+			tolerance: 5
+		};
+
+		function init(  ){
+
+			this.curPaper = new paper.PaperScope();
+			this.curPaper.setup( this.canvas );
+			log( this );
+			this.papers.push( this.curPaper );
+
+			this.tool = new curPaper.Tool();
+			this.tool.onMouseMove = onToolMouseMove;
+			this.tool.onMouseDown = onToolMouseDown;
+			// this.output.update( this.path );
+		}
+
+		function onToolMouseMove( event ) {
+
+			curPaper.project.activeLayer.selected = false;
+			if (event.item) {
+				event.item.selected = true;
+			}
+		}
+
+		function onToolMouseDown( event ) {
+
+			selectedSegment = selectedPath = null;
+			var hitResult = curPaper.project.hitTest( event.point, hitOptions );
+			if( !hitResult )
+				return;
+
+			if( hitResult ) {
+				selectedPath = hitResult.item;
+				if (hitResult.type == 'segment') {
+					selectedSegment = hitResult.segment;
+					console.log("SEGMENT");
+				}
+			}
+			/*var movePath = hitResult.type == 'fill';
+			if( movePath ) {
+				project.activeLayer.addChild( hitResult.item );
+			}*/
+		}
+
+		function onToolMouseDrag( event ) {
+			
+			if( selectedSegment ) {
+				segment.point = event.point;
+			}
+
+			/*if( movePath ) {
+				path.position += event.delta;
+			}*/
+
+			this.output.update( path );
+		}
+
+		// init();
+		log( this );
+	}
+
+	Path2dSketch.prototype.updatePath = function() {
+
+		this.curPaper.draw();
+		this.output.update( path );
+	}
+	
 	window.app = {
+
+		sketches: [],
 
 		lineto: {
 			
@@ -72,6 +155,8 @@
 				}
 
 				tool.onMouseDrag = function(event) {
+
+					log( "drag", segment, movePath );
 					if (segment) {
 						segment.point = event.point;
 					}
@@ -123,6 +208,53 @@
 				}
 				curPaper.view.draw();
 			}
+		},
+
+		cubicto: {
+
+			sketch: null,
+
+			Sketch: function(){
+
+				this.drawPath = function(){
+					log( "DRAW CUBIC TO");
+				}
+			},
+
+			init: function() {
+
+				extend( app.cubicto.Sketch, Path2dSketch );
+				var sketch = new app.cubicto.Sketch( $('#cubicto')[0], output  );
+				
+				// var sketch = _.extend( Path2dSketch, {} );
+				// sketch.init( $('#cubicto')[0] );
+				// log( "extended sketch", sketch );
+				// var sketch = new Path2dSketch( $('#cubicto')[0], output );
+
+				// sketch.drawInitialPath = function(){
+
+				// 	console.log( this );
+				// 	var path = new this.curPaper.Path();
+				// 		path.strokeColor = COLOR_LINE_TO;
+				// 		path.moveTo( new curPaper.Point(50.0, 50.0) );
+				// 		path.lineTo( new curPaper.Point(150.0, 150.0) );
+				// 		path.lineTo( new curPaper.Point(250.0, 50.0));
+				// 		path.lineTo( new curPaper.Point(350.0, 150.0) );
+				// 		path.lineTo( new curPaper.Point(450.0, 50.0) );
+				// 	this.curPaper.view.draw();
+				// 	this.updatePath();
+				// }
+
+				// sketch.drawInitialPath();
+
+				/*sketch.drawInitialPath() {
+					// draw the initial path
+					
+				}*/
+
+			}
+
+
 		},
 
 		output: {
@@ -183,12 +315,18 @@
 	}
 
 
+	function extend(ChildClass, ParentClass) {
+		ChildClass.prototype = new ParentClass();
+		ChildClass.prototype.constructor = ChildClass;
+	}
+
 	$(document).ready( function(){
 
 		// create the following interactive displays
-		if($( '#output' ).size() > 0) {window.app.output.init();}
-		if($( '#lineto' ).size() > 0) {window.app.lineto.init();}
-		if($( '#quadto' ).size() > 0) {window.app.quadto.init();}	
+		if( $( '#output' ).size() > 0 ) 	{ window.app.output.init(); }
+		if( $( '#lineto' ).size() > 0 ) 	{ window.app.lineto.init(); }
+		if( $( '#quadto' ).size() > 0 ) 	{ window.app.quadto.init(); }	
+		if( $( '#cubicto' ).size() > 0 ) 	{ window.app.cubicto.init(); }	
 	});
 	
 
