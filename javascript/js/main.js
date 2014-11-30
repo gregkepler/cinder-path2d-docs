@@ -8,7 +8,12 @@
 	// var paper = window.paper;
 // console.log(paper);
 	
-	// all sketches should extend this
+
+	// +———————————————————————————————————————+
+	// 	Path2dSketch     
+	// 	all sketches should extend this
+	// +———————————————————————————————————————+
+/*
 	var Path2dSketch = function( _canvas, _output ) {
 
 		this.canvas = _canvas;
@@ -62,10 +67,11 @@
 					console.log("SEGMENT");
 				}
 			}
-			/*var movePath = hitResult.type == 'fill';
-			if( movePath ) {
-				project.activeLayer.addChild( hitResult.item );
-			}*/
+			
+			// var movePath = hitResult.type == 'fill';
+			// if( movePath ) {
+				// project.activeLayer.addChild( hitResult.item );
+			// }
 		}
 
 		function onToolMouseDrag( event ) {
@@ -74,15 +80,15 @@
 				segment.point = event.point;
 			}
 
-			/*if( movePath ) {
-				path.position += event.delta;
-			}*/
+			// if( movePath ) {
+			// 	path.position += event.delta;
+			// }
 
 			this.output.update( path );
 		}
 
-		// init();
-		log( this );
+		init.apply( this );
+		log( "this", this );
 	}
 
 	Path2dSketch.prototype.updatePath = function() {
@@ -90,10 +96,88 @@
 		this.curPaper.draw();
 		this.output.update( path );
 	}
+
+	Path2dSketch.prototype.extend = function( classVars ) {
+
+		classVars || (classVars = {});
+
+		var obj = function(options) {
+
+	        this.initialize && this.initialize();
+	    };
+
+		obj.prototype = Object.create( Path2dSketch.prototype );
+	    obj.prototype = _.extend(obj.prototype, classVars);
+	    obj.prototype.constructor = obj;
+
+	    return obj;
+	}
+*/
+
+	window.Path2dSketch = function(){
+
+	}
+
+	Path2dSketch.extend = function( classVars ) {
+
+		classVars || (classVars = {});
+
+		var obj = function(options) {
+
+	        this.initialize && this.initialize();
+	    };
+
+		obj.prototype = Object.create( Path2dSketch.prototype );
+	    obj.prototype = _.extend(obj.prototype, classVars);
+	    obj.prototype.constructor = obj;
+
+	    return obj;
+	}
+
+	// +———————————————————————————————————————+
+	// 	LineToSketch
+	// +———————————————————————————————————————+
+
+	window.LineToSketch = Path2dSketch.extend( {
+
+		name: "lineto",
+
+		initialize: function(){
+
+			// draw path
+			this.drawInitialPath();
+		},
+
+		drawInitialPath: function() {
+
+		}
+
+	} );
+
+	
+
+	// +———————————————————————————————————————+
+	// 	Path2dCode     
+	// 	Code area that displays code for a path
+	// +———————————————————————————————————————+
+
+	var CodeModule = function() {
+
+	}
+
+
 	
 	window.app = {
 
 		sketches: [],
+
+		init: function(){
+			
+			// init all the sketches
+			var lineToSketch = new LineToSketch( { canvas:"#lineto", output:"#output"} );
+			// sketches.push( lineToSketch );
+		
+		},
 
 		lineto: {
 			
@@ -320,6 +404,8 @@
 		ChildClass.prototype.constructor = ChildClass;
 	}
 
+	
+
 	$(document).ready( function(){
 
 		// create the following interactive displays
@@ -327,6 +413,11 @@
 		if( $( '#lineto' ).size() > 0 ) 	{ window.app.lineto.init(); }
 		if( $( '#quadto' ).size() > 0 ) 	{ window.app.quadto.init(); }	
 		if( $( '#cubicto' ).size() > 0 ) 	{ window.app.cubicto.init(); }	
+
+		// ideal syntax
+		// window.app.sketchLineTo( "#lineto" );
+		window.app.init();
+
 	});
 	
 
