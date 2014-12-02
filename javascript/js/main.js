@@ -116,19 +116,35 @@
 
 	window.Path2dSketch = function(){
 
+		this.canvas = null;
+		this.output = null;/*,
+		paths: [],
+		curPaper: null,
+		tool: null,
+		selectedSegment: null,
+		selectedPath: null,
+		selectedPoint: null*/
 	}
+
+	Path2dSketch.initialize = function( options ) {
+        options || (options = {});
+
+        console.log( "options", options );
+        this.canvas = options.canvas;
+        this.output = options.output;
+    };
 
 	Path2dSketch.extend = function( classVars ) {
 
 		classVars || (classVars = {});
 
-		var obj = function(options) {
+		var obj = function( options ) {
 
-	        this.initialize && this.initialize();
+	        this.initialize && this.initialize( options );
 	    };
 
 		obj.prototype = Object.create( Path2dSketch.prototype );
-	    obj.prototype = _.extend(obj.prototype, classVars);
+	    obj.prototype = _.extend( obj.prototype, classVars );
 	    obj.prototype.constructor = obj;
 
 	    return obj;
@@ -142,14 +158,17 @@
 
 		name: "lineto",
 
-		initialize: function(){
+		initialize: function( options ){
+
+			// super
+			Path2dSketch.initialize.call( this, options );
 
 			// draw path
 			this.drawInitialPath();
 		},
 
 		drawInitialPath: function() {
-
+			console.log( "DRAW INITIAL PATH" );
 		}
 
 	} );
@@ -175,6 +194,7 @@
 			
 			// init all the sketches
 			var lineToSketch = new LineToSketch( { canvas:"#lineto", output:"#output"} );
+			console.log("lineToSketch", lineToSketch.canvas );
 			// sketches.push( lineToSketch );
 		
 		},
