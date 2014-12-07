@@ -1,0 +1,1864 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"prot",
+				"prototype"
+			],
+			[
+				"Path2d",
+				"Path2dSketch"
+			],
+			[
+				"part",
+				"particle"
+			],
+			[
+				"par",
+				"particle"
+			],
+			[
+				"parti",
+				"particles"
+			],
+			[
+				"inn",
+				"innerWidth"
+			],
+			[
+				"sprite",
+				"spriteSheetJson"
+			],
+			[
+				"HERO",
+				"HERO_Y"
+			],
+			[
+				"android",
+				"androidHeight"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"resize",
+				"resizeHandler"
+			],
+			[
+				"sort",
+				"sorted"
+			],
+			[
+				"androi",
+				"androidArr"
+			],
+			[
+				"andr",
+				"androidArr"
+			],
+			[
+				"gallery",
+				"galleryToSort"
+			],
+			[
+				"insert",
+				"insertIndex"
+			],
+			[
+				"clothes",
+				"clothes1"
+			],
+			[
+				"iter",
+				"iteration"
+			],
+			[
+				"pass",
+				"passUniqueTest"
+			],
+			[
+				"time",
+				"timeline"
+			],
+			[
+				"idleTim",
+				"idleTimes"
+			],
+			[
+				"idleAn",
+				"idleAnimation"
+			],
+			[
+				"idleAni",
+				"idleAnimations"
+			],
+			[
+				"idleTi",
+				"idleTimes"
+			],
+			[
+				"BLUR",
+				"BLUR_WIDTH"
+			],
+			[
+				"Android",
+				"AndroidContainer"
+			],
+			[
+				"cur",
+				"curBackground"
+			],
+			[
+				"tile",
+				"tileBackgrounds"
+			],
+			[
+				"news",
+				"newspaperDroids"
+			],
+			[
+				"pol",
+				"poleLayer"
+			],
+			[
+				"grou",
+				"group"
+			],
+			[
+				"neck",
+				"neckGraphic"
+			],
+			[
+				"winner",
+				"winner"
+			],
+			[
+				"screen",
+				"screenPosition"
+			],
+			[
+				"dis",
+				"distanceBetween"
+			],
+			[
+				"winn",
+				"winnerId"
+			],
+			[
+				"max",
+				"maxBotWingspan"
+			],
+			[
+				"VIEW",
+				"VIEWPORT_LEFT"
+			],
+			[
+				"View",
+				"VIEWPORT_LEFT"
+			],
+			[
+				"subway",
+				"subwayInterior"
+			],
+			[
+				"update",
+				"updatePoster"
+			],
+			[
+				"posterA",
+				"posterAlt1"
+			],
+			[
+				"drawPo",
+				"drawPoster"
+			],
+			[
+				"poster",
+				"posterSprite"
+			],
+			[
+				"post",
+				"posterSprite"
+			],
+			[
+				"pos",
+				"posterSprite"
+			],
+			[
+				"draw",
+				"drawStripe"
+			],
+			[
+				"STI",
+				"STRIPE_HEIGHT"
+			],
+			[
+				"pole",
+				"poleObject"
+			],
+			[
+				"doorW",
+				"doorWindowHeight"
+			],
+			[
+				"ZOOM",
+				"ZOOMED_IN_DURATION"
+			],
+			[
+				"total",
+				"totalWallSpace"
+			],
+			[
+				"clie",
+				"clientWidth"
+			],
+			[
+				"stage",
+				"stageMask"
+			],
+			[
+				"bein",
+				"beginFill"
+			],
+			[
+				"snapshot",
+				"snapshotTime"
+			],
+			[
+				"snap",
+				"snapshotTime"
+			],
+			[
+				"FULL",
+				"FULL_WIDTH"
+			],
+			[
+				"subwa",
+				"subwayInterior"
+			],
+			[
+				"zoom",
+				"zoomPivot"
+			],
+			[
+				"zo",
+				"zoomPivot"
+			],
+			[
+				"load",
+				"loader"
+			],
+			[
+				"elapsed",
+				"elapsedTime"
+			],
+			[
+				"tablet",
+				"tabletHeight"
+			],
+			[
+				"phot",
+				"phoneSprite"
+			],
+			[
+				"phone",
+				"phoneSprite"
+			],
+			[
+				"group",
+				"groupHead"
+			],
+			[
+				"newspa",
+				"newspaperSprite"
+			],
+			[
+				"newsp",
+				"newspaperSprite"
+			],
+			[
+				"rangeMin",
+				"rangeMinY"
+			],
+			[
+				"range",
+				"rangeMin"
+			],
+			[
+				"rang",
+				"rangeMax"
+			],
+			[
+				"anim",
+				"animationProps"
+			],
+			[
+				"animation",
+				"animationProps"
+			],
+			[
+				"assets",
+				"assetsToLoad"
+			],
+			[
+				"master",
+				"masterContainer"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"tit",
+				"totalWidth"
+			],
+			[
+				"posterT",
+				"posterTexture1"
+			],
+			[
+				"add",
+				"addChild"
+			],
+			[
+				"get",
+				"generateTexture"
+			],
+			[
+				"drawPoster",
+				"drawPosterHalf"
+			],
+			[
+				"we",
+				"wide"
+			],
+			[
+				"seg",
+				"segment"
+			],
+			[
+				"wall",
+				"wallPadding"
+			],
+			[
+				"WINDO",
+				"WINDOW_WIDTH"
+			],
+			[
+				"segme",
+				"segmentMask"
+			],
+			[
+				"segmen",
+				"segmentMask"
+			],
+			[
+				"segment",
+				"segmentMask"
+			],
+			[
+				"loadedA",
+				"loadedAndroids"
+			],
+			[
+				"loaded",
+				"loadedAmt"
+			],
+			[
+				"pi",
+				"pivot"
+			],
+			[
+				"CONS",
+				"console"
+			],
+			[
+				"acti",
+				"activeLight"
+			],
+			[
+				"lightP",
+				"lightPositions"
+			],
+			[
+				"back",
+				"backFlashes"
+			],
+			[
+				"bac",
+				"back-flashes"
+			],
+			[
+				"front",
+				"frontFlashes"
+			],
+			[
+				"scal",
+				"scale_x"
+			],
+			[
+				"ahh",
+				"ahhSounds"
+			],
+			[
+				"SOUND",
+				"SOUND_FADEOUT"
+			],
+			[
+				"door",
+				"doorAndroids"
+			],
+			[
+				"turn",
+				"turnOn"
+			],
+			[
+				"hi",
+				"highlightLeader"
+			],
+			[
+				"play",
+				"players"
+			],
+			[
+				"visib",
+				"visible"
+			],
+			[
+				"ge",
+				"generateTexture"
+			],
+			[
+				"loop",
+				"loopAmt"
+			],
+			[
+				"w",
+				"white_tile"
+			],
+			[
+				"begin",
+				"beginFill"
+			],
+			[
+				"tunnel",
+				"tunnel1Texture"
+			],
+			[
+				"background",
+				"background-position"
+			],
+			[
+				"bacgrou",
+				"background-position"
+			],
+			[
+				"set",
+				"setTimeout"
+			],
+			[
+				"visi",
+				"visible"
+			],
+			[
+				"vis",
+				"visible"
+			],
+			[
+				"client",
+				"clientHeight"
+			],
+			[
+				"androidCon",
+				"androidContainer"
+			],
+			[
+				"removeCh",
+				"removeChild"
+			],
+			[
+				"addC",
+				"addCallback"
+			],
+			[
+				"androidCo",
+				"androidCont"
+			],
+			[
+				"cot",
+				"container"
+			],
+			[
+				"androidCont",
+				"androidContainers"
+			],
+			[
+				"androidId",
+				"androidIdPool"
+			],
+			[
+				"global",
+				"globalPos"
+			],
+			[
+				"androidP",
+				"androidPool"
+			],
+			[
+				"subwayAni",
+				"subwayAnimation2"
+			],
+			[
+				"rest",
+				"restoreSubwayAnimation"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 1849,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "path2d.html",
+			"settings":
+			{
+				"buffer_size": 3513,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/main.js",
+			"settings":
+			{
+				"buffer_size": 11314,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/JSHint/JSHint.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packing ",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"package rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"packageI",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: list",
+				"Package Control: List Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: li",
+				"Package Control: List Packages"
+			],
+			[
+				"Snippet: ",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"Package Control: re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: l",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: Dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"pack in",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: In	",
+				"Package Control: Install Package"
+			],
+			[
+				"js",
+				"JSLint: Run JSLint"
+			],
+			[
+				"Package Control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 146.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/gkepler/Downloads/0059_Tropicana/_160x600/0059_trop_bounce_160x600_v4.swf",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/shaders/KaleidoShader.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/APP.VideoPlaneActor.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/IceCreamBoyActor.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/APP.ActorSpawnerActor.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/video_circles.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/video_circles.html",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/VideoCollage.js",
+		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/video_collage.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/build/tsq-grid.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid/tiles/photo.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid/gallery.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/js/AstroDroid.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/js/HeroLabel.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/andy.cnario.bootstrap.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/system/remote_sync/pollUGCFromProd.py",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-hyperspace/hyperspace.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/cnario/cnario.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/Page.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/email/o_keepsake.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/email/o_qr.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/gallery/gallery.styl",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/gallery/gallery.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/creator/creator.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/home/home.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/home/home.css",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/gallery/services.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/js/space.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/example/unique-sorting.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/index.html.src",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/core/Android.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/core/andy.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/cnario/PerspectiveContainer.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/cnario/normalize.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/andy.cnario.js",
+		"/Users/gkepler/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/subway-animation.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/example-animation/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/subway.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/core/Animation.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-map/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/examples/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/example/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/prototypes/uniqueSorting/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/motion/extra1-3.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/ColumnTile.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/CyclopsAnimation.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid/tiles/android.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/hero.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/door-droid.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/android-manager.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/android-container.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js/subway-interior.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/config.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/IdleAnimation.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/Satellite.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/scheduleAnimation.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/AndroidToutTile.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/01_green_bot.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/js/JetStream.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/motion/extra1-1.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid/main.css",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/prototypes/uniqueSorting/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-space/js/Stars.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/outro.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/view/players.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/view/outro.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/view/outro.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/view/players.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-server/server/app.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/server.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-server/server/socket.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/manifest.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/simulation.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/manifest.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/manifest_original.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/data.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/view/player.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/view/scoreboards.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer/view/scoreboard.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/view/abstract/game-layer.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/players.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/spotlights.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/data.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/AndyText.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/spritesheets/subway/subway.tps",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/random-flashes.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/rafter-lights.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/front-flashes.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/view/abstract/game.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/spotlight.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/back-flashes.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/manifest.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/rock-city/main.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/balance/view/title-hats.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/flash-manager.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/player.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/player-shadow.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/view/player-shadow.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/swimming/view/player.js",
+		"/Users/gkepler/Library/Application Support/Sublime Text 2/Packages/SublimeLinter/README.md",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/data/socket.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/_shared/ui/pose.js",
+		"/Users/gkepler/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/build/andy.cnario.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/js/AndyText.js.orig",
+		"/Users/gkepler/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/_shared/ui/pose-active.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/rock-city/view/player.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/balance/view/background.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/title.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/jetpack/view/floor.js",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/prototypes/subway-backgroud/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-jetpacks/index.html",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/assets/submission.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/assets/heroes.json",
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-jetpacks/js/AstroDroid.js"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-hyperspace",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src/cnario",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/home",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/gallery",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/creator",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/components",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/creator",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-andyjs/src",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-grid",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/soccer",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/js",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game",
+			"/Users/gkepler/Documents/Work/Google/androidify/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/,/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/,/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/",
+			"/Users/gkepler/Documents/Work/Google/androidify/and,/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/fashionista",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client/home",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend/client",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site/frontend",
+			"/Users/gkepler/Documents/Work/Google/androidify/androidify-site",
+			"",
+			"lng",
+			"",
+			"2px 2px 3px",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"proto",
+			"loadSpriteSheet",
+			"actor",
+			"add(",
+			"actor",
+			"ApplySpriteToMesh",
+			"ApplySpriteToMesh\n",
+			"spriteName",
+			"textureCircleWithRandomSprite",
+			"getSpriteMesh",
+			"ApplySpriteToMesh",
+			"aspectRatio",
+			"spritesheet",
+			"spr",
+			"flowersMat",
+			"layer1Container",
+			"flowersMat",
+			"scene",
+			"composer",
+			"ShaderPass",
+			"camera",
+			"renderer",
+			"ParticleGenerator",
+			"particleGenerator",
+			"ParticleGenerator",
+			"composer",
+			"vUv",
+			"uUv",
+			"StageManager",
+			"vUv",
+			"VideoCollage",
+			"videoCollage",
+			"vMat",
+			"action=snapshot, referer: http://10.158.1.202:3000/tsq-grid/?left",
+			"sunActor",
+			"actors",
+			"VideoTurntablePlay",
+			"play",
+			"StageManager",
+			"Stage\nStage",
+			"init",
+			"APP",
+			"saveImage",
+			"getPhoto",
+			"booth_files",
+			"getPhoto",
+			"saveImage",
+			"ALREAD",
+			"5000",
+			"sleep",
+			"Androidsburg",
+			"gallery",
+			"FALLBACK_GALLERY",
+			"ugc",
+			"API_BASE",
+			"BASE",
+			"APPSPOT",
+			"appspot",
+			"gweb",
+			"minLength",
+			"PHOTO_PRELOAD_COUNT",
+			"shuffle",
+			"street",
+			"location",
+			"LABEL_POSITIONS",
+			"Label",
+			".jpg",
+			"LABEL_POSITIONS",
+			"Label",
+			"heroAndroid",
+			"Label",
+			"\\",
+			"Label",
+			"heroAndroid",
+			"androidHeight",
+			"height:",
+			"height=",
+			"view.height",
+			"HERO_SCALE",
+			"share_id",
+			"DEFAULT_DATA",
+			"share_id",
+			"share_d",
+			"timeline",
+			"galleryReady",
+			"TOTAL_ITEMS",
+			"LONG_WAIT_TIME",
+			"snapshot",
+			"spanshot",
+			"snapshot",
+			"androidify.com",
+			"snapshot",
+			"No charIds in snapshot array",
+			"snapshot",
+			"galleryFrame",
+			"canvas",
+			"andy",
+			"canvas",
+			"andy",
+			"AndyService",
+			"destroy",
+			"AndyService",
+			"resizeHandler",
+			"'resize",
+			"resize",
+			"AndyService.on",
+			"AndyService",
+			"resizeHand",
+			"AndyService.on",
+			"resize",
+			"AndyService.renderer",
+			"AndyService.render",
+			"AndyService",
+			"AndySer",
+			"AndyService.off",
+			"AndyService",
+			"resize",
+			"AndyService",
+			"AndyService.c",
+			"AndyService",
+			"CreatorService",
+			"destroy",
+			"start",
+			"resizeHandler",
+			"resize",
+			"andy",
+			"loop",
+			"sortCompareIndex"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"HolidayCollagePlay",
+			"",
+			"random-flashes",
+			"random-manager",
+			"getRandom()",
+			"createAndroids",
+			"root.homeBounds",
+			"translate3d(",
+			"'",
+			"getSectionScale()",
+			"sectionScale",
+			"sectionStyle",
+			"sectionScale",
+			"{sectionScale}",
+			"sectionStyle",
+			"AndroidConstants",
+			"scale10",
+			"api",
+			"\"location_name\"",
+			"Constants.",
+			"Constants",
+			"Constants.",
+			"stretchToFinal",
+			"androidContainer",
+			"pageAmt",
+			"hoodie",
+			"time",
+			"skate",
+			"hoodie",
+			"this",
+			"ANDROID_ACTIVE_THRESHOLD",
+			"ANDROID_ACTIVE_CLASS",
+			"ANDROID_INACTIVE_CLASS",
+			"ANDROID_ANCHOR_PADDING",
+			"androidActiveYPosMin",
+			"fullPath",
+			"hair",
+			"hair color",
+			"shirt",
+			"instructions",
+			"main_image_decor_selector",
+			"\"title\": \"TYPE\",",
+			"5_6cuft",
+			"4_2cuft",
+			"4_5cuft",
+			"5_6cuft",
+			"4_2cuft",
+			"4_5cuft",
+			"4_2cuft",
+			"4_5cuft",
+			"FeatureStub",
+			"decor_selector",
+			"DecorSelector",
+			"03/14",
+			"0314",
+			"/div",
+			"el",
+			"\"product_1_2048.png\", \"product_2_2048.png\"",
+			"panoChanging",
+			"assets/img/instawalk360/instagram_photos/thumb/",
+			"\"url\": \"assets/img/instawalk360/instagram_photos/low/",
+			"\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/low/",
+			"\"images\": {\n						\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/low/",
+			"\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/low/",
+			"\"videos\": {\n						\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/video_low/",
+			"\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/video_low",
+			"\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/video_low/",
+			"\"thumbnail\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/thumb/",
+			"\"images\": {\n						\"low_resolution\": {\n							\"url\": \"assets/img/instawalk360/instagram_photos/low/",
+			"\"",
+			"lng",
+			"Features and Specs",
+			"a",
+			"august",
+			"august2013",
+			"booth_gifs",
+			"http://localhost/RoofiesWebbys/photos/",
+			"",
+			"booth_gifs_final",
+			"booth_gifs/",
+			"$nav-h",
+			";",
+			"=",
+			"bubble",
+			"btn",
+			"pin-btn",
+			"d=\"false\" width=\"1024\" height=\"576\" autoLoad=\"false\" autoPlay=\"false\" repeat=\"0\"",
+			"_cinema_video\" smoothing",
+			"name=\"",
+			"",
+			"load=\"false\" quality=\"high\" width=\"1024\" height=\"576\" load=\"false\" autoPlay=\"false\" repeat=\"0\"",
+			"_cinema_video\" smooth",
+			"",
+			"flv",
+			"load",
+			"smoothing=\"true\" width=\"1024\" height=\"576\" ",
+			"f4v",
+			"2px 2px 3px",
+			":subtitle",
+			":title",
+			":subtitle",
+			",",
+			"3",
+			"\"",
+			"'",
+			"#partners",
+			"'",
+			"mission",
+			"mission_subnav",
+			"\"",
+			"Cinder",
+			"'",
+			"$currentLabel",
+			"$dotContainer",
+			"$dotButton",
+			"'",
+			"#detail-container",
+			"BUT THAT’S NOT REALLY AN OPTION WHEN IT COMES TO A BOTTLE OF WINE OR A GLASS OF WHISKEY",
+			"IN SIMPLE TERMS, YOUR SENSES ARE DULLED WHEN YOU’RE FLYING DUE TO THE AIR IN THE CABIN. DRY AIR DESENSITIZES THE NOSE, WHICH REMOVES MUCH OF YOUR SENSE OF SMELL",
+			"BUT THAT’S NOT REALLY AN OPTION WHEN IT COMES TO A BOTTLE OF WINE OR A GLASS OF WHISKEY",
+			"IN SIMPLE TERMS, YOUR SENSES ARE DULLED WHEN YOU’RE FLYING DUE TO THE AIR IN THE CABIN. DRY AIR DESENSITIZES THE NOSE, WHICH REMOVES MUCH OF YOUR SENSE OF SMELL"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "index.html",
+					"settings":
+					{
+						"buffer_size": 1849,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "path2d.html",
+					"settings":
+					{
+						"buffer_size": 3513,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/main.js",
+					"settings":
+					{
+						"buffer_size": 11314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2709,
+								2709
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1606.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 145.0
+	},
+	"output.jslint_result_view":
+	{
+		"height": 129.0
+	},
+	"replace":
+	{
+		"height": 143.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"subway-a",
+				"androidify-ugc/tsq-subway/js/subway-animation.js"
+			],
+			[
+				"cnario.",
+				"androidify-ugc/js/andy.cnario.bootstrap.js"
+			],
+			[
+				"page",
+				"androidify-ugc/tsq-grid/Page.js"
+			],
+			[
+				"hypersp",
+				"androidify-ugc/tsq-hyperspace/hyperspace.js"
+			],
+			[
+				"cnario.boo",
+				"androidify-ugc/js/andy.cnario.bootstrap.js"
+			],
+			[
+				"android-ma",
+				"androidify-ugc/tsq-subway/js/android-manager.js"
+			],
+			[
+				"android-c",
+				"androidify-ugc/tsq-subway/js/android-container.js"
+			],
+			[
+				"subway-inter",
+				"androidify-ugc/tsq-subway/js/subway-interior.js"
+			],
+			[
+				"andorid-m",
+				"androidify-ugc/tsq-subway/js/android-manager.js"
+			],
+			[
+				"subwayai",
+				"androidify-ugc/tsq-subway/js/subway-animation.js"
+			],
+			[
+				"subway.",
+				"androidify-ugc/tsq-subway/js/subway.js"
+			],
+			[
+				"android-co",
+				"androidify-ugc/tsq-subway/js/android-container.js"
+			],
+			[
+				"gamerlayer",
+				"androidify-times-square/prototypes/game-display/script/app/view/abstract/game-layer.js"
+			],
+			[
+				"abstract",
+				"androidify-times-square/prototypes/game-display/script/app/view/abstract/game-layer.js"
+			],
+			[
+				"spotlights",
+				"androidify-times-square/prototypes/game-display/script/app/game/fashionista/view/spotlights.js"
+			],
+			[
+				"schedule",
+				"androidify-ugc/js/scheduleAnimation.js"
+			],
+			[
+				"subwayindex",
+				"androidify-ugc/tsq-subway/index.html"
+			],
+			[
+				"easep",
+				"androidify-ugc/third-party/gsap/easing/EasePack.js"
+			],
+			[
+				"tweenli",
+				"androidify-ugc/third-party/gsap/TweenLite.js"
+			],
+			[
+				"index.html.s",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"andy",
+				"androidify-andyjs/build/andy.cnario.js"
+			],
+			[
+				"index.htm",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"home.st",
+				"androidify-site/frontend/client/home/home.styl"
+			],
+			[
+				"home.",
+				"androidify-site/frontend/client/home/home.styl"
+			],
+			[
+				"index.ht",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"index.",
+				"androidify-times-square/node_modules/connect/index.js"
+			],
+			[
+				"gallery.html",
+				"androidify-site/frontend/client/gallery/gallery.html"
+			],
+			[
+				"sections",
+				"androidify-site/frontend/client/home/components/sections.js"
+			],
+			[
+				"footer",
+				"androidify-site/frontend/client/components/footer/footer.styl"
+			],
+			[
+				"home",
+				"androidify-site/frontend/client/home/home.styl"
+			],
+			[
+				"section",
+				"androidify-site/frontend/client/home/components/sections.js"
+			],
+			[
+				"about",
+				"androidify-site/frontend/client/about/about.styl"
+			],
+			[
+				"home-st",
+				"androidify-site/frontend/client/home/home-static.html"
+			],
+			[
+				"home-",
+				"androidify-site/frontend/client/home/home-static.styl"
+			],
+			[
+				"gall",
+				"androidify-site/frontend/client/gallery/gallery.js"
+			],
+			[
+				"tile",
+				"androidify-site/frontend/client/gallery/partials/andy-tile.html"
+			],
+			[
+				"gallery",
+				"androidify-site/frontend/client/gallery/gallery.js"
+			],
+			[
+				"andy.js",
+				"androidify-site/androidify-cms/client/components/andy/andy.js"
+			],
+			[
+				"down",
+				"androidify-site/androidify-cms/client/download.html"
+			],
+			[
+				"footer.",
+				"androidify-site/frontend/client/components/footer/footer.html"
+			],
+			[
+				"global",
+				"androidify-site/frontend/client/assets/styles/global.styl"
+			],
+			[
+				"andy.",
+				"androidify-site/frontend/client/assets/scripts/andy.js"
+			],
+			[
+				"home.js",
+				"androidify-site/frontend/client/home/home.js"
+			],
+			[
+				"index.html",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"error",
+				"androidify-site/frontend/client/error.html"
+			],
+			[
+				"header",
+				"androidify-site/frontend/client/components/header/header.html"
+			],
+			[
+				"index.html.sr",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"about.html",
+				"androidify-site/frontend/client/about/about.html"
+			],
+			[
+				"index.sty",
+				"androidify-site/frontend/client/index.styl"
+			],
+			[
+				"notifica",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.js"
+			],
+			[
+				"index.js",
+				"androidify-site/frontend/client/index.js"
+			],
+			[
+				"gallery.js",
+				"androidify-site/frontend/client/gallery/gallery.js"
+			],
+			[
+				"index",
+				"androidify-site/frontend/client/index.styl"
+			],
+			[
+				"index.htmls",
+				"androidify-site/frontend/client/index.html.src"
+			],
+			[
+				"sec",
+				"androidify-site/frontend/client/home/components/sections.js"
+			],
+			[
+				"mini",
+				"androidify-site/frontend/client/home/components/minigallery.js"
+			],
+			[
+				"globa",
+				"androidify-site/frontend/client/assets/styles/global.styl"
+			],
+			[
+				"noti",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.html"
+			],
+			[
+				"service",
+				"androidify-site/frontend/client/gallery/services.js"
+			],
+			[
+				"notica",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.styl"
+			],
+			[
+				"notificatio",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.js"
+			],
+			[
+				"miniga",
+				"androidify-site/frontend/client/home/components/minigallery.js"
+			],
+			[
+				"home.htm",
+				"androidify-site/frontend/client/home/home.html"
+			],
+			[
+				"centr",
+				"androidify-site/frontend/client/home/components/central-android.js"
+			],
+			[
+				"home.j",
+				"androidify-site/frontend/client/home/home.js"
+			],
+			[
+				"gallery.",
+				"androidify-site/frontend/client/gallery/gallery.js"
+			],
+			[
+				"index.st",
+				"androidify-site/frontend/client/index.styl"
+			],
+			[
+				"home-stat",
+				"androidify-site/frontend/client/home/home-static.styl"
+			],
+			[
+				"glob",
+				"androidify-site/frontend/client/assets/styles/global.styl"
+			],
+			[
+				"notif",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.styl"
+			],
+			[
+				"notifications",
+				"androidify-site/frontend/client/components/notification-overlay/notification-overlay.js"
+			],
+			[
+				"home.ht",
+				"androidify-site/frontend/client/home/home.html"
+			],
+			[
+				"sectio",
+				"androidify-site/frontend/client/home/components/sections.js"
+			],
+			[
+				"home.styl",
+				"androidify-site/frontend/client/home/home.styl"
+			],
+			[
+				"",
+				"/Users/gkepler/Documents/Work/Samsung/Centerstage/assets/test/products.json"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 389.0,
+	"status_bar_visible": true
+}
