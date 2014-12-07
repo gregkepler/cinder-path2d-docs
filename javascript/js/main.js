@@ -103,89 +103,258 @@
 
 		var obj = function(options) {
 
-	        this.initialize && this.initialize();
-	    };
+			this.initialize && this.initialize();
+		};
 
 		obj.prototype = Object.create( Path2dSketch.prototype );
-	    obj.prototype = _.extend(obj.prototype, classVars);
-	    obj.prototype.constructor = obj;
+		obj.prototype = _.extend(obj.prototype, classVars);
+		obj.prototype.constructor = obj;
 
-	    return obj;
+		return obj;
 	}
 */
 
-	window.Path2dSketch = function(){
+	/*window.Path2dSketch = function(){
 
 		this.canvas = null;
-		this.output = null;/*,
-		paths: [],
-		curPaper: null,
-		tool: null,
-		selectedSegment: null,
-		selectedPath: null,
-		selectedPoint: null*/
+		this.output = null;
+		this.paths = [];
+		this.curPaper = null;
+		this.tool = null;
+		this.selectedSegment = null;
+		this.selectedPath = null;
+		this.selectedPoint = null;
+
+	};*/
+
+
+	// extending classes
+	/*function surrogateCtor() {}
+	function extend(base, sub) {
+		surrogateCtor.prototype = base.prototype;
+		sub.prototype = new surrogateCtor();
+		sub.prototype.constructor = sub;
+		sub.superclass = base;
+	}*/
+
+	//
+	// from http://codepen.io/MyHatIsAwesome/pen/DaptL
+	// Function.extend( base )
+	// sets up inheritance between two constructor functions
+	// without needing to instantiate the base constructor
+	//
+	Function.prototype.extend = function( base )
+	{
+	  // Define a surrogate constructor for base
+	  var Temp = function(){}
+	  Temp.prototype = base.prototype
+
+	  // instantiate the surrogate
+	  var t = new Temp()
+	  t.constructor = this
+
+	  // copy subclass prototype into surrogate object
+	  for( key in this.prototype )
+	    t[key] = this.prototype[key]
+
+	  // set subclass prototype as the surrogate object
+	  this.prototype = t
+
+	  // this.prototype.superclass = base;
+	  this.prototype.superclass = base.prototype;
+	  // console.log( "SUPERCLASS", this, this.superclass );
 	}
 
-	Path2dSketch.initialize = function( options ) {
-        options || (options = {});
 
-        console.log( "options", options );
-        this.canvas = options.canvas;
-        this.output = options.output;
-    };
+	function Path2dSketch( options ) {
 
-	Path2dSketch.extend = function( classVars ) {
+		this.canvas = null;
+		this.output = null;
+		this.paths = [];
+		this.curPaper = null;
+		this.tool = null;
+		this.selectedSegment = null;
+		this.selectedPath = null;
+		this.selectedPoint = null;
 
-		classVars || (classVars = {});
+		console.log( "Path2dSketch", this.prototype, options );
+		// how to call a function from constructor which doesn't exist yet\
+
+		/*this.initialize = function( opts ) {
+
+			console.log( "Path2dSketch INIT" );
+			var options = opts || {};
+
+			this.canvas = options.canvas;
+			this.output = options.output;
+
+			var paperScope = new paper.PaperScope();
+			paperScope.setup( $( options.canvas )[0]);
+			this.curPaper = paperScope;
+			this.paths.push( paperScope );
+		};*/
+
+		this.initialize( options );
+	}
+
+	Path2dSketch.prototype = {
+
+		initialize: function( opts ) {
+
+			console.log( "PATH2DSKETCH INITIALIZE" );
+
+			var options = opts || {};
+
+			console.log( "options", options );
+			this.canvas = options.canvas;
+			this.output = options.output;
+
+			var paperScope = new paper.PaperScope();
+			paperScope.setup( $( options.canvas )[0]);
+			this.curPaper = paperScope;
+			console.log( "paths", this, this.paths, paperScope );
+			this.paths.push( paperScope );
+		}
+	};
+
+	// Path2dSketch.prototype.canvas = null;
+	// Path2dSketch.prototype.paths = [];
+
+	/*window.Path2dSketch = function() {
+
+		return {
+
+			canvas: null,
+			output: null,
+			paths: []
+		};
+
+	};*/
+
+
+
+	// window.Path2dSketch.initialize = function( opts ) {
+	/*Path2dSketch.prototype.initialize = function( opts ) {
+
+		var options = opts || {};
+
+		console.log( "options", options );
+		this.canvas = options.canvas;
+		this.output = options.output;
+
+		var paperScope = new paper.PaperScope();
+		paperScope.setup( $( options.canvas )[0]);
+		this.curPaper = paperScope;
+		console.log( "paths", this, this.paths, paperScope );
+		this.paths.push( paperScope );
+	};*/
+
+	/*// window.Path2dSketch.extend = function( vars ) {
+	Path2dSketch.prototype.extend = function( vars ) {
+
+		var classVars = vars || {};
 
 		var obj = function( options ) {
 
-	        this.initialize && this.initialize( options );
-	    };
+			this.initialize( options );
+		};
 
+		console.log( "OBJ PROTOTYPE", Path2dSketch.prototype, this );
 		obj.prototype = Object.create( Path2dSketch.prototype );
-	    obj.prototype = _.extend( obj.prototype, classVars );
-	    obj.prototype.constructor = obj;
+		obj.prototype = _.extend( obj.prototype, classVars );
+		obj.prototype.constructor = obj;
 
-	    return obj;
-	}
+		return obj;
+	};*/
 
-	// +———————————————————————————————————————+
-	// 	LineToSketch
-	// +———————————————————————————————————————+
-
-	window.LineToSketch = Path2dSketch.extend( {
-
-		name: "lineto",
-
-		initialize: function( options ){
-
-			// super
-			Path2dSketch.initialize.call( this, options );
-
-			// draw path
-			this.drawInitialPath();
-		},
-
-		drawInitialPath: function() {
-			console.log( "DRAW INITIAL PATH" );
-		}
-
-	} );
 
 	
 
+
 	// +———————————————————————————————————————+
-	// 	Path2dCode     
-	// 	Code area that displays code for a path
+	//	LineToSketch
+	// +———————————————————————————————————————+
+
+	function LineToSketch( options ) {
+
+		console.log("------------");
+		console.log( "LINE TO SKETCH", Path2dSketch.prototype );
+		// LineToSketch.superclass.call( this, options );
+		Path2dSketch.call( this, options );
+
+		
+
+		this.name = "lineto";
+
+		/*this.initialize = function( options ){
+
+			console.log( "LINE TO SKETCH INIT" );
+			// super
+			Path2dSketch.prototype.initialize.call( this, options );
+			// Path2dSketch.call( this, options );
+
+			// draw path
+			this.drawInitialPath();
+		};*/
+
+		/*this.drawInitialPath = function() {
+			console.log( "DRAW INITIAL PATH" );
+
+			// draw the initial path
+			var curPaper = this.curPaper;
+			console.log( "curPaper", curPaper );
+			var path = new curPaper.Path();
+				path.strokeColor = COLOR_LINE_TO;
+				path.moveTo( new curPaper.Point(50.0, 50.0) );
+				path.lineTo( new curPaper.Point(150.0, 150.0) );
+				path.lineTo( new curPaper.Point(250.0, 50.0));
+				path.lineTo( new curPaper.Point(350.0, 150.0) );
+				path.lineTo( new curPaper.Point(450.0, 50.0) );
+			
+		};*/
+		// console.log( " ", this );
+		// this.initialize();
+		
+	}
+	// this needs to come before new prototype functions are added
+	// extend( Path2dSketch, LineToSketch );
+	
+
+	LineToSketch.prototype = {
+		initialize: function( options ) {
+		console.log( "LINE TO SKETCH INIT: superclass", this, this.superclass );
+		this.superclass.initialize.call( this, options );
+		this.drawInitialPath();
+	},
+	drawInitialPath: function( ) {
+			console.log( "DRAW INITIAL PATH" );
+
+			// draw the initial path
+			var curPaper = this.curPaper;
+			console.log( "curPaper", curPaper );
+			var path = new curPaper.Path();
+				path.strokeColor = COLOR_LINE_TO;
+				path.moveTo( new curPaper.Point(50.0, 50.0) );
+				path.lineTo( new curPaper.Point(150.0, 150.0) );
+				path.lineTo( new curPaper.Point(250.0, 50.0));
+				path.lineTo( new curPaper.Point(350.0, 150.0) );
+				path.lineTo( new curPaper.Point(450.0, 50.0) );
+		}
+	};
+	LineToSketch.extend( Path2dSketch );
+
+
+
+	// +———————————————————————————————————————+
+	//	Path2dCode     
+	//	Code area that displays code for a path
 	// +———————————————————————————————————————+
 
 	var CodeModule = function() {
 
-	}
+	};
 
 
-	
 	window.app = {
 
 		sketches: [],
@@ -194,7 +363,7 @@
 			
 			// init all the sketches
 			var lineToSketch = new LineToSketch( { canvas:"#lineto", output:"#output"} );
-			console.log("lineToSketch", lineToSketch.canvas );
+			// console.log("lineToSketch", lineToSketch.canvas );
 			// sketches.push( lineToSketch );
 		
 		},
@@ -229,9 +398,9 @@
 						event.item.selected = true;
 
 					}
-				}
+				};
 				
-				var segment, path;
+				var segment;
 
 				var hitOptions = {
 					segments: true,
@@ -256,7 +425,7 @@
 					movePath = hitResult.type == 'fill';
 					if (movePath)
 						project.activeLayer.addChild(hitResult.item);
-				}
+				};
 
 				tool.onMouseDrag = function(event) {
 
@@ -270,7 +439,7 @@
 					}
 
 					app.output.update( path );
-				}
+				};
 
 				app.output.update( path );
 			}
@@ -322,12 +491,12 @@
 
 				this.drawPath = function(){
 					log( "DRAW CUBIC TO");
-				}
+				};
 			},
 
 			init: function() {
 
-				extend( app.cubicto.Sketch, Path2dSketch );
+				// extend( app.cubicto.Sketch, Path2dSketch );
 				var sketch = new app.cubicto.Sketch( $('#cubicto')[0], output  );
 				
 				// var sketch = _.extend( Path2dSketch, {} );
@@ -381,10 +550,10 @@
 					var segment = segments[i];
 					// console.log( segment, segment.point);
 
-					if(i == 0){
-						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n" 
+					if( i === 0 ){
+						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
 					}else{
-						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n" 
+						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
 					}
 				}
 
@@ -395,10 +564,10 @@
 				log( code, Prism.highlight( code, Prism.languages.cpp ) );
 			}
 		}
-	}
+	};
 
 	this.show = function( moduleName ){
-		console.log( "show", moduleName ); 
+		console.log( "show", moduleName );
 
 		// remove active from any active canvases
 		var elements = document.querySelectorAll( "canvas" );
@@ -409,30 +578,26 @@
 		// make the specified canvas active
 		console.log( document.querySelectorAll('canvas#' + moduleName ) );
 		$('canvas#' + moduleName).addClass( "active" );
-	}
+	};
 
 	function removeClass( el, className ){
 		if (el.classList)
-		  el.classList.remove(className);
+			el.classList.remove(className);
 		else
-		  el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+			el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 	}
 
 
-	function extend(ChildClass, ParentClass) {
-		ChildClass.prototype = new ParentClass();
-		ChildClass.prototype.constructor = ChildClass;
-	}
-
+	
 	
 
 	$(document).ready( function(){
 
 		// create the following interactive displays
-		if( $( '#output' ).size() > 0 ) 	{ window.app.output.init(); }
-		if( $( '#lineto' ).size() > 0 ) 	{ window.app.lineto.init(); }
-		if( $( '#quadto' ).size() > 0 ) 	{ window.app.quadto.init(); }	
-		if( $( '#cubicto' ).size() > 0 ) 	{ window.app.cubicto.init(); }	
+		if( $( '#output' ).size() > 0 )		{ window.app.output.init(); }
+		if( $( '#lineto' ).size() > 0 )		{ window.app.lineto.init(); }
+		if( $( '#quadto' ).size() > 0 )		{ window.app.quadto.init(); }
+		if( $( '#cubicto' ).size() > 0 )	{ window.app.cubicto.init(); }
 
 		// ideal syntax
 		// window.app.sketchLineTo( "#lineto" );
