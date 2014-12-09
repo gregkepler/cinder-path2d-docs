@@ -267,63 +267,62 @@
 	//	Code area that displays code for a path
 	// +———————————————————————————————————————+
 
-	var CodeModule = function() {
+	cidocs.CodeModule = function() {
 
+		this.div = null;
+
+		this.init = function(){
+			this.div = $( '#output' );
+		};
+
+		this.update = function( path ){
+
+			var segments = path.segments;
+			log( "segments", segments, segments.length );
+			var p = "mPath";
+			var code = "Path2d mPath;\n";
+
+			for(var i=0; i<segments.length; i++){
+				var segment = segments[i];
+				// console.log( segment, segment.point);
+
+				if( i === 0 ){
+					code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
+				}else{
+					code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
+				}
+
+				// TODO: base the template for the line segment based on the segment type
+			}
+
+			code += "gl::draw( mPath );";
+			// div.html( code );
+			this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
+
+			log( code, Prism.highlight( code, Prism.languages.cpp ) );
+		};
+
+		this.init();
 	};
 
 
 	window.app = {
 
 		sketches: {},
+		
+		codeModule: new cidocs.CodeModule(),
 
 		init: function(){
 			
 			// init all the sketches
-			var lineToSketch	= new cidocs.LineToSketch( { canvas:"#lineto", output:window.app.output } );
-			var quadToSketch	= new cidocs.QuadToSketch( { canvas:"#quadto", output:window.app.output } );
-			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:"#cubicto", output:window.app.output } );
+			var lineToSketch	= new cidocs.LineToSketch( { canvas:"#lineto", output:this.codeModule } );
+			var quadToSketch	= new cidocs.QuadToSketch( { canvas:"#quadto", output:this.codeModule } );
+			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:"#cubicto", output:this.codeModule } );
 
 			this.sketches["lineto"]		= lineToSketch;
 			this.sketches["quadto"]		= quadToSketch;
 			this.sketches["cubicto"]	= cubicToSketch;
 		
-		},
-
-		output: {
-
-			div: null,
-
-			init: function(){
-				div = $( '#output' );
-				// div.html( Prism.highlight( "", Prism.languages.cpp ) );
-			},
-
-			update: function( path ){
-
-				var segments = path.segments;
-				log( "segments", segments, segments.length );
-				var p = "mPath";
-				var code = "Path2d mPath;\n";
-
-				for(var i=0; i<segments.length; i++){
-					var segment = segments[i];
-					// console.log( segment, segment.point);
-
-					if( i === 0 ){
-						code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
-					}else{
-						code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
-					}
-
-					// TODO: base the template for the line segment based on the segment type
-				}
-
-				code += "gl::draw( mPath );";
-				// div.html( code );
-				div.html( Prism.highlight( code, Prism.languages.cpp ) );
-
-				log( code, Prism.highlight( code, Prism.languages.cpp ) );
-			}
 		}
 	};
 
@@ -354,14 +353,7 @@
 	
 
 	$(document).ready( function(){
-
-		// create the following interactive displays
-		if( $( '#output' ).size() > 0 )		{ window.app.output.init(); }
-		// if( $( '#quadto' ).size() > 0 )		{ window.app.quadto.init(); }
-		// if( $( '#cubicto' ).size() > 0 )	{ window.app.cubicto.init(); }
-
-		// ideal syntax
-		// window.app.sketchLineTo( "#lineto" );
+		
 		window.app.init();
 
 	});
