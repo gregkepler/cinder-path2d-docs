@@ -531,7 +531,7 @@
 			"file": "path2d.html",
 			"settings":
 			{
-				"buffer_size": 3513,
+				"buffer_size": 3520,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +539,7 @@
 			"file": "js/main.js",
 			"settings":
 			{
-				"buffer_size": 11314,
+				"buffer_size": 8998,
 				"line_ending": "Unix"
 			}
 		}
@@ -1264,7 +1264,7 @@
 					"file": "path2d.html",
 					"settings":
 					{
-						"buffer_size": 3513,
+						"buffer_size": 3520,
 						"regions":
 						{
 						},
@@ -1381,15 +1381,15 @@
 					"file": "js/main.js",
 					"settings":
 					{
-						"buffer_size": 11314,
+						"buffer_size": 8998,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2709,
-								2709
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1859,6 +1859,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 389.0,
+	"side_bar_width": 311.0,
 	"status_bar_visible": true
 }

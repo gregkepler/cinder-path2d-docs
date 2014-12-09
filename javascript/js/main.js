@@ -1,5 +1,7 @@
-;(function($, window) {
-		
+(function($, window) {
+	
+	var cidocs = {};
+
 	// array of paper scope
 	var papers = [];
 	var COLOR_LINE_TO = '#00FF00';
@@ -43,7 +45,7 @@
 	//	all sketches should extend this
 	// +———————————————————————————————————————+
 
-	function Path2dSketch( options ) {
+	cidocs.Path2dSketch = function( options ) {
 
 		this.canvas = null;
 		this.output = null;
@@ -63,7 +65,7 @@
 		this.initialize( options );
 	}
 
-	Path2dSketch.prototype = {
+	cidocs.Path2dSketch.prototype = {
 
 		initialize: function( opts ) {
 
@@ -140,18 +142,18 @@
 	//	LineToSketch
 	// +———————————————————————————————————————+
 
-	function LineToSketch( options ) {
+	cidocs.LineToSketch = function( options ) {
 
 		console.log("------------");
-		console.log( "LINE TO SKETCH", Path2dSketch.prototype );
+		console.log( "LINE TO SKETCH", cidocs.Path2dSketch.prototype );
 		// LineToSketch.superclass.call( this, options );
-		Path2dSketch.call( this, options );
+		cidocs.Path2dSketch.call( this, options );
 
 		this.name = "lineto";
 		
 	}
 
-	LineToSketch.prototype = {
+	cidocs.LineToSketch.prototype = {
 		initialize: function( options ) {
 			console.log( "LINE TO SKETCH INIT: superclass", this, this.superclass );
 			this.superclass.initialize.call( this, options );
@@ -174,22 +176,22 @@
 			this.paths.push( path );
 		}
 	};
-	LineToSketch.extend( Path2dSketch );
+	cidocs.LineToSketch.extend( cidocs.Path2dSketch );
 
 
 	// +———————————————————————————————————————+
 	//	QuadToSketch
 	// +———————————————————————————————————————+
 
-	function QuadToSketch( options ) {
+	cidocs.QuadToSketch = function( options ) {
 
-		console.log( "QUAD TO SKETCH", Path2dSketch.prototype );
-		Path2dSketch.call( this, options );
+		console.log( "QUAD TO SKETCH", cidocs.Path2dSketch.prototype );
+		cidocs.Path2dSketch.call( this, options );
 
 		this.name = "quadto";
 	}
 
-	QuadToSketch.prototype = {
+	cidocs.QuadToSketch.prototype = {
 
 		initialize: function( options ) {
 
@@ -215,22 +217,22 @@
 			this.paths.push( path );
 		}
 	};
-	QuadToSketch.extend( Path2dSketch );
+	cidocs.QuadToSketch.extend( cidocs.Path2dSketch );
 
 
 	// +———————————————————————————————————————+
 	//	CubicToSketch
 	// +———————————————————————————————————————+
 
-	function CubicToSketch( options ) {
+	cidocs.CubicToSketch = function( options ) {
 
-		console.log( "CUBIC TO SKETCH", Path2dSketch.prototype );
-		Path2dSketch.call( this, options );
+		console.log( "CUBIC TO SKETCH", cidocs.Path2dSketch.prototype );
+		cidocs.Path2dSketch.call( this, options );
 
 		this.name = "cubicto";
 	}
 
-	CubicToSketch.prototype = {
+	cidocs.CubicToSketch.prototype = {
 
 		initialize: function( options ) {
 
@@ -256,7 +258,7 @@
 			this.paths.push( path );
 		}
 	};
-	CubicToSketch.extend( Path2dSketch );
+	cidocs.CubicToSketch.extend( cidocs.Path2dSketch );
 
 
 
@@ -272,16 +274,18 @@
 
 	window.app = {
 
-		sketches: [],
+		sketches: {},
 
 		init: function(){
 			
 			// init all the sketches
-			var lineToSketch	= new LineToSketch( { canvas:"#lineto", output:window.app.output } );
-			var quadToSketch	= new QuadToSketch( { canvas:"#quadto", output:window.app.output } );
-			var cubicToSketch	= new CubicToSketch( { canvas:"#cubicto", output:window.app.output } );
-			// console.log("lineToSketch", lineToSketch.canvas );
-			// sketches.push( lineToSketch );
+			var lineToSketch	= new cidocs.LineToSketch( { canvas:"#lineto", output:window.app.output } );
+			var quadToSketch	= new cidocs.QuadToSketch( { canvas:"#quadto", output:window.app.output } );
+			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:"#cubicto", output:window.app.output } );
+
+			this.sketches["lineto"]		= lineToSketch;
+			this.sketches["quadto"]		= quadToSketch;
+			this.sketches["cubicto"]	= cubicToSketch;
 		
 		},
 
@@ -332,9 +336,10 @@
 			removeClass( el, "active" );
 		});
 
+
 		// make the specified canvas active
-		console.log( document.querySelectorAll('canvas#' + moduleName ) );
 		$('canvas#' + moduleName).addClass( "active" );
+		window.app.sketches[moduleName].updatePath();
 	};
 
 	function removeClass( el, className ){
