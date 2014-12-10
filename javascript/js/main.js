@@ -59,16 +59,19 @@
 			segments: true,
 			stroke: true,
 			fill: true,
-			tolerance: 5
+			tolerance: 10
 		};
+		this.segment = null;
+		this.movePath = false;
 
 		this.initialize( options );
+
+		var test = "test";
 	}
 
 	cidocs.Path2dSketch.prototype = {
 
 		initialize: function( opts ) {
-
 
 			var options = opts || {};
 			console.log( "PATH2DSKETCH INITIALIZE: output  ", options.output );
@@ -83,55 +86,77 @@
 			this.curPaper = paperScope;
 			// console.log( "paths", this, this.paths, paperScope );
 			// this.paths.push( paperScope );
+
+			this.tool = new paperScope.Tool();
+			// this.tool.minDistance = 0;
+			// this.tool.maxDistance = 20;
+			// this.tool.distanceThreshold = 10;
+			console.log( "tool", this.tool );
+			this.tool.onMouseMove = _.bind( this.onToolMouseMove, this );
+			this.tool.onMouseDown = _.bind( this.onToolMouseDown, this );
+			this.tool.onMouseDrag = _.bind( this.onToolMouseDrag, this );
 		},
 
 		onToolMouseMove: function( event ) {
 
-			curPaper.project.activeLayer.selected = false;
-			if (event.item) {
+			this.curPaper.project.activeLayer.selected = false;
+			/*console.log( event.item );
+			if( event.item ) {
 				event.item.selected = true;
-			}
+			}*/
+
+			var result = this.curPaper.project.hitTest( event.point, this.hitOptions );
+            if (result) {
+            	result.item._parent.selected = true;
+            }
 		},
 
 		onToolMouseDown: function( event ) {
 
-			selectedSegment = selectedPath = null;
-			var hitResult = curPaper.project.hitTest( event.point, hitOptions );
+			this.selectedSegment = this.selectedPath = null;
+			var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
 			if( !hitResult )
 				return;
 
 			if( hitResult ) {
-				selectedPath = hitResult.item;
+				this.selectedPath = hitResult.item;
+				this.selectedPath.selected = true;
+
+				console.log( hitResult);
 				if (hitResult.type == 'segment') {
-					selectedSegment = hitResult.segment;
-					console.log("SEGMENT");
+					this.selectedSegment = hitResult.segment;
 				}
 			}
 			
-			// var movePath = hitResult.type == 'fill';
-			// if( movePath ) {
+			// this.movePath = hitResult.type == 'fill';
+			// if( this.movePath ) {
 				// project.activeLayer.addChild( hitResult.item );
 			// }
 		},
 
 		onToolMouseDrag: function( event ) {
 			
-			if( selectedSegment ) {
-				segment.point = event.point;
+			if( this.selectedSegment ) {
+				this.selectedSegment.point = event.point;
 			}
 
-			// if( movePath ) {
-			//	path.position += event.delta;
+			// if( this.movePath ) {
+				// this.selectedPath.position += event.delta;
 			// }
 
-			this.output.update( path );
+			this.updatePath();
 		},
 
 		updatePath: function() {
 
 			this.curPaper.view.draw();
-			console.log( this.paths[0] );
+			// console.log( this.paths[0] );
 			this.output.update( this.paths[0] );
+		},
+
+		show: function() {
+			$(this.canvas).addClass( "active" );
+			this.updatePath();
 		}
 	};
 
@@ -308,21 +333,18 @@
 
 	window.app = {
 
-		sketches: {},
-		
+		sketches: [],
+
 		codeModule: new cidocs.CodeModule(),
 
 		init: function(){
 			
 			// init all the sketches
-			var lineToSketch	= new cidocs.LineToSketch( { canvas:"#lineto", output:this.codeModule } );
-			var quadToSketch	= new cidocs.QuadToSketch( { canvas:"#quadto", output:this.codeModule } );
-			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:"#cubicto", output:this.codeModule } );
+			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
+			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
+			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
 
-			this.sketches["lineto"]		= lineToSketch;
-			this.sketches["quadto"]		= quadToSketch;
-			this.sketches["cubicto"]	= cubicToSketch;
-		
+			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch );		
 		}
 	};
 
@@ -335,10 +357,13 @@
 			removeClass( el, "active" );
 		});
 
+		/*_.each.call(  window.app.sketches, function(el, i){
+			$( el, "active" );
+		});*/
+
 
 		// make the specified canvas active
-		$('canvas#' + moduleName).addClass( "active" );
-		window.app.sketches[moduleName].updatePath();
+		_.findWhere( window.app.sketches, {name:moduleName}).show();
 	};
 
 	function removeClass( el, className ){
