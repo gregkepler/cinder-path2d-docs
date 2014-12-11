@@ -6,7 +6,7 @@
 	var papers = [];
 	var COLOR_LINE_TO = '#00FF00';
 	var COLOR_QUAD_TO = '#0000FF';
-	var COLOR_CUBIC_TO = '#FFFF00';
+	var COLOR_CUBIC_TO = '#FF00FF';
 	// var paper = window.paper;
 // console.log(paper);
 	
@@ -59,7 +59,7 @@
 			segments: true,
 			stroke: true,
 			fill: true,
-			tolerance: 10
+			tolerance: 5
 		};
 		this.segment = null;
 		this.movePath = false;
@@ -272,18 +272,66 @@
 			var curPaper = this.curPaper;
 			var waveWidth = 100.0;
 			var path = new curPaper.Path();
-			path.moveTo( new curPaper.Point(0.0, 50.0) );
 			path.strokeColor = COLOR_CUBIC_TO;
-			for( var i = 0; i < 5; i++ ) {
-				var startX = i * waveWidth;
-				path.quadraticCurveTo( new curPaper.Point( startX, 0.0 ), new curPaper.Point( startX + waveWidth / 2.0, 0.0 ) );
-				path.quadraticCurveTo( new curPaper.Point( startX + waveWidth / 2.0, 50.0 ), new curPaper.Point( startX + waveWidth, 50.0 ) );
+			path.moveTo( new curPaper.Point( 50.0, 50.0 ) );
+			path.cubicCurveTo( new curPaper.Point( 75.0, 50.0 ), new curPaper.Point( 100.0, 75.0 ), new curPaper.Point( 100.0, 100.0 ) );
+			
 
-			}
+
 			this.paths.push( path );
 		}
 	};
 	cidocs.CubicToSketch.extend( cidocs.Path2dSketch );
+
+
+	// +———————————————————————————————————————+
+	//	CombinedSketch
+	// +———————————————————————————————————————+
+
+	cidocs.CombinedSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+
+		this.name = "combined";
+	}
+
+	cidocs.CombinedSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			var curPaper = this.curPaper;
+
+			var leafGap = 10,
+				leaf
+			// var leafWidth = 100.0;
+			var path = new curPaper.Path();
+			path.strokeColor = COLOR_CUBIC_TO;
+			path.moveTo( new curPaper.Point( 75.0, 140.0 ) );
+			path.quadraticCurveTo( 	new curPaper.Point( 100.0, 140.0 ), 
+									new curPaper.Point( 100.0, 100.0 ) );
+			path.cubicCurveTo( 	new curPaper.Point( 40.0, 150.0 ), 	
+								new curPaper.Point( 40.0, 40.0 ), 	
+								new curPaper.Point( 100.0, 90.0 ) );
+			path.cubicCurveTo( 	new curPaper.Point( 50.0, 30.0 ),
+								new curPaper.Point( 160.0, 30.0 ),	
+								new curPaper.Point( 110.0, 90.0 ) );
+			path.cubicCurveTo( 	new curPaper.Point( 170.0, 40.0 ), 	
+								new curPaper.Point( 170.0, 150.0 ), 	
+								new curPaper.Point( 110.0, 100.0 ) );
+			path.quadraticCurveTo( new curPaper.Point( 110.0, 140.0 ), new curPaper.Point( 135.0, 140.0 ) );
+			path.lineTo( new curPaper.Point( 75.0, 140.0 ) );;;
+
+
+			this.paths.push( path );
+		}
+	};
+	cidocs.CombinedSketch.extend( cidocs.Path2dSketch );
 
 
 
@@ -295,6 +343,9 @@
 	cidocs.CodeModule = function() {
 
 		this.div = null;
+
+		this.moveToTemplate = _.template( "mPath.moveTo( Vec2f( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.lineToTemplate = _.template( "mPath.lineTo( Vec2f( <%= pointX %>, <%= pointY %> ) );\n" );
 
 		this.init = function(){
 			this.div = $( '#output' );
@@ -312,9 +363,9 @@
 				// console.log( segment, segment.point);
 
 				if( i === 0 ){
-					code += "mPath.moveTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
+					code += this.moveToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
 				}else{
-					code += "mPath.lineTo( Vec2f( " + segment.point.x + ", " + segment.point.y + " ) );\n";
+					code += this.lineToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
 				}
 
 				// TODO: base the template for the line segment based on the segment type
@@ -343,8 +394,9 @@
 			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
 			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
+			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
 
-			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch );		
+			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, combinedSketch );		
 		}
 	};
 
@@ -380,6 +432,7 @@
 	$(document).ready( function(){
 		
 		window.app.init();
+		show("combined");
 
 	});
 	
