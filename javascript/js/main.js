@@ -7,6 +7,13 @@
 	var COLOR_LINE_TO = '#00FF00';
 	var COLOR_QUAD_TO = '#0000FF';
 	var COLOR_CUBIC_TO = '#FF00FF';
+
+	var SEGMENT_TYPES = [
+		"MOVETO",
+		"LINETO",
+		"QUADTO",
+		"CUBICTO"
+	]
 	// var paper = window.paper;
 // console.log(paper);
 	
@@ -40,6 +47,62 @@
 	};
 
 
+	Point = function( x, y ){
+		return { 
+		    x: x,
+		    y: y
+		};
+	}
+
+	// +———————————————————————————————————————+
+	//	Path2d     
+	//	wrap a paperjs path to perform more
+	//	like a cinder path2d
+	// +———————————————————————————————————————+
+
+	cidocs.Path2d = function( paperScope ) {
+
+		this.points		= [];	// to keep track of points
+		this.segments	= [];	// to keep track of segment types
+		this.ps = paperScope;
+
+		this.path = new this.ps.Path();
+		
+	}
+
+	cidocs.Path2d.prototype = {
+		
+		moveTo: function( point ) {
+
+			var PaperPts = this.convertPoints( [point] );
+			this.path.moveTo( PaperPts[0] );
+			this.points.push( point );
+			this.segments.push( SEGMENT_TYPES[0] );
+		},
+
+		lineTo: function( point ) {
+
+			var PaperPts = this.convertPoints( [point] );
+			this.path.lineTo( PaperPts[0] );
+			this.points.push( point );
+			this.segments.push( SEGMENT_TYPES[1] );
+		},
+
+		convertPoints: function( points ){
+
+			var paperPoints = [];
+			var self = this;
+
+			_.each( points, function( pt ){
+				console.log( pt );
+				paperPoints.push( new self.ps.Point( pt.x, pt.y ) );
+			});
+
+			return paperPoints;
+		}
+
+	}
+
 	// +———————————————————————————————————————+
 	//	Path2dSketch     
 	//	all sketches should extend this
@@ -61,7 +124,6 @@
 			fill: true,
 			tolerance: 5
 		};
-		this.segment = null;
 		this.movePath = false;
 
 		this.initialize( options );
@@ -107,7 +169,8 @@
 
 			var result = this.curPaper.project.hitTest( event.point, this.hitOptions );
             if (result) {
-            	result.item._parent.selected = true;
+            	// result.item._parent.selected = true;
+            	result.item._parent.fullySelected = true;
             }
 		},
 
@@ -120,7 +183,7 @@
 
 			if( hitResult ) {
 				this.selectedPath = hitResult.item;
-				this.selectedPath.selected = true;
+				this.selectedPath.fullySelected = true;
 
 				console.log( hitResult);
 				if (hitResult.type == 'segment') {
@@ -194,11 +257,24 @@
 			var path = new curPaper.Path();
 				path.strokeColor = COLOR_LINE_TO;
 				path.moveTo( new curPaper.Point(50.0, 50.0) );
+				// this.moveTo( path, [ new curPaper.Point(50.0, 50.0) ] );
 				path.lineTo( new curPaper.Point(150.0, 150.0) );
 				path.lineTo( new curPaper.Point(250.0, 50.0));
 				path.lineTo( new curPaper.Point(350.0, 150.0) );
 				path.lineTo( new curPaper.Point(450.0, 50.0) );
 			this.paths.push( path );
+
+			/*
+			// new Path2d wrapper
+			var path = new cidocs.Path2d( this.curPaper );
+				path.moveTo( Point( 50.0, 50.0 ) );
+				path.lineTo( Point( 150.0, 150.0 ) );
+				path.lineTo( Point( 250.0, 50.0 ) );
+				path.lineTo( Point( 350.0, 150.0 ) );
+				path.lineTo( Point( 450.0, 50.0 ) );*/
+
+
+
 		}
 	};
 	cidocs.LineToSketch.extend( cidocs.Path2dSketch );
@@ -325,7 +401,7 @@
 								new curPaper.Point( 170.0, 150.0 ), 	
 								new curPaper.Point( 110.0, 100.0 ) );
 			path.quadraticCurveTo( new curPaper.Point( 110.0, 140.0 ), new curPaper.Point( 135.0, 140.0 ) );
-			path.lineTo( new curPaper.Point( 75.0, 140.0 ) );;;
+			path.lineTo( new curPaper.Point( 75.0, 140.0 ) );
 
 
 			this.paths.push( path );
@@ -344,8 +420,11 @@
 
 		this.div = null;
 
-		this.moveToTemplate = _.template( "mPath.moveTo( Vec2f( <%= pointX %>, <%= pointY %> ) );\n" );
-		this.lineToTemplate = _.template( "mPath.lineTo( Vec2f( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.moveToTemplate = _.template( "mPath.moveTo( vec2( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.lineToTemplate = _.template( "mPath.lineTo( vec2( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.quadToTemplate = _.template( "mPath.quadTo( vec2( <%= h1x %>, <%= h1y %> ), vec2( <%= p2x %>, <%= p2y %> ) );\n" );
+		this.curveToTemplate = _.template( "mPath.curveTo( vec2( <%= h1x %>, <%= h1y %> ), vec2( <%= h2x %>, <%= h2y %> ), vec2( <%= p2x %>, <%= p2y %> ) );\n" );
+		// this.quadToTemplate = _.template( "mPath.quadTo( Vec2f( <%= pointX %>, <%= pointY %> ) );\n" );
 
 		this.init = function(){
 			this.div = $( '#output' );
@@ -358,14 +437,37 @@
 			var p = "mPath";
 			var code = "Path2d mPath;\n";
 
+			console.log( "CURVES",  path.curves );
+
 			for(var i=0; i<segments.length; i++){
 				var segment = segments[i];
-				// console.log( segment, segment.point);
+				var hasHandleIn = ( segment.handleIn.x || segment.handleIn.y ) ? true : false;
+				var hasHandleOut = ( segment.handleOut.x || segment.handleOut.y ) ? true: false;
+				// console.log( "SEGMENT",  segment.toString(), hasHandleIn, hasHandleOut );
+				
+
+				var segmentType;
+
+				if( i === 0 ) {
+					code += this.moveToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
+				} 
+
+				if( segment.linear ) {
+					code += this.lineToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
+				} else if( hasHandleIn && hasHandleOut ) {
+					segmentType = 3;
+					code += this.curveToTemplate( { h1x: segment.handleIn.x, h1y: segment.handleIn.y, h2x: segment.handleOut.x, h2y: segment.handleOut.y, p2x: segment.point.x, p2y: segment.point.x } );
+				} else if( hasHandleIn || hasHandleOut ) {
+					segmentType = 2;
+					var handle = ( hasHandleIn ) ? segment.handleIn : segment.handleOut;
+					code += this.quadToTemplate( { h1x: handle.x, h1y: handle.y, p2x: segment.point.x, p2y: segment.point.x } );
+				} 
+
 
 				if( i === 0 ){
-					code += this.moveToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
+					
 				}else{
-					code += this.lineToTemplate( { pointX: segment.point.x, pointY: segment.point.y } );
+					
 				}
 
 				// TODO: base the template for the line segment based on the segment type
@@ -432,7 +534,7 @@
 	$(document).ready( function(){
 		
 		window.app.init();
-		show("combined");
+		// show("combined");
 
 	});
 	

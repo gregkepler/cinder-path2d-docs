@@ -86,7 +86,7 @@ void Path2DSamplesApp::setup()
 	}
 	
 	
-	// move over a bit and dot affine matric copies and rotate
+	// move over a bit and dot affine matrix copies and rotate
 	{
 		int amount = 10;
 		
