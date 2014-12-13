@@ -15,7 +15,7 @@
 		"CUBICTO"
 	]
 	// var paper = window.paper;
-// console.log(paper);
+	// console.log(paper);
 	
 
 
@@ -67,6 +67,11 @@
 		this.ps = paperScope;
 
 		this.path = new this.ps.Path();
+
+		this.moveToTemplate = _.template( "mPath.moveTo( vec2( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.lineToTemplate = _.template( "mPath.lineTo( vec2( <%= pointX %>, <%= pointY %> ) );\n" );
+		this.quadToTemplate = _.template( "mPath.quadTo( vec2( <%= h1x %>, <%= h1y %> ), vec2( <%= p2x %>, <%= p2y %> ) );\n" );
+		this.curveToTemplate = _.template( "mPath.curveTo( vec2( <%= h1x %>, <%= h1y %> ), vec2( <%= h2x %>, <%= h2y %> ), vec2( <%= p2x %>, <%= p2y %> ) );\n" );
 		
 	}
 
@@ -109,11 +114,45 @@
 			var self = this;
 
 			_.each( points, function( pt ){
-				console.log( pt );
 				paperPoints.push( new self.ps.Point( pt.x, pt.y ) );
 			});
 
 			return paperPoints;
+		},
+
+		getCinderPath: function() {
+
+			var ptIndex = 0;
+			var points = this.points;
+			var code = "";
+			var self = this;
+			_.each( this.segments, function( segment ){
+				switch( segment ) {
+					
+					case SEGMENT_TYPES[0]:
+						code += self.moveToTemplate( { pointX: points[ptIndex].x, pointY: points[ptIndex].y } );
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[1]:
+						code += self.lineToTemplate( { pointX: points[ptIndex].x, pointY: points[ptIndex].y } );
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[2]:
+						code += self.quadToTemplate( { h1x: points[ptIndex].x, h1y: points[ptIndex].y, p2x: points[ptIndex+1].x, p2y: points[ptIndex+1].y } );
+						ptIndex+=2;
+						break;
+
+					case SEGMENT_TYPES[3]:
+						code += self.curveToTemplate( { h1x: points[ptIndex].x, h1y: points[ptIndex].y, h2x: points[ptIndex+1].x, h2y: points[ptIndex+1].y, p2x: points[ptIndex+2].x, p2y:points[ptIndex+2].y } );
+						ptIndex+=3;
+						break;
+				}
+			} );
+
+			console.log( "getCinderPath", code);
+			return code;
 		}
 
 	}
@@ -168,7 +207,6 @@
 			// this.tool.minDistance = 0;
 			// this.tool.maxDistance = 20;
 			// this.tool.distanceThreshold = 10;
-			console.log( "tool", this.tool );
 			this.tool.onMouseMove = _.bind( this.onToolMouseMove, this );
 			this.tool.onMouseDown = _.bind( this.onToolMouseDown, this );
 			this.tool.onMouseDrag = _.bind( this.onToolMouseDrag, this );
@@ -200,7 +238,7 @@
 				this.selectedPath = hitResult.item;
 				this.selectedPath.fullySelected = true;
 
-				console.log( hitResult);
+				// console.log( hitResult);
 				if (hitResult.type == 'segment') {
 					this.selectedSegment = hitResult.segment;
 				}
@@ -247,8 +285,6 @@
 
 	cidocs.LineToSketch = function( options ) {
 
-		console.log("------------");
-		console.log( "LINE TO SKETCH", cidocs.Path2dSketch.prototype );
 		// LineToSketch.superclass.call( this, options );
 		cidocs.Path2dSketch.call( this, options );
 
@@ -258,14 +294,12 @@
 
 	cidocs.LineToSketch.prototype = {
 		initialize: function( options ) {
-			console.log( "LINE TO SKETCH INIT: superclass", this, this.superclass );
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
 			this.updatePath();
 		},
 		drawInitialPath: function( ) {
-			console.log( "DRAW INITIAL PATH" );
-
+			
 			// draw the initial path
 			/*var curPaper = this.curPaper;
 			console.log( "curPaper", this.curPaper );
@@ -288,7 +322,7 @@
 			path2d.lineTo( Point( 250.0, 50.0 ) );
 			path2d.lineTo( Point( 350.0, 150.0 ) );
 			path2d.lineTo( Point( 450.0, 50.0 ) );
-			this.paths.push( path2d.path );
+			this.paths.push( path2d );
 
 			
 
@@ -303,9 +337,7 @@
 
 	cidocs.QuadToSketch = function( options ) {
 
-		console.log( "QUAD TO SKETCH", cidocs.Path2dSketch.prototype );
 		cidocs.Path2dSketch.call( this, options );
-
 		this.name = "quadto";
 	}
 
@@ -345,8 +377,7 @@
 				path2d.quadTo( Point( startX, 0.0 ), Point( startX + waveWidth / 2.0, 0.0 ) );
 				path2d.quadTo( Point( startX + waveWidth / 2.0, 50.0 ), Point( startX + waveWidth, 50.0 ) );
 			}
-			this.paths.push( path2d.path );
-			console.log( "PATH", path2d.path );
+			this.paths.push( path2d );
 		}
 	};
 	cidocs.QuadToSketch.extend( cidocs.Path2dSketch );
@@ -358,9 +389,7 @@
 
 	cidocs.CubicToSketch = function( options ) {
 
-		console.log( "CUBIC TO SKETCH", cidocs.Path2dSketch.prototype );
 		cidocs.Path2dSketch.call( this, options );
-
 		this.name = "cubicto";
 	}
 
@@ -377,18 +406,17 @@
 			
 			// quadTo - waves
 			var curPaper = this.curPaper;
-			var waveWidth = 100.0;
-			var path = new curPaper.Path();
+			/*var path = new curPaper.Path();
 			path.strokeColor = COLOR_CUBIC_TO;
 			path.moveTo( new curPaper.Point( 50.0, 50.0 ) );
 			path.cubicCurveTo( new curPaper.Point( 75.0, 50.0 ), new curPaper.Point( 100.0, 75.0 ), new curPaper.Point( 100.0, 100.0 ) );
+			this.paths.push( path );*/
 			
-			/*var path = new cidocs.Path2d( this.curPaper );
-			path.moveTo( Point( 50.0, 50.0 ) );
-			path.cubicTo( Point( 75.0, 50.0 ), Point( 100.0, 75.0 ), Point( 100.0, 100.0 ) );
-			*/
-
-			this.paths.push( path );
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.path.strokeColor = COLOR_CUBIC_TO;
+			path2d.moveTo( Point( 50.0, 50.0 ) );
+			path2d.cubicTo( Point( 75.0, 50.0 ), Point( 100.0, 75.0 ), Point( 100.0, 100.0 ) );
+			this.paths.push( path2d );
 		}
 	};
 	cidocs.CubicToSketch.extend( cidocs.Path2dSketch );
@@ -420,7 +448,7 @@
 			var leafGap = 10,
 				leaf
 			// var leafWidth = 100.0;
-			var path = new curPaper.Path();
+			/*var path = new curPaper.Path();
 			path.strokeColor = COLOR_CUBIC_TO;
 			path.moveTo( new curPaper.Point( 75.0, 140.0 ) );
 			path.quadraticCurveTo( 	new curPaper.Point( 100.0, 140.0 ), 
@@ -436,20 +464,20 @@
 								new curPaper.Point( 110.0, 100.0 ) );
 			path.quadraticCurveTo( new curPaper.Point( 110.0, 140.0 ), new curPaper.Point( 135.0, 140.0 ) );
 			path.lineTo( new curPaper.Point( 75.0, 140.0 ) );
+			this.paths.push( path );*/
 
 
-			/*
-			var path = new cidocs.Path2d( this.curPaper );
-			path.moveTo( Point( 75.0, 140.0 ) );
-			path.quadTo( Point( 100.0, 140.0 ), Point( 100.0, 100.0 ) );
-			path.cubicTo( Point( 40.0, 150.0 ), Point( 40.0, 40.0 ), Point( 100.0, 90.0 ) );
-			path.cubicTo( Point( 50.0, 30.0 ), Point( 160.0, 30.0 ), Point( 110.0, 90.0 ) );
-			path.cubicTo( Point( 170.0, 40.0 ), Point( 170.0, 150.0 ), Point( 110.0, 100.0 ) );
-			path.quadTo( Point( 110.0, 140.0 ), Point( 135.0, 140.0 ) );
-			path.lineTo( Point( 75.0, 140.0 ) );*/
-
-
-			this.paths.push( path );
+			
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.path.strokeColor = COLOR_CUBIC_TO;
+			path2d.moveTo( Point( 75.0, 140.0 ) );
+			path2d.quadTo( Point( 100.0, 140.0 ), Point( 100.0, 100.0 ) );
+			path2d.cubicTo( Point( 40.0, 150.0 ), Point( 40.0, 40.0 ), Point( 100.0, 90.0 ) );
+			path2d.cubicTo( Point( 50.0, 30.0 ), Point( 160.0, 30.0 ), Point( 110.0, 90.0 ) );
+			path2d.cubicTo( Point( 170.0, 40.0 ), Point( 170.0, 150.0 ), Point( 110.0, 100.0 ) );
+			path2d.quadTo( Point( 110.0, 140.0 ), Point( 135.0, 140.0 ) );
+			path2d.lineTo( Point( 75.0, 140.0 ) );
+			this.paths.push( path2d );
 		}
 	};
 	cidocs.CombinedSketch.extend( cidocs.Path2dSketch );
@@ -481,8 +509,8 @@
 			log( "segments", segments, segments.length );
 			var p = "mPath";
 			var code = "Path2d mPath;\n";
-
-			console.log( "CURVES",  path.curves );
+			code += path.getCinderPath();
+			/*// console.log( "CURVES",  path.curves );
 
 			for(var i=0; i<segments.length; i++){
 				var segment = segments[i];
@@ -508,15 +536,8 @@
 					code += this.quadToTemplate( { h1x: handle.x, h1y: handle.y, p2x: segment.point.x, p2y: segment.point.x } );
 				} 
 
-
-				if( i === 0 ){
-					
-				}else{
-					
-				}
-
 				// TODO: base the template for the line segment based on the segment type
-			}
+			}*/
 
 			code += "gl::draw( mPath );";
 			// div.html( code );
