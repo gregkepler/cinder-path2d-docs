@@ -88,6 +88,21 @@
 			this.segments.push( SEGMENT_TYPES[1] );
 		},
 
+		quadTo: function( handlePt, endPt ) {
+			var PaperPts = this.convertPoints( [handlePt, endPt] );
+			this.path.quadraticCurveTo( PaperPts[0], PaperPts[1] );
+			this.points.push( handlePt, endPt );
+			this.segments.push( SEGMENT_TYPES[2] );
+		},
+
+		cubicTo: function( handlePt1, handlePt2, endPt ) {
+
+			var PaperPts = this.convertPoints( [handlePt1, handlePt2, endPt] );
+			this.path.cubicCurveTo( PaperPts[0], PaperPts[1], PaperPts[2] );
+			this.points.push( handlePt1, handlePt2, endPt );
+			this.segments.push( SEGMENT_TYPES[3] );
+		},
+
 		convertPoints: function( points ){
 
 			var paperPoints = [];
@@ -252,7 +267,7 @@
 			console.log( "DRAW INITIAL PATH" );
 
 			// draw the initial path
-			var curPaper = this.curPaper;
+			/*var curPaper = this.curPaper;
 			console.log( "curPaper", this.curPaper );
 			var path = new curPaper.Path();
 				path.strokeColor = COLOR_LINE_TO;
@@ -262,18 +277,20 @@
 				path.lineTo( new curPaper.Point(250.0, 50.0));
 				path.lineTo( new curPaper.Point(350.0, 150.0) );
 				path.lineTo( new curPaper.Point(450.0, 50.0) );
-			this.paths.push( path );
+			this.paths.push( path );*/
 
-			/*
+			
 			// new Path2d wrapper
-			var path = new cidocs.Path2d( this.curPaper );
-				path.moveTo( Point( 50.0, 50.0 ) );
-				path.lineTo( Point( 150.0, 150.0 ) );
-				path.lineTo( Point( 250.0, 50.0 ) );
-				path.lineTo( Point( 350.0, 150.0 ) );
-				path.lineTo( Point( 450.0, 50.0 ) );*/
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.path.strokeColor = COLOR_LINE_TO;
+			path2d.moveTo( Point( 50.0, 50.0 ) );
+			path2d.lineTo( Point( 150.0, 150.0 ) );
+			path2d.lineTo( Point( 250.0, 50.0 ) );
+			path2d.lineTo( Point( 350.0, 150.0 ) );
+			path2d.lineTo( Point( 450.0, 50.0 ) );
+			this.paths.push( path2d.path );
 
-
+			
 
 		}
 	};
@@ -306,7 +323,7 @@
 			// quadTo - waves
 			var curPaper = this.curPaper;
 			var waveWidth = 100.0;
-			var path = new curPaper.Path();
+			/*var path = new curPaper.Path();
 			path.moveTo( new curPaper.Point(0.0, 50.0) );
 			path.strokeColor = COLOR_QUAD_TO;
 			for( var i = 0; i < 5; i++ ) {
@@ -315,7 +332,21 @@
 				path.quadraticCurveTo( new curPaper.Point( startX + waveWidth / 2.0, 50.0 ), new curPaper.Point( startX + waveWidth, 50.0 ) );
 
 			}
-			this.paths.push( path );
+			this.paths.push( path );*/
+
+			
+			// Path2d wrapper
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.path.strokeColor = COLOR_QUAD_TO;
+			path2d.moveTo( Point( 0.0, 50.0 ) );
+				
+			for( var i = 0; i < 5; i++ ) {
+				var startX = i * waveWidth;
+				path2d.quadTo( Point( startX, 0.0 ), Point( startX + waveWidth / 2.0, 0.0 ) );
+				path2d.quadTo( Point( startX + waveWidth / 2.0, 50.0 ), Point( startX + waveWidth, 50.0 ) );
+			}
+			this.paths.push( path2d.path );
+			console.log( "PATH", path2d.path );
 		}
 	};
 	cidocs.QuadToSketch.extend( cidocs.Path2dSketch );
@@ -352,7 +383,10 @@
 			path.moveTo( new curPaper.Point( 50.0, 50.0 ) );
 			path.cubicCurveTo( new curPaper.Point( 75.0, 50.0 ), new curPaper.Point( 100.0, 75.0 ), new curPaper.Point( 100.0, 100.0 ) );
 			
-
+			/*var path = new cidocs.Path2d( this.curPaper );
+			path.moveTo( Point( 50.0, 50.0 ) );
+			path.cubicTo( Point( 75.0, 50.0 ), Point( 100.0, 75.0 ), Point( 100.0, 100.0 ) );
+			*/
 
 			this.paths.push( path );
 		}
@@ -402,6 +436,17 @@
 								new curPaper.Point( 110.0, 100.0 ) );
 			path.quadraticCurveTo( new curPaper.Point( 110.0, 140.0 ), new curPaper.Point( 135.0, 140.0 ) );
 			path.lineTo( new curPaper.Point( 75.0, 140.0 ) );
+
+
+			/*
+			var path = new cidocs.Path2d( this.curPaper );
+			path.moveTo( Point( 75.0, 140.0 ) );
+			path.quadTo( Point( 100.0, 140.0 ), Point( 100.0, 100.0 ) );
+			path.cubicTo( Point( 40.0, 150.0 ), Point( 40.0, 40.0 ), Point( 100.0, 90.0 ) );
+			path.cubicTo( Point( 50.0, 30.0 ), Point( 160.0, 30.0 ), Point( 110.0, 90.0 ) );
+			path.cubicTo( Point( 170.0, 40.0 ), Point( 170.0, 150.0 ), Point( 110.0, 100.0 ) );
+			path.quadTo( Point( 110.0, 140.0 ), Point( 135.0, 140.0 ) );
+			path.lineTo( Point( 75.0, 140.0 ) );*/
 
 
 			this.paths.push( path );
