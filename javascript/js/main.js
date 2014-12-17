@@ -85,12 +85,6 @@
 		
 		moveTo: function( point ) {
 
-			// var paperPts = this.convertPoints( [point] );
-
-			// this.path.moveTo( paperPts[0] );
-
-			console.log( "point", point );
-
 			var pt = new Shape.Rectangle( this.ptRect );
 			pt.translate( point );
 			pt.strokeColor = 'blue';
@@ -103,11 +97,6 @@
 
 		lineTo: function( point ) {
 
-			/*var paperPts = this.convertPoints( [point] );
-			this.path.lineTo( paperPts[0] );
-			this.points.push( paperPts[0] );
-			this.segments.push( SEGMENT_TYPES[1] );*/
-
 			var pt = new Shape.Rectangle( this.ptRect );
 			pt.translate( point );
 			pt.strokeColor = 'blue';
@@ -118,11 +107,6 @@
 		},
 
 		quadTo: function( handlePt, endPt ) {
-			/*var paperPts = this.convertPoints( [handlePt, endPt] );
-			this.path.quadraticCurveTo( paperPts[0], paperPts[1] );
-			this.points.push( paperPts[0], paperPts[1] );
-			this.segments.push( SEGMENT_TYPES[2] );*/
-
 
 			var h1 = new Shape.Rectangle( this.ptRect );
 			h1.translate( handlePt );
@@ -138,12 +122,6 @@
 		},
 
 		cubicTo: function( handlePt1, handlePt2, endPt ) {
-
-			/*var paperPts = this.convertPoints( [handlePt1, handlePt2, endPt] );
-			this.path.cubicCurveTo( paperPts[0], paperPts[1], paperPts[2] );
-			this.points.push( paperPts[0], paperPts[1], paperPts[2] );
-			this.segments.push( SEGMENT_TYPES[3] );*/
-
 
 			var h1 = new Shape.Rectangle( this.ptRect );
 			h1.translate( handlePt1 );
@@ -168,13 +146,82 @@
 			this.path.position = pos;
 
 			_.each( this.points, function( pt ) {
-				console.log( "SET POS", pt.position );
+				// console.log( "SET POS", pt.position );
 				pt.position.x += pos.x;
 				pt.position.y += pos.y;
 			} );
 
 			this.drawPath();
 		},
+
+		movePoint: function( selectedPoint, newPos ) {
+
+			var ptIndex = 0;
+			var points = this.points;
+			var self = this;
+			var mainPt = null;
+
+			_.each( this.segments, function( segment, index, segments ) {
+
+				if( mainPt ) 
+					return;
+
+				var ptsToMove = [];
+				var nextSegment = segments[index+1];
+
+				switch( segment ) {
+					
+					case SEGMENT_TYPES[0]:
+						mainPt = ptIndex;
+						ptsToMove = [points[mainPt]];						
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 1] );
+						}
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[1]:
+						mainPt = ptIndex;
+						ptsToMove = [points[mainPt]];
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 1] );
+						}
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[2]:
+						mainPt = ptIndex + 1;
+						ptsToMove = [points[mainPt]];						
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 2] );
+						}
+						ptIndex+=2;
+						break;
+
+					case SEGMENT_TYPES[3]:
+						mainPt = ptIndex + 2;
+						ptsToMove = [points[mainPt], points[ptIndex + 1]];
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 3] );
+						}
+						ptIndex+=3;
+						break;
+				};
+
+				// if we've found the point to move, move it aling with companion points
+				if( selectedPoint === self.points[mainPt] ) {
+					var mainPt = new Point( points[mainPt].position );
+					var diff = newPos.subtract( mainPt );
+
+					_.each( ptsToMove, function( pt ) {
+						pt.position = new Point( pt.position ).add( diff );
+					}, this );				}
+			} );
+
+			if( !mainPt ) {
+				selectedPoint.position = newPos;
+			}
+		},	
 
 		convertPoints: function( points ){
 
@@ -415,10 +462,8 @@
 				}
 			} );
 
-			console.log( "PATH", this.path );
-			
+			// console.log( "PATH", this.path );
 		}
-
 	}
 
 	// +———————————————————————————————————————+
@@ -515,7 +560,6 @@
 				}*/
 
 				if (hitResult.item.type === 'rectangle') {
-					console.log( "DOWN", hitResult.item.position );
 					this.selectedPoint = hitResult.item;
 				}
 
@@ -533,9 +577,13 @@
 				this.selectedSegment.point = event.point;
 			}*/
 
+			// console.log( "POINT", new paper.Point( event.point.x, event.point.y ).length );
+
 			if( this.selectedPoint ) {
-				this.selectedPoint.position = event.point;
-				console.log( "DRAG", this.selectedPoint.position.x, this.selectedPoint.position.y );
+
+				this.paths[0].movePoint( this.selectedPoint, event.point );
+				// this.selectedPoint.position = event.point;
+				// console.log( "DRAG", this.selectedPoint.position.x, this.selectedPoint.position.y );
 				// console.log( this.selectedPoint.position );
 				this.paths[0].drawPath();	
 				this.updatePath();
@@ -551,8 +599,6 @@
 		updatePath: function() {
 
 			this.curPaper.view.draw();
-			
-			console.log( this.curPaper.view );
 			this.output.update( this.paths[0] );
 		},
 
@@ -577,7 +623,6 @@
 			$(this.canvas).addClass( "active" );
 			this.updatePath();
 
-			console.log("BUTTON", $("#handle-toggle"));
 			_.bindAll( this, 'toggleHandles' );
 			$("#handle-toggle").click( $.proxy( this.toggleHandles, this) );
 
@@ -585,7 +630,6 @@
 
 		hide: function() {
 
-			console.log( "HIDE" );
 			$(this.canvas).removeClass( "active" );
 			$("#handle-toggle").unbind('click')
 		}
@@ -616,27 +660,16 @@
 
 		drawInitialPath: function( ) {
 			
-			console.log( "DRAW LINE PATH" );
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
 			// path2d.path.strokeColor = COLOR_LINE_TO;
 			path2d.moveTo( new Point( 50.0, 50.0 ) );
-			
-			// var rect = new Rectangle( new Point( -4, -4 ), new Size( 8, 8 ) );
-			// var pt = new Shape.Rectangle( rect );
-			// pt.translate( new Point( 50.0, 50.0 ) );
-			// pt.strokeColor = 'blue';
-
 			path2d.lineTo( new Point( 150.0, 150.0 ) );
 			path2d.lineTo( new Point( 250.0, 50.0 ) );
 			path2d.lineTo( new Point( 350.0, 150.0 ) );
 			path2d.lineTo( new Point( 450.0, 50.0 ) );
 
-			
-
 			this.paths.push( path2d );
-
-			// path2d.drawHandles();
 		}
 	};
 	cidocs.LineToSketch.extend( cidocs.Path2dSketch );
@@ -752,7 +785,6 @@
 			var curPaper = this.curPaper;
 			
 			var path2d = new cidocs.Path2d( this.curPaper );
-			// path2d.path.strokeColor = COLOR_CUBIC_TO;
 			path2d.moveTo( new Point( 75.0, 140.0 ) );
 			path2d.quadTo( new Point( 100.0, 140.0 ), new Point( 100.0, 100.0 ) );
 			path2d.cubicTo( new Point( 40.0, 150.0 ), new Point( 40.0, 40.0 ), new Point( 100.0, 90.0 ) );
@@ -761,8 +793,6 @@
 			path2d.quadTo( new Point( 110.0, 140.0 ), new Point( 135.0, 140.0 ) );
 			path2d.lineTo( new Point( 75.0, 140.0 ) );
 			this.paths.push( path2d );
-
-			// path2d.drawHandles();
 		}
 	};
 	cidocs.CombinedSketch.extend( cidocs.Path2dSketch );
@@ -791,7 +821,6 @@
 		this.update = function( path ){
 
 			var segments = path.segments;
-			log( "segments", segments, segments.length );
 			var p = "mPath";
 			var code = "Path2d mPath;\n";
 			code += path.getCinderPath();
@@ -828,7 +857,7 @@
 			// div.html( code );
 			this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
 
-			log( code, Prism.highlight( code, Prism.languages.cpp ) );
+			// log( code, Prism.highlight( code, Prism.languages.cpp ) );
 		};
 
 		this.init();
@@ -854,7 +883,7 @@
 	};
 
 	this.show = function( moduleName ){
-		console.log( "show", moduleName );
+		// console.log( "show", moduleName );
 
 		// remove active from any active canvases
 		var elements = document.querySelectorAll( "canvas" );
