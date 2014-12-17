@@ -62,7 +62,6 @@
 
 	function convertToCiNum( number ) {
 		var places = number.getDecimals();
-		console.log(number, places);
 		if( places <= 1 ) {
 			return number.toFixed( 1 );
 		} else {
@@ -70,13 +69,6 @@
 		}
 	}
 
-
-	/*Point = function( x, y ){
-		return { 
-		    x: x,
-		    y: y
-		};
-	}*/
 
 	// +———————————————————————————————————————+
 	//	Path2d     
@@ -92,6 +84,7 @@
 		this.ps = paperScope;
 
 		this.path = new Path();
+		this.path.pivot = new Point();
 
 		this.moveToTemplate = _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
 		this.lineToTemplate = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
@@ -113,7 +106,6 @@
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[0] );
 			this.drawPath();
-			// console.log( "SCOPE", pt.position );
 		},
 
 		lineTo: function( point ) {
@@ -124,7 +116,6 @@
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[1] );
 			this.drawPath();
-			// console.log( "SCOPE", this.ps );
 		},
 
 		quadTo: function( handlePt, endPt ) {
@@ -163,16 +154,25 @@
 
 		setPosition: function( pos ) {
 
-			this.path.pivot = new this.ps.Point( 0, 0 );
-			this.path.position = pos;
-
+			var tlPos = this.path.bounds.topLeft;
 			_.each( this.points, function( pt ) {
-				// console.log( "SET POS", pt.position );
-				pt.position.x += pos.x;
-				pt.position.y += pos.y;
+				var relPos = (new Point(pt.position)).subtract( new Point( tlPos ) );
+				pt.position.x = relPos.x + pos.x;
+				pt.position.y = relPos.y + pos.y;
 			} );
 
 			this.drawPath();
+		},
+
+		centerInCanvas: function( canvas ) {
+
+			// console.log( canvas[0].clientWidth, this.path.bounds );
+			console.log( "CANVAS", canvas[0] );
+			var posX = (canvas[0].clientWidth - this.path.bounds.width) / 2;
+			var posY = (canvas[0].clientHeight - this.path.bounds.height) / 2;
+			console.log(posX, posY);
+			this.setPosition( new Point( posX, posY ) );
+			// this.setPosition( new Point( posX, posY ) );
 		},
 
 		movePoint: function( selectedPoint, newPos ) {
@@ -528,11 +528,11 @@
 			var options = opts || {};
 
 			// use defined options
-			this.canvas = options.canvas;
+			this.canvas = $( options.canvas );
 			this.output = options.output;
 
 			var paperScope = new paper.PaperScope();
-			paperScope.setup( $( options.canvas )[0]);
+			paperScope.setup( this.canvas[0] );
 			this.curPaper = paperScope;
 
 			this.tool = new paperScope.Tool();
@@ -641,7 +641,8 @@
 		},
 
 		show: function() {
-			$(this.canvas).addClass( "active" );
+			this.canvas.removeClass( "inactive" );
+			this.canvas.addClass( "active" );
 			this.updatePath();
 
 			_.bindAll( this, 'toggleHandles' );
@@ -651,7 +652,9 @@
 
 		hide: function() {
 
-			$(this.canvas).removeClass( "active" );
+			console.log( this.canvas );
+			this.canvas.removeClass( "active" );
+			this.canvas.addClass( "inactive" );
 			$("#handle-toggle").unbind('click')
 		}
 	};
@@ -683,7 +686,6 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			// path2d.path.strokeColor = COLOR_LINE_TO;
 			path2d.moveTo( new Point( 50.0, 50.0 ) );
 			path2d.lineTo( new Point( 150.0, 150.0 ) );
 			path2d.lineTo( new Point( 250.0, 50.0 ) );
@@ -691,6 +693,7 @@
 			path2d.lineTo( new Point( 450.0, 50.0 ) );
 
 			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
 		}
 	};
 	cidocs.LineToSketch.extend( cidocs.Path2dSketch );
@@ -732,12 +735,9 @@
 				path2d.quadTo( new Point( startX + waveWidth / 2.0, 50.0 ), new Point( startX + waveWidth, 50.0 ) );
 			}
 			
-			// path2d.path.translate( new curPaper.Point( 100, 100 ) );
-			// path2d.path.pivot = new curPaper.Point( 0, 0 );
-			// path2d.path.position = new curPaper.Point( 100, 100 );
-			// console.log("path pos", path2d.path);
-			path2d.setPosition( new Point( 100, 100 ) );
+			// path2d.setPosition( new Point( 100, 100 ) );
 			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
 
 			// path2d.drawHandles();
 		}
@@ -775,6 +775,8 @@
 			path2d.cubicTo( new Point( 100.0, 175.0 ), new Point( 200.0, 175.0 ), new Point( 200.0, 100.0 ) );
 			path2d.cubicTo( new Point( 200.0, 75.0 ), new Point( 225.0, 50.0 ), new Point( 250.0, 50.0 ) );
 			this.paths.push( path2d );
+
+			path2d.centerInCanvas( this.canvas );
 		}
 	};
 	cidocs.CubicToSketch.extend( cidocs.Path2dSketch );
@@ -812,6 +814,7 @@
 			path2d.quadTo( new Point( 110.0, 140.0 ), new Point( 135.0, 140.0 ) );
 			path2d.lineTo( new Point( 75.0, 140.0 ) );
 			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
 		}
 	};
 	cidocs.CombinedSketch.extend( cidocs.Path2dSketch );
