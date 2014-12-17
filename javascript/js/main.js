@@ -310,6 +310,26 @@
 
 		},
 
+		handlesOn: function() {
+			_.each( this.points, function( point ) {
+				point.visible = true;
+			} );
+
+			_.each( this.extras, function( extra ) {
+				extra.visible = true;
+			} );
+		},
+
+		handlesOff: function() {
+			_.each( this.points, function( point ) {
+				point.visible = false;
+			} );
+			_.each( this.extras, function( extra ) {
+				extra.visible = false;
+			} );
+
+		},
+
 		drawPath: function() {
 
 			// redraw the path using the original directions
@@ -423,6 +443,7 @@
 			tolerance: 5
 		};
 		this.movePath = false;
+		this.handlesOn = true;
 
 		this.initialize( options );
 
@@ -434,9 +455,7 @@
 		initialize: function( opts ) {
 
 			var options = opts || {};
-			console.log( "PATH2DSKETCH INITIALIZE: output  ", options.output );
 
-			// console.log( "options", options );
 			// use defined options
 			this.canvas = options.canvas;
 			this.output = options.output;
@@ -537,9 +556,38 @@
 			this.output.update( this.paths[0] );
 		},
 
+		toggleHandles: function() {
+
+			this.handlesOn = !this.handlesOn;
+
+			if( this.handlesOn ){
+				_.each( this.paths, function( path ) {
+					path.handlesOn();
+				} );
+			} else {
+				_.each( this.paths, function( path ) {
+					path.handlesOff();
+				} );
+			}
+
+			this.updatePath();
+		},
+
 		show: function() {
 			$(this.canvas).addClass( "active" );
 			this.updatePath();
+
+			console.log("BUTTON", $("#handle-toggle"));
+			_.bindAll( this, 'toggleHandles' );
+			$("#handle-toggle").click( $.proxy( this.toggleHandles, this) );
+
+		},
+
+		hide: function() {
+
+			console.log( "HIDE" );
+			$(this.canvas).removeClass( "active" );
+			$("#handle-toggle").unbind('click')
 		}
 	};
 
@@ -810,13 +858,10 @@
 
 		// remove active from any active canvases
 		var elements = document.querySelectorAll( "canvas" );
-		Array.prototype.forEach.call(elements, function(el, i){
-			removeClass( el, "active" );
-		});
 
-		/*_.each.call(  window.app.sketches, function(el, i){
-			$( el, "active" );
-		});*/
+		_.each( window.app.sketches, function( sketch, i ){
+			sketch.hide();
+		});
 
 
 		// make the specified canvas active
@@ -837,7 +882,7 @@
 	$(document).ready( function(){
 		
 		window.app.init();
-		// show("combined");
+		show("lineto");
 
 	});
 	
