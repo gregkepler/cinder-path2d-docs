@@ -489,6 +489,22 @@
 			} );
 
 			// console.log( "PATH", this.path );
+		},
+
+		reset: function(){
+
+			_.each( this.points, function( point ) {
+				point.remove();
+			});
+
+			_.each( this.extras, function( extra ) {
+				extra.remove();
+			});
+
+			this.path.remove();
+			this.points		= [];
+			this.segments	= [];
+			this.extras		= [];
 		}
 	}
 
@@ -613,8 +629,17 @@
 			// if( this.movePath ) {
 				// this.selectedPath.position += event.delta;
 			// }
-			
 
+		},
+
+		drawInitialPath: function(){
+			// overwrite
+		},
+
+		reset: function(){
+			this.paths[0].reset();
+			this.paths = [];
+			this.drawInitialPath();
 		},
 
 		updatePath: function() {
@@ -645,8 +670,9 @@
 			this.canvas.addClass( "active" );
 			this.updatePath();
 
-			_.bindAll( this, 'toggleHandles' );
+			_.bindAll( this, 'toggleHandles', 'reset' );
 			$("#handle-toggle").click( $.proxy( this.toggleHandles, this) );
+			$("#reset").click( $.proxy( this.reset, this) );
 
 		},
 
@@ -656,6 +682,7 @@
 			this.canvas.removeClass( "active" );
 			this.canvas.addClass( "inactive" );
 			$("#handle-toggle").unbind('click')
+			$("#reset").unbind('click')
 		}
 	};
 
