@@ -859,6 +859,8 @@
 
 		sketches: [],
 
+		links: [],
+
 		codeModule: new cidocs.CodeModule(),
 
 		init: function(){
@@ -868,8 +870,26 @@
 			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
-
 			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, combinedSketch );		
+
+			// init all the links
+
+
+			var linksDiv = $( '#sketchLinks' );
+			_.each( this.sketches, function( sketch ){
+				// create a link
+				// var link = "<a title=\"Blah\" href=\"javascript:show('" + sketch.canvas.id + "')\">This is blah<a>";
+
+				console.log( "canvas id",  sketch.canvas[0].id );
+				var li = $('<li>').appendTo( linksDiv );
+				var link = $('<a>',{	
+				    text: sketch.canvas.data('name'),
+    				title: 'Blah',
+    				href: '#',
+    				click: function(){ show( sketch.canvas[0].id );return false;}
+				}).appendTo( li );
+
+			});
 		}
 	};
 

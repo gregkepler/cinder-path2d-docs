@@ -28,17 +28,12 @@
                 
                 [INSERT INTERACTIVE POINT AND SEGMENT DISPLAY]
                 <div class="tutorial">
-                    <div class="sketch-links">
-                        <a href="javascript:void(0);" onClick='javascript:show("lineto")'>LineTo</a> | 
-                        <a href="javascript:void(0);" onClick='javascript:show("quadto")'>QuadTo</a> | 
-                        <a href="javascript:void(0);" onClick='javascript:show("cubicto")'>CubicTo</a> | 
-                        <a href="javascript:void(0);" onClick='javascript:show("combined")'>Combined</a>
-                    </div>
+                    <ul id="sketchLinks"></ul>
                     <div class="canvases">
-                        <canvas id="lineto" class="active" width="500" height="300"></canvas>
-                        <canvas id="quadto" width="500" height="300"></canvas>
-                        <canvas id="cubicto" width="500" height="300"></canvas>
-                        <canvas id="combined" width="500" height="300"></canvas>
+                        <canvas id="lineto" data-name="LineTo" class="active" width="500" height="300"></canvas>
+                        <canvas id="quadto" data-name="QuadTo" width="500" height="300"></canvas>
+                        <canvas id="cubicto" data-name="CubicTo" width="500" height="300"></canvas>
+                        <canvas id="combined" width="500" data-name="Combined" height="300"></canvas>
                         <button id="handle-toggle" >Toggle Handles</button>
                     </div>
                     <pre><code id="output" class="language-cpp"></code></pre>
