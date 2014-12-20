@@ -7,6 +7,7 @@
 
 	// array of paper scope
 	var papers = [];
+	var COLOR_MOVE_TO = '#c64b24';
 	var COLOR_LINE_TO = '#00FF00';
 	var COLOR_QUAD_TO = '#0000FF';
 	var COLOR_CUBIC_TO = '#FF00FF';
@@ -94,7 +95,8 @@
 		this.ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
 		
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
-		star.fillColor = 'blue';
+		star.fillColor = COLOR_MOVE_TO;
+		star.strokeColor = COLOR_MOVE_TO;
 		star.type = 'star';
 		// star.strokeColor = 'blue';
 		star.rotation = 180;
@@ -121,7 +123,6 @@
 			// var pt = new Item( this.ptStar );
 			var pt = this.ptStar.place();
 			pt.translate( point );
-			pt.strokeColor = 'blue';
 
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[0] );
