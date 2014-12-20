@@ -51,13 +51,13 @@
 	};
 
 	if (!Number.prototype.getDecimals) {
-	    Number.prototype.getDecimals = function() {
-	        var num = this,
-	            match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
-	        if (!match)
-	            return 0;
-	        return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
-	    }
+		Number.prototype.getDecimals = function() {
+			var num = this,
+				match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+			if (!match)
+				return 0;
+			return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
+		}
 }
 
 	function convertToCiNum( number ) {
@@ -122,7 +122,6 @@
 			var pt = this.ptStar.place();
 			pt.translate( point );
 			pt.strokeColor = 'blue';
-
 
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[0] );
@@ -371,10 +370,11 @@
 						// var star = self.ptStar.place();
 						// star.position = points[ptIndex].position;
 						// self.extras.push(star);
+						var pt = points[ptIndex].position;
 
 
-
-						self.path.moveTo( new Point( points[ptIndex].position ) );
+						self.path.moveTo( new Point( pt ) );
+						self.drawPointText.call( self, [pt] );
 						ptIndex++;
 						break;
 
@@ -385,22 +385,26 @@
 						// console.log( "LINE TO", points[ptIndex].position.x, points[ptIndex].position.y );
 						// self.lineTo( points[ptIndex] );
 
+						var pt = points[ptIndex].position;
+
 						// path line
-						self.path.lineTo( new Point( points[ptIndex].position ) );
+						self.path.lineTo( new Point( pt ) );
 
 						// segment line
 						var seg = new Path();
 						seg.moveTo( points[ptIndex-1].position );
 						seg.strokeColor = COLOR_LINE_TO;
 						seg.strokeWidth = 3.0;
-						seg.lineTo( new Point( points[ptIndex].position ) );
+						seg.lineTo( new Point( pt ) );
 						self.extras.push( seg );
 
+						self.drawPointText.call( self, [pt] );
 						ptIndex++;
 						break;
 
 					case SEGMENT_TYPES[2]:
 
+						// var pt = points[ptIndex].position;
 						var l1 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex + 1].position ) );
 						var l2 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex - 1].position ) );
 						l1.strokeColor = 'cyan';
@@ -428,14 +432,18 @@
 						);
 						self.extras.push( seg );
 
-
+						self.drawPointText.call( self, [points[ptIndex].position, points[ptIndex+1].position] );
 						ptIndex+=2;
 						break;
 
 					case SEGMENT_TYPES[3]:
 
-						var l1 = new Path.Line( new Point( points[ptIndex - 1].position ), new Point( points[ptIndex].position ) );
-						var l2 = new Path.Line( new Point( points[ptIndex + 1].position ), new Point( points[ptIndex + 2].position ) );
+						var h1 = points[ptIndex].position;
+						var h2 = points[ptIndex+1].position;
+						var pt = points[ptIndex+2].position;
+
+						var l1 = new Path.Line( new Point( points[ptIndex - 1].position ), new Point( h1 ) );
+						var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
 						l1.strokeColor = 'cyan';
 						l2.strokeColor = 'cyan';
 						l1.sendToBack();
@@ -444,9 +452,9 @@
 
 
 						self.path.cubicCurveTo(
-							new Point( points[ptIndex].position ),
-							new Point( points[ptIndex + 1].position ),
-							new Point( points[ptIndex + 2].position )
+							new Point( h1 ),
+							new Point( h2 ),
+							new Point( pt )
 						);
 
 
@@ -456,11 +464,13 @@
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
 						seg.cubicCurveTo(
-							new Point( points[ptIndex].position ),
-							new Point( points[ptIndex + 1].position ),
-							new Point( points[ptIndex + 2].position )
+							new Point( h1 ),
+							new Point( h2 ),
+							new Point( pt )
 						);
 						self.extras.push( seg );
+
+						self.drawPointText.call( self, [h1, h2, pt] );
 
 						ptIndex+=3;
 						break;
@@ -472,6 +482,21 @@
 			});
 
 			// console.log( "PATH", this.path );
+		},
+
+		drawPointText: function( pts ) {
+
+			var self = this;
+			_.each( pts, function( pt ){
+				var text = new PointText({
+					point: [pt.x + 5, pt.y],
+					content: '[' + pt.x + ', ' + pt.y + ']',
+					fillColor: 'black',
+					fontFamily: 'Courier New',
+					fontSize: 8
+				});
+				self.extras.push( text );
+			});
 		},
 
 		reset: function(){
@@ -550,13 +575,13 @@
 
 			/*var result = this.curPaper.project.hitTest( event.point, this.hitOptions );
 			console.log( result );
-            if( result ) {
-            	// if( result == this)
-            	// result.item._parent.selected = true;
-            	result.item._parent.fullySelected = true;
-            }*/
+			if( result ) {
+				// if( result == this)
+				// result.item._parent.selected = true;
+				result.item._parent.fullySelected = true;
+			}*/
 
-            var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
+			var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
 			if( hitResult && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
 				hitResult.item.fullySelected = true;
 			}
@@ -725,24 +750,23 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			// this.updatePath();
 		},
 
 		drawInitialPath: function( ) {
 			
 			// quadTo - waves
 			var curPaper = this.curPaper;
-			var waveWidth = 100.0;
+			var waveWidth = 180.0;
+			var waveHeight = waveWidth/2.0;
 			
 			// Path2d wrapper
 			var path2d = new cidocs.Path2d( this.curPaper );
-			// path2d.path.strokeColor = COLOR_QUAD_TO;
-			path2d.moveTo( new Point( 0.0, 50.0 ) );
+			path2d.moveTo( new Point( 0.0, waveHeight ) );
 				
 			for( var i = 0; i < 3; i++ ) {
 				var startX = i * waveWidth;
 				path2d.quadTo( new Point( startX, 0.0 ), new Point( startX + waveWidth / 2.0, 0.0 ) );
-				path2d.quadTo( new Point( startX + waveWidth / 2.0, 50.0 ), new Point( startX + waveWidth, 50.0 ) );
+				path2d.quadTo( new Point( startX + waveWidth / 2.0, waveHeight ), new Point( startX + waveWidth, waveHeight ) );
 			}
 			
 			// path2d.setPosition( new Point( 100, 100 ) );
@@ -778,11 +802,10 @@
 			// quadTo - waves
 			var curPaper = this.curPaper;		
 			var path2d = new cidocs.Path2d( this.curPaper );
-			// path2d.path.strokeColor = COLOR_CUBIC_TO;
-			path2d.moveTo( new Point( 50.0, 50.0 ) );
-			path2d.cubicTo( new Point( 75.0, 50.0 ), new Point( 100.0, 75.0 ), new Point( 100.0, 100.0 ) );
-			path2d.cubicTo( new Point( 100.0, 175.0 ), new Point( 200.0, 175.0 ), new Point( 200.0, 100.0 ) );
-			path2d.cubicTo( new Point( 200.0, 75.0 ), new Point( 225.0, 50.0 ), new Point( 250.0, 50.0 ) );
+			path2d.moveTo( new Point( 0.0, 0.0 ) );
+			path2d.cubicTo( new Point( 50.0, 0.0 ), new Point( 100.0, 50.0 ), new Point( 100.0, 100.0 ) );
+			path2d.cubicTo( new Point( 100.0, 250.0 ), new Point( 300.0, 250.0 ), new Point( 300.0, 100.0 ) );
+			path2d.cubicTo( new Point( 300.0, 50.0 ), new Point( 350.0, 0.0 ), new Point( 400.0, 0.0 ) );
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
@@ -815,13 +838,13 @@
 			var curPaper = this.curPaper;
 			
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 75.0, 140.0 ) );
-			path2d.quadTo( new Point( 100.0, 140.0 ), new Point( 100.0, 100.0 ) );
-			path2d.cubicTo( new Point( 40.0, 150.0 ), new Point( 40.0, 40.0 ), new Point( 100.0, 90.0 ) );
-			path2d.cubicTo( new Point( 50.0, 30.0 ), new Point( 160.0, 30.0 ), new Point( 110.0, 90.0 ) );
-			path2d.cubicTo( new Point( 170.0, 40.0 ), new Point( 170.0, 150.0 ), new Point( 110.0, 100.0 ) );
-			path2d.quadTo( new Point( 110.0, 140.0 ), new Point( 135.0, 140.0 ) );
-			path2d.lineTo( new Point( 75.0, 140.0 ) );
+			path2d.moveTo( new Point( 150.0, 280.0 ) );
+			path2d.quadTo( new Point( 200.0, 280.0 ), new Point( 200.0, 200.0 ) );
+			path2d.cubicTo( new Point( 80.0, 300.0 ), new Point( 80.0, 80.0 ), new Point( 200.0, 180.0 ) );
+			path2d.cubicTo( new Point( 100.0, 60.0 ), new Point( 320.0, 60.0 ), new Point( 220.0, 180.0 ) );
+			path2d.cubicTo( new Point( 340.0, 80.0 ), new Point( 340.0, 300.0 ), new Point( 220.0, 200.0 ) );
+			path2d.quadTo( new Point( 220.0, 280.0 ), new Point( 270.0, 280.0 ) );
+			path2d.lineTo( new Point( 150.0, 280.0 ) );
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
 		}
@@ -893,11 +916,11 @@
 
 				var li = $('<li>').appendTo( linksDiv );
 				var link = $('<a>',{	
-				    text: sketch.canvas.data('name'),
-    				title: 'Blah',
-    				href: '#',
-    				'data-sketch': sketch.canvas[0].id,
-    				click: function(){ show( sketch.canvas[0].id );return false;}
+					text: sketch.canvas.data('name'),
+					title: 'Blah',
+					href: '#',
+					'data-sketch': sketch.canvas[0].id,
+					click: function(){ show( sketch.canvas[0].id );return false;}
 				})
 				link.appendTo( li );
 
