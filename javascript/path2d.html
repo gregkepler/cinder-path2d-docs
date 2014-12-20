@@ -6,7 +6,9 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        
+            
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/prism.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/path2d.css">
@@ -24,9 +26,8 @@
                 <h1>Part 1: Path2D Basics</h1>
                 <p>Each Path2D instance is made up of points and segments.</p>
                 <p>A point can refer to a single point where a line connects at the beginnig or end or a handle that is part of the definition of the path.</p>
-                <p>A Segment refers to the resulting line segment defined by the points and handles. The tpyes of segments are _</p>
+                <p>A Segment refers to the resulting line segment defined by the points and handles. The tpyes of segments are MOVETO, LINETO, QUADTO, and CUBICTO. Every path must start with a MOVETO segment to draw anything and the first segment of a path will of type MOVETO.</p>
                 
-                [INSERT INTERACTIVE POINT AND SEGMENT DISPLAY]
                 <div class="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">

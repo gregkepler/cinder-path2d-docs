@@ -1,3 +1,10 @@
+body
+	font-size: 16px
+	font-family: 'Merriweather', serif;
+
+p
+	font-size: .9em
+
 .content
 
 	max-width: 680px
@@ -6,17 +13,44 @@ ul#sketchLinks
 
 	list-style: none
 	padding: 0
+	background: #232323
+	height: 100%
+	margin: 0
 
 	li
 		display: inline-block
 		margin-right: 5px
+		padding: 1em
 
 	a
-		color: #ffffff
-		background: #4f4f4f
-		padding: 1em
-		font-family: sans-serif
+		color: #e7e7e7
+		font-family: 'Open Sans', sans-serif
 		text-decoration: none
+		padding: .7em 0
+
+		&:hover
+			color: #ffffff
+
+		&.active
+			border-bottom: .4em solid #c64b24
+
+
+
+.canvases
+	position: relative
+
+	#handle-toggle
+		position: absolute;
+		left: 10px
+		bottom: 10px
+
+	#reset
+		position: absolute;
+		right: 10px
+		bottom: 10px
+
+pre[class*="language-"]
+	margin: 0
 
 canvas
 	
@@ -35,3 +69,11 @@ canvas
 button
 	
 	padding: 1em
+
+h1
+	font-family: 'Open Sans', sans-serif
+	color: #333333
+	font-size: 2.25em
+
+.tutorial
+	margin-top: 3em

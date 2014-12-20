@@ -92,16 +92,37 @@
 		this.curveToTemplate = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		
 		this.ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
-		// this.ptRect = new Rectangle( new Point( -4, -4 ), new Size( 8, 8 ) );
+		
+		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
+		star.fillColor = 'blue';
+		star.type = 'star';
+		// star.strokeColor = 'blue';
+		star.rotation = 180;
+		// this.ptStar = star;
+		// this.ptStar.visible = false;
+		// removeChild( this.ptStar );
+		// this.ptStar.removeChild();
+		this.ptStar = new Symbol( star );
+
+		// var star = this.ps.project.importSVG( 'images/star.svg' );
+		// this.starPt = new Symbol( star );
+		// this.starPt.remove();
+		// star.remove();
 	}
 
 	cidocs.Path2d.prototype = {
 		
 		moveTo: function( point ) {
 
-			var pt = new Shape.Rectangle( this.ptRect );
+			// var pt = new Shape.Rectangle( this.ptRect );
+			// var pt = this.ptStar.clone();
+			// pt.addChild( this.ptStar.place() );
+			// var pt = new Shape.Rectangle( this.ptStar );
+			// var pt = new Item( this.ptStar );
+			var pt = this.ptStar.place();
 			pt.translate( point );
 			pt.strokeColor = 'blue';
+
 
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[0] );
@@ -167,10 +188,8 @@
 		centerInCanvas: function( canvas ) {
 
 			// console.log( canvas[0].clientWidth, this.path.bounds );
-			console.log( "CANVAS", canvas[0] );
 			var posX = (canvas[0].clientWidth - this.path.bounds.width) / 2;
 			var posY = (canvas[0].clientHeight - this.path.bounds.height) / 2;
-			console.log(posX, posY);
 			this.setPosition( new Point( posX, posY ) );
 			// this.setPosition( new Point( posX, posY ) );
 		},
@@ -298,89 +317,6 @@
 			return code;
 		},
 
-		drawHandles: function( segmentType ) {
-			
-			console.log( "DRAW HANDLES" );
-			this.extras = [];
-			var ptIndex = 0;
-			var points = this.points;
-			var self = this;
-
-			// for each segment in the path, draw the 
-			// point, a handles (if they exist), and 
-			// lines between points and handles
-			_.each( this.segments, function( segment ) {
-				// var point = new Rectangle( new Point( segment ) );
-
-				console.log("SEGMENT", segment);
-
-				switch( segment ) {
-					
-					case SEGMENT_TYPES[0]:
-						
-						var pt = new Shape.Rectangle( self.ptRect );
-						pt.translate( points[ptIndex].position.x, points[ptIndex].position.y );
-						pt.strokeColor = 'blue';
-						ptIndex++;
-						break;
-
-
-					case SEGMENT_TYPES[1]:
-
-						var pt = new Shape.Rectangle( self.ptRect );
-						pt.translate( points[ptIndex] );
-						pt.strokeColor = 'blue';
-						ptIndex++;
-						break;
-
-
-					case SEGMENT_TYPES[2]:
-
-						var pt = new Shape.Rectangle( self.ptRect );
-						pt.translate( points[ptIndex+1] );
-						pt.strokeColor = 'blue';
-
-						var h1 = new Shape.Rectangle( self.ptRect );
-						h1.translate( points[ptIndex] );
-						h1.strokeColor = 'cyan';
-
-						var l1 = new Path.Line(points[ptIndex], points[ptIndex+1]);
-						var l2 = new Path.Line(points[ptIndex], points[ptIndex-1]);
-						l1.strokeColor = 'cyan';
-						l2.strokeColor = 'cyan';
-
-						ptIndex+=2;
-						break;
-
-
-					case SEGMENT_TYPES[3]:
-
-						var pt = new Shape.Rectangle( self.ptRect );
-						pt.translate( points[ptIndex+2] );
-						pt.strokeColor = 'blue';
-
-						var h1 = new Shape.Rectangle( self.ptRect );
-						h1.translate( points[ptIndex] );
-						h1.strokeColor = 'cyan';
-
-						var h2 = new Shape.Rectangle( self.ptRect );
-						h2.translate( points[ptIndex+1] );
-						h2.strokeColor = 'cyan';
-						
-						var l1 = new Path.Line(points[ptIndex-1], points[ptIndex]);
-						var l2 = new Path.Line(points[ptIndex+1], points[ptIndex+2]);
-						l1.strokeColor = 'cyan';
-						l2.strokeColor = 'cyan';
-
-						ptIndex+=3;
-						break;
-				}
-			} );
-			
-			// make all of the extras selectable
-
-		},
-
 		handlesOn: function() {
 			_.each( this.points, function( point ) {
 				point.visible = true;
@@ -430,16 +366,36 @@
 						// self.moveTo( points[ptIndex] );
 						// var pt = new paper.Point( points[ptIndex].position.x, points[ptIndex].position.y );
 
-						// self.path.strokeColor = COLOR_LINE_TO;
+						// var start = new Path.
+
+						// var star = self.ptStar.place();
+						// star.position = points[ptIndex].position;
+						// self.extras.push(star);
+
+
+
 						self.path.moveTo( new Point( points[ptIndex].position ) );
 						ptIndex++;
 						break;
 
 					case SEGMENT_TYPES[1]:
+
+
+						
 						// console.log( "LINE TO", points[ptIndex].position.x, points[ptIndex].position.y );
 						// self.lineTo( points[ptIndex] );
-						// self.path.strokeColor = COLOR_LINE_TO;
+
+						// path line
 						self.path.lineTo( new Point( points[ptIndex].position ) );
+
+						// segment line
+						var seg = new Path();
+						seg.moveTo( points[ptIndex-1].position );
+						seg.strokeColor = COLOR_LINE_TO;
+						seg.strokeWidth = 3.0;
+						seg.lineTo( new Point( points[ptIndex].position ) );
+						self.extras.push( seg );
+
 						ptIndex++;
 						break;
 
@@ -461,6 +417,17 @@
 						);
 
 						
+						// segment line
+						var seg = new Path();
+						seg.moveTo( points[ptIndex-1].position );
+						seg.strokeColor = COLOR_QUAD_TO;
+						seg.strokeWidth = 3.0;
+						seg.quadraticCurveTo(
+							new Point( points[ptIndex].position ),
+							new Point( points[ptIndex + 1].position )
+						);
+						self.extras.push( seg );
+
 
 						ptIndex+=2;
 						break;
@@ -475,18 +442,34 @@
 						l2.sendToBack();
 						self.extras.push( l1, l2 );
 
-						// self.path.strokeColor = COLOR_CUBIC_TO;
 
-						// self.curveTo( points[ptIndex], points[ptIndex+1], points[ptIndex+2] );
 						self.path.cubicCurveTo(
 							new Point( points[ptIndex].position ),
 							new Point( points[ptIndex + 1].position ),
 							new Point( points[ptIndex + 2].position )
 						);
+
+
+						// segment line
+						var seg = new Path();
+						seg.moveTo( points[ptIndex-1].position );
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						seg.cubicCurveTo(
+							new Point( points[ptIndex].position ),
+							new Point( points[ptIndex + 1].position ),
+							new Point( points[ptIndex + 2].position )
+						);
+						self.extras.push( seg );
+
 						ptIndex+=3;
 						break;
 				}
 			} );
+	
+			_.each( this.points, function( point ) {
+				point.bringToFront();
+			});
 
 			// console.log( "PATH", this.path );
 		},
@@ -574,7 +557,7 @@
             }*/
 
             var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
-			if( hitResult && hitResult.item.type === 'rectangle') {
+			if( hitResult && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
 				hitResult.item.fullySelected = true;
 			}
 
@@ -591,12 +574,12 @@
 				// this.selectedPath = hitResult.item;
 				// this.selectedPath.fullySelected = true;
 
-				// console.log( hitResult);
+				// console.log( hitResult.type );
 				/*if (hitResult.type == 'segment') {
 					this.selectedSegment = hitResult.segment;
 				}*/
 
-				if (hitResult.item.type === 'rectangle') {
+				if (hitResult.item.type === 'rectangle' || hitResult.type === "segment") {
 					this.selectedPoint = hitResult.item;
 				}
 
@@ -640,6 +623,7 @@
 			this.paths[0].reset();
 			this.paths = [];
 			this.drawInitialPath();
+			this.updatePath();
 		},
 
 		updatePath: function() {
@@ -678,7 +662,6 @@
 
 		hide: function() {
 
-			console.log( this.canvas );
 			this.canvas.removeClass( "active" );
 			this.canvas.addClass( "inactive" );
 			$("#handle-toggle").unbind('click')
@@ -766,7 +749,6 @@
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
 
-			// path2d.drawHandles();
 		}
 	};
 	cidocs.QuadToSketch.extend( cidocs.Path2dSketch );
@@ -886,12 +868,14 @@
 
 		sketches: [],
 
-		links: [],
+		// buttons: [],
 
 		codeModule: new cidocs.CodeModule(),
 
 		init: function(){
 			
+			var self = this;
+
 			// init all the sketches
 			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
 			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
@@ -907,21 +891,23 @@
 				// create a link
 				// var link = "<a title=\"Blah\" href=\"javascript:show('" + sketch.canvas.id + "')\">This is blah<a>";
 
-				console.log( "canvas id",  sketch.canvas[0].id );
 				var li = $('<li>').appendTo( linksDiv );
 				var link = $('<a>',{	
 				    text: sketch.canvas.data('name'),
     				title: 'Blah',
     				href: '#',
+    				'data-sketch': sketch.canvas[0].id,
     				click: function(){ show( sketch.canvas[0].id );return false;}
-				}).appendTo( li );
+				})
+				link.appendTo( li );
 
+				// console.log( self.buttons, link );
+				// self.buttons.push( link );
 			});
 		}
 	};
 
 	this.show = function( moduleName ){
-		// console.log( "show", moduleName );
 
 		// remove active from any active canvases
 		var elements = document.querySelectorAll( "canvas" );
@@ -933,6 +919,13 @@
 
 		// make the specified canvas active
 		_.findWhere( window.app.sketches, {name:moduleName}).show();
+		_.each( $( '#sketchLinks a' ), function( el ){
+			var $el = $( el );
+			if( $el.data('sketch') === moduleName )
+				$el.addClass( 'active' );
+			else
+				$el.removeClass( 'active' );
+		} )
 	};
 
 	function removeClass( el, className ){
@@ -943,7 +936,6 @@
 	}
 
 
-	
 	
 
 	$(document).ready( function(){
