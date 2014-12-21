@@ -26,14 +26,25 @@
                 <h1>Part 1: Path2D Basics</h1>
                 <p>A Path2D instance is constructed of points and segments.</p>
                 <p>A point refers to points where a line segment connects starts and ends as well as handles that define the curve of the path.</p>
-                <p>A segment refers to the line segment as defined by the points and handles. The types of segments are MOVETO, LINETO, QUADTO, and CUBICTO and CLOSE. Every path must start with a MOVETO segment.</p>
-                
+                <p>A segment refers to the line segment as defined by the points and handles. The types of segments are: 
+                    <ul>
+                        <li><strong>MOVETO</strong>: Consists of a single point to start or continue your drawing from. Every path must start with a MOVETO segment.</li>
+                        <li><strong>LINETO</strong>: Consists of a single point which contructs a line from the previous point</li>
+                        <li><strong>QUADTO</strong>: A quadratic bezier curve consisting of 1 central handle point and 1 end point</li>
+                        <li><strong>CUBICTO</strong>: A cubic bezier curve consisting of one handle point that controls the curve from the previous point and one handle point controlling the curve going into the given end point.</li>
+                        <li><strong>CLOSE</strong>: A line created between the first and last points of a path.</li>
+                    </ul>
+                </p>                
                 <div class="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">
-                        <canvas id="lineto" data-name="LINETO" class="active" width="500" height="300"></canvas>
-                        <canvas id="quadto" data-name="QUADTO" width="500" height="300"></canvas>
-                        <canvas id="cubicto" data-name="CUBICTO" width="500" height="300"></canvas>
+                        <canvas id="moveto" data-name="MOVETO" class="active" width="500" height="300"></canvas>
+                        <canvas id="linetosegment" data-name="LINETO" width="500" height="300"></canvas>
+                        <!-- <canvas id="lineto" data-name="LINETO" width="500" height="300"></canvas> -->
+                        <canvas id="quadtosegment" data-name="QUADTO" width="500" height="300"></canvas>
+                        <!-- <canvas id="cubicto" data-name="CUBICTO" width="500" height="300"></canvas> -->
+                        <canvas id="cubictosegment" data-name="CUBICTO" width="500" height="300"></canvas>
+                        <canvas id="close" data-name="CLOSE" width="500" height="300"></canvas>
                         <canvas id="combined" width="500" data-name="Combined" height="300"></canvas>
 
                         <button id="handle-toggle" >Toggle Handles</button>

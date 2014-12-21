@@ -11,13 +11,15 @@
 	var COLOR_LINE_TO = '#00FF00';
 	var COLOR_QUAD_TO = '#0000FF';
 	var COLOR_CUBIC_TO = '#FF00FF';
+	var COLOR_CLOSE = '#FF0000';
 	var COLOR_PATH = '#000000';
 
 	var SEGMENT_TYPES = [
 		"MOVETO",
 		"LINETO",
 		"QUADTO",
-		"CUBICTO"
+		"CUBICTO",
+		"CLOSE"
 	]
 	// var paper = window.paper;
 	// console.log(paper);
@@ -91,6 +93,7 @@
 		this.lineToTemplate = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
 		this.quadToTemplate = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		this.curveToTemplate = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
+		this.closeTemplate = _.template( "mPath.close()\n" );
 		
 		this.ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
 		
@@ -173,13 +176,19 @@
 			this.drawPath();
 		},
 
+		close: function() {
+
+			this.segments.push( SEGMENT_TYPES[4] );
+			this.drawPath();
+		},
+
 		setPosition: function( pos ) {
 
 			var tlPos = this.path.bounds.topLeft;
 			_.each( this.points, function( pt ) {
 				var relPos = (new Point(pt.position)).subtract( new Point( tlPos ) );
-				pt.position.x = relPos.x + pos.x;
-				pt.position.y = relPos.y + pos.y;
+				pt.position.x = Math.round( relPos.x + pos.x );
+				pt.position.y = Math.round( relPos.y + pos.y );
 			} );
 
 			this.drawPath();
@@ -188,8 +197,8 @@
 		centerInCanvas: function( canvas ) {
 
 			// console.log( canvas[0].clientWidth, this.path.bounds );
-			var posX = (canvas[0].clientWidth - this.path.bounds.width) / 2;
-			var posY = (canvas[0].clientHeight - this.path.bounds.height) / 2;
+			var posX = Math.round( (canvas[0].clientWidth - this.path.bounds.width) / 2 );
+			var posY = Math.round( (canvas[0].clientHeight - this.path.bounds.height) / 2 );
 			this.setPosition( new Point( posX, posY ) );
 			// this.setPosition( new Point( posX, posY ) );
 		},
@@ -309,6 +318,10 @@
 														h2x: convertToCiNum( points[ptIndex+1].position.x ), h2y: convertToCiNum( points[ptIndex+1].position.y ), 
 														p2x: convertToCiNum( points[ptIndex+2].position.x ), p2y: convertToCiNum( points[ptIndex+2].position.y ) } );
 						ptIndex+=3;
+						break;
+
+					case SEGMENT_TYPES[4]:
+						code += self.closeTemplate();
 						break;
 				}
 			} );
@@ -475,6 +488,21 @@
 
 						ptIndex+=3;
 						break;
+
+					case SEGMENT_TYPES[4]:
+
+						self.path.closed = true;
+
+						// segment line
+						var seg = new Path();
+						seg.strokeColor = COLOR_CLOSE;
+						seg.strokeWidth = 3.0;
+						seg.moveTo( points[points.length-1].position );
+						seg.lineTo(
+							points[0].position
+						);
+						self.extras.push( seg );
+						break;
 				}
 			} );
 	
@@ -555,6 +583,7 @@
 			// use defined options
 			this.canvas = $( options.canvas );
 			this.output = options.output;
+			this.name 	= options.name;
 
 			var paperScope = new paper.PaperScope();
 			paperScope.setup( this.canvas[0] );
@@ -697,6 +726,135 @@
 
 
 	
+	// +———————————————————————————————————————+
+	//	MoveToSketch
+	// +———————————————————————————————————————+
+
+	cidocs.MoveToSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+
+		this.name = "moveto";
+	}
+
+	cidocs.MoveToSketch.prototype = {
+
+		initialize: function( options ) {
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+			this.updatePath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			// draw the initial path
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.moveTo( new Point( 50.0, 50.0 ) );
+			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+
+	cidocs.MoveToSketch.extend( cidocs.Path2dSketch );
+
+	// +———————————————————————————————————————+
+	//	LineToSegmentSketch
+	// +———————————————————————————————————————+
+
+	cidocs.LineToSegmentSketch = function( options ) {
+
+		// LineToSketch.superclass.call( this, options );
+		cidocs.Path2dSketch.call( this, options );
+	}
+
+	cidocs.LineToSegmentSketch.prototype = {
+
+		initialize: function( options ) {
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+			this.updatePath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			// draw the initial path
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.moveTo( new Point( 0.0, 0.0 ) );
+			path2d.lineTo( new Point( 200.0, 200.0 ) );
+
+			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+
+	cidocs.LineToSegmentSketch.extend( cidocs.Path2dSketch );
+
+
+	// +———————————————————————————————————————+
+	//	QuadToSegmentSketch
+	// +———————————————————————————————————————+
+
+	cidocs.QuadToSegmentSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+	}
+
+	cidocs.QuadToSegmentSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+			this.updatePath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			// draw the initial path
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.moveTo( new Point( 0.0, 200.0 ) );
+			path2d.quadTo( new Point( 0.0, 0.0 ), new Point( 200.0, 0.0 ) );
+
+			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+
+	cidocs.QuadToSegmentSketch.extend( cidocs.Path2dSketch );
+
+
+	// +———————————————————————————————————————+
+	//	CubicToSegmentSketch
+	// +———————————————————————————————————————+
+
+	cidocs.CubicToSegmentSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+	}
+
+	cidocs.CubicToSegmentSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+			this.updatePath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			// draw the initial path
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.moveTo( new Point( 0.0, 200.0 ) );
+			path2d.cubicTo( new Point( 100.0, 200.0 ), new Point( 100.0, 0.0 ), new Point( 200.0, 0.0 ) );
+
+			this.paths.push( path2d );
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+
+	cidocs.CubicToSegmentSketch.extend( cidocs.Path2dSketch );
+
 
 	// +———————————————————————————————————————+
 	//	LineToSketch
@@ -816,6 +974,42 @@
 
 
 	// +———————————————————————————————————————+
+	//	CloseSketch
+	// +———————————————————————————————————————+
+
+	cidocs.CloseSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+		this.name = "close";
+	}
+
+	cidocs.CloseSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+			// this.updatePath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			// quadTo - waves
+			var curPaper = this.curPaper;		
+			var path2d = new cidocs.Path2d( this.curPaper );
+			path2d.moveTo( new Point( 0.0, 200.0 ) );
+			path2d.lineTo( new Point( 150.0, 0.0 ) );
+			path2d.lineTo( new Point( 300.0, 200.0 ) );
+			path2d.close();
+			this.paths.push( path2d );
+
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+	cidocs.CloseSketch.extend( cidocs.Path2dSketch );
+
+
+	// +———————————————————————————————————————+
 	//	CombinedSketch
 	// +———————————————————————————————————————+
 
@@ -901,11 +1095,18 @@
 			var self = this;
 
 			// init all the sketches
-			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
-			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
-			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
-			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
-			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, combinedSketch );		
+			var moveToSketch			= new cidocs.MoveToSketch( { canvas:'#moveto', output:this.codeModule } );
+			var lineToSegmentSketch		= new cidocs.LineToSegmentSketch( { canvas:'#linetosegment', name:'linetosegment', output:this.codeModule } );
+			var quadToSegmentSketch		= new cidocs.QuadToSegmentSketch( { canvas:'#quadtosegment', name:'quadtosegment', output:this.codeModule } );
+			var cubicToSegmentSketch	= new cidocs.CubicToSegmentSketch( { canvas:'#cubictosegment', name:'cubictosegment', output:this.codeModule } );
+			var closeSketch				= new cidocs.CloseSketch( { canvas:'#close', output:this.codeModule } );
+			var combinedSketch			= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
+			this.sketches.push( moveToSketch, lineToSegmentSketch, quadToSegmentSketch, cubicToSegmentSketch, closeSketch, combinedSketch );		
+
+			// part 2
+			// var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
+			// var quadToSketch		= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
+			// var cubicToSketch		= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
 
 			// init all the links
 
@@ -913,7 +1114,6 @@
 			var linksDiv = $( '#sketchLinks' );
 			_.each( this.sketches, function( sketch ){
 				// create a link
-				// var link = "<a title=\"Blah\" href=\"javascript:show('" + sketch.canvas.id + "')\">This is blah<a>";
 
 				var li = $('<li>').appendTo( linksDiv );
 				var link = $('<a>',{	
@@ -924,9 +1124,6 @@
 					click: function(){ show( sketch.canvas[0].id );return false;}
 				})
 				link.appendTo( li );
-
-				// console.log( self.buttons, link );
-				// self.buttons.push( link );
 			});
 		}
 	};
@@ -965,7 +1162,7 @@
 	$(document).ready( function(){
 		
 		window.app.init();
-		show("lineto");
+		show( "moveto" );
 
 	});
 	
