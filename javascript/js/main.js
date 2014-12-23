@@ -58,7 +58,7 @@
 				return 0;
 			return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
 		}
-}
+	}
 
 	function convertToCiNum( number ) {
 		var places = number.getDecimals();
@@ -69,13 +69,140 @@
 		}
 	}
 
-	cidocs.Segment = function( type, points, radius ) {
 
+
+	// +———————————————————————————————————————+
+	//	Segments     
+	//	directions for how to draw and
+	//	describe each drawing command
+	// +———————————————————————————————————————+
+
+	cidocs.Segment = function( path2d, type, points ) {
+
+		this.path2d = path2d;
+		// this.path2d.points.push( points );
+		this.path = this.path2d.path;
 		this.type = type;
 		this.points = points;
-		this.radius = radius;
+		this.extras = [];
+
+		if( this.path2d.points.length )
+			this.pointIndex = this.path2d.points.length-1;
+	}
+
+	cidocs.Segment.prototype = {
+
+		reset: function() {
+
+			_.each( this.extras, function( extra ) {
+				extra.remove();
+			});
+			this.extras = [];
+		},
+
+		drawPointText: function( pts ) {
+
+			var self = this;
+			_.each( pts, function( pt ){
+				var text = new PointText({
+					point: [pt.x + 5, pt.y],
+					content: '[' + pt.x + ', ' + pt.y + ']',
+					fillColor: 'black',
+					fontFamily: 'Courier New',
+					fontSize: 8
+				});
+				self.extras.push( text );
+			});
+		},
+	}
+
+
+	cidocs.MoveToSegment = function( path2d, type, points ){
+
+		cidocs.Segment.call( this, path2d, type, points );
+		this.template = _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
+	}
+
+	cidocs.MoveToSegment.prototype = {
+
 		
 	}
+
+	cidocs.MoveToSegment.extend( cidocs.Segment );
+
+
+	cidocs.LineToSegment = function( path2d, type, points ){
+
+		cidocs.Segment.call( this, path2d, type, points );
+		this.template = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
+	}
+
+	cidocs.LineToSegment.prototype = {
+
+		
+	}
+
+	cidocs.LineToSegment.extend( cidocs.Segment );
+
+
+	cidocs.QuadToSegment = function( path2d, type, points ){
+
+		cidocs.Segment.call( this, path2d, type, points );
+		this.template = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
+	}
+
+	cidocs.QuadToSegment.prototype = {
+
+	}
+
+	cidocs.QuadToSegment.extend( cidocs.Segment );
+
+
+	cidocs.CubicToSegment = function( path2d, type, points ){
+
+		cidocs.Segment.call( this, path2d, type, points );
+		this.template = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
+	}
+
+	cidocs.CubicToSegment.prototype = {
+
+	}
+
+	cidocs.CubicToSegment.extend( cidocs.Segment );
+
+
+	cidocs.ArcSegment = function( path2d, type, center, radius, startRadians, endRadians ){
+
+		cidocs.Segment.call( this, path2d, type, [center] );
+		this.radius = radius;
+		this.startRadians = startRadians;
+		this.endRadians = endRadians;
+		this.template = _.template( "mPath.arc( vec2( <%= centerX %>f, <%= centerY %>f ), <%= radius %>, <%= startRadians %>, <%= endRadians %> );\n" );
+	}
+
+	cidocs.ArcSegment.prototype = {
+
+		draw: function( ){
+
+		}
+
+	}
+
+	cidocs.ArcSegment.extend( cidocs.Segment );
+
+
+	cidocs.CloseSegment = function( path2d, type ){
+
+		cidocs.Segment.call( this, path2d, type, [] );
+		this.template = _.template( "mPath.close()\n" );
+	}
+
+	cidocs.CloseSegment.prototype = {
+
+	}
+	
+	cidocs.CloseSegment.extend( cidocs.Segment );
+
 
 	// +———————————————————————————————————————+
 	//	Path2d     
@@ -87,6 +214,7 @@
 
 		this.points		= [];	// to keep track of points
 		this.segments	= [];	// to keep track of segment types
+		this.segs		= [];
 		this.extras		= [];	// array of points, handles and lines
 		this.ps = paperScope;
 
@@ -121,8 +249,13 @@
 			var pt = this.ptStar.place();
 			pt.translate( point );
 
+
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[0] );
+
+			var segment = new cidocs.MoveToSegment( this, SEGMENT_TYPES[0], [_.last( this.points )] );
+			this.segs.push( segment );
+
 			this.drawPath();
 		},
 
@@ -133,6 +266,11 @@
 			pt.strokeColor = 'blue';
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[1] );
+
+			var segment = new cidocs.LineToSegment( this, SEGMENT_TYPES[1], [pt] );
+			this.segs.push( segment );
+
+
 			this.drawPath();
 		},
 
@@ -148,6 +286,10 @@
 
 			this.points.push( h1, pt );
 			this.segments.push( SEGMENT_TYPES[2] );
+
+			var segment = new cidocs.QuadToSegment( this, SEGMENT_TYPES[2], [h1, pt] );
+			this.segs.push( segment );
+
 			this.drawPath();
 		},
 
@@ -167,36 +309,29 @@
 
 			this.points.push( h1, h2, pt );
 			this.segments.push( SEGMENT_TYPES[3] );
+
+			var segment = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1, h2, pt] );
+			this.segs.push( segment );
+
 			this.drawPath();
 		},
 
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
-			var forward = frwd || true;
+			
+			var pt = new Shape.Rectangle( this.ptRect );
+			pt.translate( center );
+			pt.strokeColor = 'blue';
+			this.points.push( pt );
 
-			if( forward ) {
-				while( endRadians < startRadians )
-					endRadians += 2 * Math.PI;
-			}
-			else {
-				while( endRadians > startRadians )
-					endRadians -= 2 * Math.PI;
-			}
+			// get pt at start radians
+			// get pt at end radians
 
-			if( this.points.length === 0 ) {
-				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
-				this.moveTo( start );
-			} else {
-				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
-				this.lineTo( start );
-			}
+			// var h1 = new Shape.Rectangle( )
 
-			if( forward )
-				this.arcHelper( center, radius, startRadians, endRadians, forward );
-			else
-				this.arcHelper( center, radius, endRadians, startRadians, forward );
-
-
+			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], pt, radius, startRadians, endRadians );
+			this.segs.push( segment );
+			this.drawPath();
 /*
 			// 
 			// var startPt = new Point( Math.cos( startRadians ) * radius, Math.sin( startRadians ) * radius );
@@ -212,11 +347,13 @@
 			this.points.push( pt, startPt, endPt );
 			this.segments.push( SEGMENT_TYPES[5] );*/
 
+
+
 		},
 
 		
 
-		arcHelper: function( center, radius, startRadians, endRadians, forward )
+		arcHelper: function( path, center, radius, startRadians, endRadians, forward )
 		{
 			// wrap the angle difference around to be in the range [0, 4*pi]
 		    while( endRadians - startRadians > 4 * Math.PI )
@@ -225,19 +362,20 @@
 
 		    // Recurse if angle delta is larger than PI
 		    if( endRadians - startRadians > Math.PI ) {
-		    	console.log("ARC 1");
+		    	console.log("ARC HELPER 1");
 				var midRadians = startRadians + (endRadians - startRadians) * 0.5;
 				if( forward ) {
-					this.arcHelper( center, radius, startRadians, midRadians, forward );
-					this.arcHelper( center, radius, midRadians, endRadians, forward );
+					this.arcHelper( path, center, radius, startRadians, midRadians, forward );
+					this.arcHelper( path, center, radius, midRadians, endRadians, forward );
 				}
 				else {
-					this.arcHelper( center, radius, midRadians, endRadians, forward );
-					this.arcHelper( center, radius, startRadians, midRadians, forward );
+					this.arcHelper( path, center, radius, midRadians, endRadians, forward );
+					this.arcHelper( path, center, radius, startRadians, midRadians, forward );
 				}
 		    } 
 			else if( Math.abs( endRadians - startRadians ) > 0.000001 ) {
 
+				console.log("ARC HELPER 2");
 				var segments = Math.ceil( Math.abs( endRadians - startRadians ) / ( Math.PI / 2.0 ) );
 				var angle;
 				var angleDelta = ( endRadians - startRadians ) / segments;
@@ -249,12 +387,13 @@
 				}
 
 				for( var seg = 0; seg < segments; seg++, angle += angleDelta ) {
-					this.arcSegmentAsCubicBezier( center, radius, angle, angle + angleDelta );
+					console.log( "ARC", center );
+					this.arcSegmentAsCubicBezier( path, center, radius, angle, angle + angleDelta );
 				}
 		    }	
 		},
 
-		arcSegmentAsCubicBezier: function( center, radius, startRadians, endRadians )
+		arcSegmentAsCubicBezier: function( path, center, radius, startRadians, endRadians )
 		{
 			var r_sin_A, r_cos_A;
 			var r_sin_B, r_cos_B;
@@ -267,36 +406,45 @@
 
 			h = 4.0/3.0 * Math.tan( (endRadians - startRadians) / 4 );
 
-			console.log(center.x, r_cos_A, h );
+			console.log( "SEGMENT AS BEZ", center, r_cos_A, h );
 			var h1 = new Point( center.x + r_cos_A - h * r_sin_A, center.y + r_sin_A + h * r_cos_A );
 			var h2 = new Point( center.x + r_cos_B + h * r_sin_B, center.y + r_sin_B - h * r_cos_B );
 			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
-			this.cubicTo( h1, h2, pt );
+			path.cubicCurveTo( h1, h2, pt );
 		},
 
 		close: function() {
 
 			this.segments.push( SEGMENT_TYPES[4] );
+
+			var segment = new cidocs.CloseSegment( this, SEGMENT_TYPES[4] );
+			this.segs.push( segment );
+
 			this.drawPath();
 		},
 
 		setPosition: function( pos ) {
 
+			console.log( "SET POSITION", this.points );
 			var tlPos = this.path.bounds.topLeft;
 			_.each( this.points, function( pt ) {
 				var relPos = (new Point(pt.position)).subtract( new Point( tlPos ) );
 				pt.position.x = Math.round( relPos.x + pos.x );
 				pt.position.y = Math.round( relPos.y + pos.y );
+
+				console.log( "pt pos:" + pt.position, "tlPos: " + tlPos, "relPos: " + relPos, (new Point(pt.position)).subtract( new Point( tlPos )) );
 			} );
+
 
 			this.drawPath();
 		},
 
 		centerInCanvas: function( canvas ) {
 
-			// console.log( canvas[0].clientWidth, this.path.bounds );
+			console.log("CENTER IN CANVAS", canvas[0].id );
 			var posX = Math.round( (canvas[0].clientWidth - this.path.bounds.width) / 2 );
 			var posY = Math.round( (canvas[0].clientHeight - this.path.bounds.height) / 2 );
+			console.log( canvas[0].clientWidth, this.path.bounds, posX, posY );
 			this.setPosition( new Point( posX, posY ) );
 			// this.setPosition( new Point( posX, posY ) );
 		},
@@ -353,6 +501,15 @@
 							ptsToMove.push( points[ptIndex + 3] );
 						}
 						ptIndex+=3;
+						break;
+
+					case SEGMENT_TYPES[5]:
+						mainPt = ptIndex + 1;
+						ptsToMove = [points[mainPt]];
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 1] );
+						}
+						ptIndex+=1;
 						break;
 				};
 
@@ -418,6 +575,15 @@
 						ptIndex+=3;
 						break;
 
+					case SEGMENT_TYPES[5]:
+						// code += self.curveToTemplate( { h1x: convertToCiNum( points[ptIndex].position.x ), h1y: convertToCiNum( points[ptIndex].position.y ), 
+						// 								h2x: convertToCiNum( points[ptIndex+1].position.x ), h2y: convertToCiNum( points[ptIndex+1].position.y ), 
+						// 								p2x: convertToCiNum( points[ptIndex+2].position.x ), p2y: convertToCiNum( points[ptIndex+2].position.y ) } );
+						
+						code += "INSERT ARC TEMPLET \n"
+						ptIndex += 1;
+						break;
+
 					case SEGMENT_TYPES[4]:
 						code += self.closeTemplate();
 						break;
@@ -469,7 +635,7 @@
 			this.extras = [];
 
 
-			_.each( segments, function( segment ){
+			/*_.each( segments, function( segment ){
 				switch( segment ) {
 					
 					case SEGMENT_TYPES[0]:
@@ -483,8 +649,6 @@
 						// star.position = points[ptIndex].position;
 						// self.extras.push(star);
 						var pt = points[ptIndex].position;
-
-
 						self.path.moveTo( new Point( pt ) );
 						self.drawPointText.call( self, [pt] );
 						ptIndex++;
@@ -609,7 +773,191 @@
 						self.extras.push( seg );
 						break;
 				}
+			} );*/
+	
+			_.each( this.segs, function( segment, index ) {
+
+				var segmentPoints = segment.points;
+				var prevPoint = ( ptIndex === 0 ) ? null : points[ptIndex-1].position;
+				// console.log( segment.type );
+				console.log( "DRAW SEGMENTS", segment.type );
+				// segment.draw();
+
+				switch( segment.type ) {
+					
+					case SEGMENT_TYPES[0]:
+						// console.log( "MOVE TO", points[ptIndex].position.x, points[ptIndex].position.y );
+						// self.moveTo( points[ptIndex] );
+						// var pt = new paper.Point( points[ptIndex].position.x, points[ptIndex].position.y );
+
+						// var start = new Path.
+
+						// var star = self.ptStar.place();
+						// star.position = points[ptIndex].position;
+						// self.extras.push(star);
+						var pt = segmentPoints[0].position;
+						self.path.moveTo( new Point( pt ) );
+						self.drawPointText.call( self, [pt] );
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[1]:
+
+
+						
+						// console.log( "LINE TO", points[ptIndex].position.x, points[ptIndex].position.y );
+						// self.lineTo( points[ptIndex] );
+
+						var pt = segmentPoints[0].position;
+
+						// path line
+						self.path.lineTo( new Point( pt ) );
+
+						// segment line
+						var seg = new Path();
+						seg.moveTo( prevPoint );
+						seg.strokeColor = COLOR_LINE_TO;
+						seg.strokeWidth = 3.0;
+						seg.lineTo( new Point( pt ) );
+						self.extras.push( seg );
+
+						self.drawPointText.call( self, [pt] );
+						ptIndex++;
+						break;
+
+					case SEGMENT_TYPES[2]:
+
+						var h1 = segmentPoints[0].position;
+						var pt1 = segmentPoints[1].position;
+
+						// var pt = points[ptIndex].position;
+						// var l1 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( segmentPoints[ptIndex + 1].position ) );
+						// var l2 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( prevPoint ) );
+						var l1 = new Path.Line( new Point( h1 ), new Point( pt1 ) );
+						var l2 = new Path.Line( new Point( h1 ), new Point( prevPoint ) );
+						l1.strokeColor = 'cyan';
+						l2.strokeColor = 'cyan';
+						l1.sendToBack();
+						l2.sendToBack();
+						self.extras.push( l1, l2 );
+
+						// self.quadTo(points[ptIndex], points[ptIndex+1] );
+						// self.path.strokeColor = COLOR_QUAD_TO;
+						self.path.quadraticCurveTo(
+							new Point( h1 ),
+							new Point( pt1 )
+						);
+
+						
+						// segment line
+						var seg = new Path();
+						seg.moveTo( prevPoint );
+						seg.strokeColor = COLOR_QUAD_TO;
+						seg.strokeWidth = 3.0;
+						seg.quadraticCurveTo(
+							new Point( h1 ),
+							new Point( pt1 )
+						);
+						self.extras.push( seg );
+
+						self.drawPointText.call( self, [h1, pt1] );
+						ptIndex+=2;
+						break;
+
+					case SEGMENT_TYPES[3]:
+
+						var h1 = segmentPoints[0].position;
+						var h2 = segmentPoints[1].position;
+						var pt = segmentPoints[2].position;
+
+						var l1 = new Path.Line( prevPoint, new Point( h1 ) );
+						var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
+						l1.strokeColor = 'cyan';
+						l2.strokeColor = 'cyan';
+						l1.sendToBack();
+						l2.sendToBack();
+						self.extras.push( l1, l2 );
+
+
+						self.path.cubicCurveTo(
+							new Point( h1 ),
+							new Point( h2 ),
+							new Point( pt )
+						);
+
+
+						// segment line
+						var seg = new Path();
+						seg.moveTo( prevPoint );
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						seg.cubicCurveTo(
+							new Point( h1 ),
+							new Point( h2 ),
+							new Point( pt )
+						);
+						self.extras.push( seg );
+
+						self.drawPointText.call( self, [h1, h2, pt] );
+
+						ptIndex+=3;
+						break;
+
+					case SEGMENT_TYPES[5]:
+
+						var forward = true;
+						var startRadians = segment.startRadians;
+						var endRadians = segment.endRadians;
+						var radius = segment.radius;
+						var center = segment.points[0].position;
+
+						// radius will be based on distance between center and pt 1
+						// start radians will be based on radians for pt 1
+						// end radians will be based on radians for pt 2
+
+						if( forward ) {
+							while( endRadians < startRadians )
+								endRadians += 2 * Math.PI;
+						}
+						else {
+							while( endRadians > startRadians )
+								endRadians -= 2 * Math.PI;
+						}
+
+						if( points.length === 0 ) {
+							var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+							self.path.moveTo( start );
+						} else {
+							var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+							self.path.lineTo( start );
+						}
+
+						console.log( "center", center );
+						if( forward )
+							self.arcHelper( self.path, center, radius, startRadians, endRadians, forward );
+						else
+							self.arcHelper( self.path, center, radius, endRadians, startRadians, forward );
+						
+						break;
+
+					case SEGMENT_TYPES[4]:
+
+						console.log("DRAW CLOSE");
+						self.path.closed = true;
+
+						// segment line
+						var seg = new Path();
+						seg.strokeColor = COLOR_CLOSE;
+						seg.strokeWidth = 3.0;
+						seg.moveTo( prevPoint );
+						seg.lineTo(
+							points[0].position
+						);
+						self.extras.push( seg );
+						break;
+				}
 			} );
+			
 	
 			_.each( this.points, function( point ) {
 				point.bringToFront();

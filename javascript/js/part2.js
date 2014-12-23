@@ -140,7 +140,7 @@
 			var path2d = new cidocs.Path2d( this.curPaper );
 			// path2d.moveTo( new Point( 0.0, 0.0 ) );
 
-			path2d.arc( new Point( 0.0, 0.0 ), 150.0, 0, Math.PI );
+			path2d.arc( new Point( 25.0, 25.0 ), 25.0, 0, Math.PI );
 				// path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
 			// path2d.cubicTo( new Point( 100.0, 250.0 ), new Point( 300.0, 250.0 ), new Point( 300.0, 100.0 ) );
 			// path2d.cubicTo( new Point( 300.0, 50.0 ), new Point( 350.0, 0.0 ), new Point( 400.0, 0.0 ) );
