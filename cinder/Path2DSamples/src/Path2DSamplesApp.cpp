@@ -63,9 +63,10 @@ void Path2DSamplesApp::setup()
 //	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, glm::pi<float> );
 	path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
 	
+	
 	path5.moveTo( vec2( 0.0, 0.0 ) );
 	// end point, tangent position, radius
-	path5.arcTo( vec2( 50.0, 50.0 ), vec2( 50.0, 0.0 ), 50.0 );
+	path5.arcTo( vec2( 50.0, 50.0 ), vec2( 50.0, 0.0 ), 25.0 );
 	
 	// path for contains
 	path6.moveTo( vec2( 0.0, 0.0 ) );
@@ -240,6 +241,32 @@ void Path2DSamplesApp::draw()
 	// draw solid
 	
 //	console() << " _ " << endl;
+	
+	
+	
+	
+	gl::pushMatrices();
+	gl::translate( vec2( 600, 50 ) );
+	gl::color( 1, 1, 1 );
+	vec2 toPt = vec2( 100, 100 );
+	vec2 tanPt = vec2( 0, 50 );
+	Path2d arcTo1;
+	arcTo1.moveTo( 0, 0 );
+	arcTo1.arcTo( toPt, tanPt, 100.0 );
+	gl::draw( arcTo1 );
+	
+	gl::drawSolidCircle( vec2(0, 0), 3 );
+	gl::drawSolidCircle( toPt, 3 );
+	gl::drawSolidCircle( tanPt, 3 );
+	
+	
+	for( int i = 0; i < arcTo1.getPoints().size(); i++ ) {
+		auto point = arcTo1.getPoints()[i];
+		gl::color( 1, 0, 0 );
+		gl::drawSolidCircle( point, 2 );
+	}
+	
+	gl::popMatrices();
 }
 
 void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
@@ -283,7 +310,9 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	int ptCount = 0;
 	for( int i = 0; i < path.getSegments().size(); i++ ) {
 		auto segment = path.getSegments()[i];
+		
 //		console() << " --- " << segment << " --- "<< endl;
+		
 		auto points = path.getPoints();
 		
 		// if segment type == Path2d::SegmentType::CUBICTO

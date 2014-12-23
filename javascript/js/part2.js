@@ -117,6 +117,41 @@
 	cidocs.CubicToSketch.extend( cidocs.Path2dSketch );
 
 
+	// +———————————————————————————————————————+
+	//	CubicToSketch
+	// +———————————————————————————————————————+
+
+	cidocs.ArcSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+	}
+
+	cidocs.ArcSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+		},
+
+		drawInitialPath: function( ) {
+			
+			var curPaper = this.curPaper;		
+			var path2d = new cidocs.Path2d( this.curPaper );
+			// path2d.moveTo( new Point( 0.0, 0.0 ) );
+
+			path2d.arc( new Point( 0.0, 0.0 ), 150.0, 0, Math.PI );
+				// path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
+			// path2d.cubicTo( new Point( 100.0, 250.0 ), new Point( 300.0, 250.0 ), new Point( 300.0, 100.0 ) );
+			// path2d.cubicTo( new Point( 300.0, 50.0 ), new Point( 350.0, 0.0 ), new Point( 400.0, 0.0 ) );
+			this.paths.push( path2d );
+
+			path2d.centerInCanvas( this.canvas );
+		}
+	};
+	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
+
+
 	
 
 
@@ -176,8 +211,9 @@
 			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
 			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
+			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
-			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, combinedSketch );	
+			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, combinedSketch );	
 
 
 			this.superclass.init.call( this );

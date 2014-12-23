@@ -19,12 +19,9 @@
 		"LINETO",
 		"QUADTO",
 		"CUBICTO",
-		"CLOSE"
+		"CLOSE",
+		"ARC"
 	]
-	// var paper = window.paper;
-	// console.log(paper);
-	
-
 
 
 	//
@@ -72,6 +69,13 @@
 		}
 	}
 
+	cidocs.Segment = function( type, points, radius ) {
+
+		this.type = type;
+		this.points = points;
+		this.radius = radius;
+		
+	}
 
 	// +———————————————————————————————————————+
 	//	Path2d     
@@ -101,18 +105,8 @@
 		star.fillColor = COLOR_MOVE_TO;
 		star.strokeColor = COLOR_MOVE_TO;
 		star.type = 'star';
-		// star.strokeColor = 'blue';
 		star.rotation = 180;
-		// this.ptStar = star;
-		// this.ptStar.visible = false;
-		// removeChild( this.ptStar );
-		// this.ptStar.removeChild();
 		this.ptStar = new Symbol( star );
-
-		// var star = this.ps.project.importSVG( 'images/star.svg' );
-		// this.starPt = new Symbol( star );
-		// this.starPt.remove();
-		// star.remove();
 	}
 
 	cidocs.Path2d.prototype = {
@@ -174,6 +168,110 @@
 			this.points.push( h1, h2, pt );
 			this.segments.push( SEGMENT_TYPES[3] );
 			this.drawPath();
+		},
+
+		arc: function( center, radius, startRadians, endRadians, frwd ) {
+
+			var forward = frwd || true;
+
+			if( forward ) {
+				while( endRadians < startRadians )
+					endRadians += 2 * Math.PI;
+			}
+			else {
+				while( endRadians > startRadians )
+					endRadians -= 2 * Math.PI;
+			}
+
+			if( this.points.length === 0 ) {
+				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+				this.moveTo( start );
+			} else {
+				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+				this.lineTo( start );
+			}
+
+			if( forward )
+				this.arcHelper( center, radius, startRadians, endRadians, forward );
+			else
+				this.arcHelper( center, radius, endRadians, startRadians, forward );
+
+
+/*
+			// 
+			// var startPt = new Point( Math.cos( startRadians ) * radius, Math.sin( startRadians ) * radius );
+			var startPt = new Shape.Rectangle( this.ptRect );
+			startPt.translate( new Point( Math.cos( startRadians ) * radius, Math.sin( startRadians ) * radius ) );
+			var endPt = new Shape.Rectangle( this.ptRect );
+			endPt.translate( new Point( Math.cos( endRadians ) * radius, Math.sin( endRadians ) * radius ) );
+			// var endPt = new Point( cos( endRadians ) * radius, sin( endRadians ) * radius );
+
+			var pt = new Shape.Rectangle( this.ptRect );
+			pt.translate( centerPt );
+
+			this.points.push( pt, startPt, endPt );
+			this.segments.push( SEGMENT_TYPES[5] );*/
+
+		},
+
+		
+
+		arcHelper: function( center, radius, startRadians, endRadians, forward )
+		{
+			// wrap the angle difference around to be in the range [0, 4*pi]
+		    while( endRadians - startRadians > 4 * Math.PI )
+				endRadians -= 2 * Math.PI;
+
+
+		    // Recurse if angle delta is larger than PI
+		    if( endRadians - startRadians > Math.PI ) {
+		    	console.log("ARC 1");
+				var midRadians = startRadians + (endRadians - startRadians) * 0.5;
+				if( forward ) {
+					this.arcHelper( center, radius, startRadians, midRadians, forward );
+					this.arcHelper( center, radius, midRadians, endRadians, forward );
+				}
+				else {
+					this.arcHelper( center, radius, midRadians, endRadians, forward );
+					this.arcHelper( center, radius, startRadians, midRadians, forward );
+				}
+		    } 
+			else if( Math.abs( endRadians - startRadians ) > 0.000001 ) {
+
+				var segments = Math.ceil( Math.abs( endRadians - startRadians ) / ( Math.PI / 2.0 ) );
+				var angle;
+				var angleDelta = ( endRadians - startRadians ) / segments;
+				if( forward )
+					angle = startRadians;
+				else {
+					angle = endRadians;
+					angleDelta = -angleDelta;
+				}
+
+				for( var seg = 0; seg < segments; seg++, angle += angleDelta ) {
+					this.arcSegmentAsCubicBezier( center, radius, angle, angle + angleDelta );
+				}
+		    }	
+		},
+
+		arcSegmentAsCubicBezier: function( center, radius, startRadians, endRadians )
+		{
+			var r_sin_A, r_cos_A;
+			var r_sin_B, r_cos_B;
+			var h;
+
+			r_sin_A = radius * Math.sin( startRadians );
+			r_cos_A = radius * Math.cos( startRadians );
+			r_sin_B = radius * Math.sin( endRadians );
+			r_cos_B = radius * Math.cos( endRadians );
+
+			h = 4.0/3.0 * Math.tan( (endRadians - startRadians) / 4 );
+
+			console.log(center.x, r_cos_A, h );
+			var h1 = new Point( center.x + r_cos_A - h * r_sin_A, center.y + r_sin_A + h * r_cos_A );
+			var h2 = new Point( center.x + r_cos_B + h * r_sin_B, center.y + r_sin_B - h * r_cos_B );
+			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
+			this.cubicTo( h1, h2, pt );
 		},
 
 		close: function() {
@@ -487,6 +585,13 @@
 						self.drawPointText.call( self, [h1, h2, pt] );
 
 						ptIndex+=3;
+						break;
+
+					case SEGMENT_TYPES[5]:
+
+						
+
+						
 						break;
 
 					case SEGMENT_TYPES[4]:
