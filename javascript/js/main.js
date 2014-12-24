@@ -171,9 +171,9 @@
 	cidocs.CubicToSegment.extend( cidocs.Segment );
 
 
-	cidocs.ArcSegment = function( path2d, type, center, radius, startRadians, endRadians ){
+	cidocs.ArcSegment = function( path2d, type, points, radius, startRadians, endRadians ){
 
-		cidocs.Segment.call( this, path2d, type, [center] );
+		cidocs.Segment.call( this, path2d, type, points );
 		this.radius = radius;
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
@@ -318,18 +318,25 @@
 
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
-			
 			var pt = new Shape.Rectangle( this.ptRect );
 			pt.translate( center );
 			pt.strokeColor = 'blue';
-			this.points.push( pt );
 
 			// get pt at start radians
+			var startPt = new Shape.Rectangle( this.ptRect );
+			startPt.translate( new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center ) );
+			startPt	.strokeColor = 'blue';
+
+			var endPt = new Shape.Rectangle( this.ptRect );
+			endPt.translate( new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center ) );
+			endPt.strokeColor = 'blue';
 			// get pt at end radians
 
+			// this.points.push( pt );
+			this.points.push( pt, startPt, endPt );
 			// var h1 = new Shape.Rectangle( )
 
-			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], pt, radius, startRadians, endRadians );
+			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians );
 			this.segs.push( segment );
 			this.drawPath();
 /*
@@ -362,7 +369,7 @@
 
 		    // Recurse if angle delta is larger than PI
 		    if( endRadians - startRadians > Math.PI ) {
-		    	console.log("ARC HELPER 1");
+
 				var midRadians = startRadians + (endRadians - startRadians) * 0.5;
 				if( forward ) {
 					this.arcHelper( path, center, radius, startRadians, midRadians, forward );
@@ -375,7 +382,6 @@
 		    } 
 			else if( Math.abs( endRadians - startRadians ) > 0.000001 ) {
 
-				console.log("ARC HELPER 2");
 				var segments = Math.ceil( Math.abs( endRadians - startRadians ) / ( Math.PI / 2.0 ) );
 				var angle;
 				var angleDelta = ( endRadians - startRadians ) / segments;
@@ -387,7 +393,6 @@
 				}
 
 				for( var seg = 0; seg < segments; seg++, angle += angleDelta ) {
-					console.log( "ARC", center );
 					this.arcSegmentAsCubicBezier( path, center, radius, angle, angle + angleDelta );
 				}
 		    }	
@@ -406,7 +411,6 @@
 
 			h = 4.0/3.0 * Math.tan( (endRadians - startRadians) / 4 );
 
-			console.log( "SEGMENT AS BEZ", center, r_cos_A, h );
 			var h1 = new Point( center.x + r_cos_A - h * r_sin_A, center.y + r_sin_A + h * r_cos_A );
 			var h2 = new Point( center.x + r_cos_B + h * r_sin_B, center.y + r_sin_B - h * r_cos_B );
 			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
@@ -425,14 +429,11 @@
 
 		setPosition: function( pos ) {
 
-			console.log( "SET POSITION", this.points );
 			var tlPos = this.path.bounds.topLeft;
 			_.each( this.points, function( pt ) {
 				var relPos = (new Point(pt.position)).subtract( new Point( tlPos ) );
 				pt.position.x = Math.round( relPos.x + pos.x );
 				pt.position.y = Math.round( relPos.y + pos.y );
-
-				console.log( "pt pos:" + pt.position, "tlPos: " + tlPos, "relPos: " + relPos, (new Point(pt.position)).subtract( new Point( tlPos )) );
 			} );
 
 
@@ -441,12 +442,9 @@
 
 		centerInCanvas: function( canvas ) {
 
-			console.log("CENTER IN CANVAS", canvas[0].id );
 			var posX = Math.round( (canvas[0].clientWidth - this.path.bounds.width) / 2 );
 			var posY = Math.round( (canvas[0].clientHeight - this.path.bounds.height) / 2 );
-			console.log( canvas[0].clientWidth, this.path.bounds, posX, posY );
 			this.setPosition( new Point( posX, posY ) );
-			// this.setPosition( new Point( posX, posY ) );
 		},
 
 		movePoint: function( selectedPoint, newPos ) {
@@ -457,7 +455,8 @@
 			var mainPt = null;
 			var newPos = newPos.round();
 
-			_.each( this.segments, function( segment, index, segments ) {
+			// _.each( this.segments, function( segment, index, segments ) {
+			_.each( this.segs, function( segment, index, segments ) {
 
 				if( mainPt ) 
 					return;
@@ -465,7 +464,7 @@
 				var ptsToMove = [];
 				var nextSegment = segments[index+1];
 
-				switch( segment ) {
+				switch( segment.type ) {
 					
 					case SEGMENT_TYPES[0]:
 						mainPt = ptIndex;
@@ -504,12 +503,47 @@
 						break;
 
 					case SEGMENT_TYPES[5]:
-						mainPt = ptIndex + 1;
+						
+						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];
-						if( nextSegment === SEGMENT_TYPES[3] ) {
-							ptsToMove.push( points[ptIndex + 1] );
+
+						// if startPt is selected, move the end point the same distance
+						// if endPt is selected, move the start point the same distance
+
+						var rad, angle1, angle2, startPt, endPt;
+						if( selectedPoint == points[ptIndex + 1] ) {
+							
+							rad = points[ptIndex+1].position.getDistance( points[ptIndex].position );
+							angle1 = points[ptIndex+1].position.subtract( points[ptIndex].position ).angleInRadians;
+							angle2 = points[ptIndex+2].position.subtract( points[ptIndex].position ).angleInRadians;
+
+							startPt = new Point( Math.cos( angle1 ) * rad, Math.sin( angle1 ) * rad ).add( points[ptIndex].position );
+							endPt = new Point( Math.cos( angle2 ) * rad, Math.sin( angle2 ) * rad ).add( points[ptIndex].position );
+
+							points[ptIndex + 1].position = startPt;
+							points[ptIndex + 2].position = endPt;
+
+						} else if( selectedPoint == points[ptIndex + 2] ) {
+
+							rad = points[ptIndex+2].position.getDistance( points[ptIndex].position );
+							angle1 = points[ptIndex+1].position.subtract(points[ptIndex].position).angleInRadians;
+							angle2 = points[ptIndex+2].position.subtract(points[ptIndex].position).angleInRadians;
+
+							startPt = new Point( Math.cos( angle1 ) * rad, Math.sin( angle1 ) * rad ).add( points[ptIndex].position );
+							endPt = new Point( Math.cos( angle2 ) * rad, Math.sin( angle2 ) * rad ).add( points[ptIndex].position );
+
+							points[ptIndex + 1].position = startPt;
+							points[ptIndex + 2].position = endPt;
+
+						} else{
+
+							ptsToMove = [points[mainPt], points[ptIndex + 1], points[ptIndex + 2]];
 						}
-						ptIndex+=1;
+
+						if( nextSegment === SEGMENT_TYPES[3] ) {
+							ptsToMove.push( points[ptIndex + 3] );
+						}
+						ptIndex+=3;
 						break;
 				};
 
@@ -581,7 +615,7 @@
 						// 								p2x: convertToCiNum( points[ptIndex+2].position.x ), p2y: convertToCiNum( points[ptIndex+2].position.y ) } );
 						
 						code += "INSERT ARC TEMPLET \n"
-						ptIndex += 1;
+						ptIndex += 3;
 						break;
 
 					case SEGMENT_TYPES[4]:
@@ -780,7 +814,6 @@
 				var segmentPoints = segment.points;
 				var prevPoint = ( ptIndex === 0 ) ? null : points[ptIndex-1].position;
 				// console.log( segment.type );
-				console.log( "DRAW SEGMENTS", segment.type );
 				// segment.draw();
 
 				switch( segment.type ) {
@@ -906,12 +939,17 @@
 					case SEGMENT_TYPES[5]:
 
 						var forward = true;
-						var startRadians = segment.startRadians;
-						var endRadians = segment.endRadians;
-						var radius = segment.radius;
+						// var startRadians = segment.startRadians;
+						// var endRadians = segment.endRadians;
 						var center = segment.points[0].position;
+						var startPt = segment.points[1].position;
+						var endPt = segment.points[2].position;
+						var radius = startPt.getDistance( center );
+						var startRadians = startPt.subtract( center ).angleInRadians;
+						var endRadians = endPt.subtract( center ).angleInRadians;;
 
 						// radius will be based on distance between center and pt 1
+
 						// start radians will be based on radians for pt 1
 						// end radians will be based on radians for pt 2
 
@@ -932,17 +970,18 @@
 							self.path.lineTo( start );
 						}
 
-						console.log( "center", center );
 						if( forward )
 							self.arcHelper( self.path, center, radius, startRadians, endRadians, forward );
 						else
 							self.arcHelper( self.path, center, radius, endRadians, startRadians, forward );
 						
+
+						ptIndex += 3;
+
 						break;
 
 					case SEGMENT_TYPES[4]:
 
-						console.log("DRAW CLOSE");
 						self.path.closed = true;
 
 						// segment line
@@ -1082,12 +1121,13 @@
 				// this.selectedPath = hitResult.item;
 				// this.selectedPath.fullySelected = true;
 
-				// console.log( hitResult.type );
+				// console.log( "MOUSE DOWN", hitResult.item.type );
 				/*if (hitResult.type == 'segment') {
 					this.selectedSegment = hitResult.segment;
 				}*/
 
 				if (hitResult.item.type === 'rectangle' || hitResult.type === "segment") {
+					// console.log( "SELECT ME" )
 					this.selectedPoint = hitResult.item;
 				}
 
@@ -1108,6 +1148,7 @@
 			// console.log( "POINT", new paper.Point( event.point.x, event.point.y ).length );
 
 			if( this.selectedPoint ) {
+
 
 				this.paths[0].movePoint( this.selectedPoint, event.point );
 				// this.selectedPoint.position = event.point;
