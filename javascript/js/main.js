@@ -462,7 +462,7 @@
 					return;
 
 				var ptsToMove = [];
-				var nextSegment = segments[index+1];
+				var nextSegment = (segments[index+1]) ? segments[index+1].type : null;
 
 				switch( segment.type ) {
 					
