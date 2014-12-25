@@ -35,21 +35,24 @@
                         <li><strong>CLOSE</strong>: A line created between the first and last points of a path.</li>
                     </ul>
                 </p>
-                
+
                 <div class="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">
                         <canvas id="moveto" data-name="MOVETO" class="active" width="500" height="300"></canvas>
                         <canvas id="linetosegment" data-name="LINETO" width="500" height="300"></canvas>
-                        <!-- <canvas id="lineto" data-name="LINETO" width="500" height="300"></canvas> -->
                         <canvas id="quadtosegment" data-name="QUADTO" width="500" height="300"></canvas>
-                        <!-- <canvas id="cubicto" data-name="CUBICTO" width="500" height="300"></canvas> -->
                         <canvas id="cubictosegment" data-name="CUBICTO" width="500" height="300"></canvas>
                         <canvas id="close" data-name="CLOSE" width="500" height="300"></canvas>
-                        <!-- <canvas id="combined" width="500" data-name="Combined" height="300"></canvas> -->
 
-                        <button id="handle-toggle" >Toggle Handles</button>
-                        <button id="reset" >Reset</button>
+                        <div class="canvasButtons">
+                            <div class="left">
+                                <button id="handle-toggle" >Toggle Handles</button>
+                            </div>
+                            <div class="right">
+                                <button id="reset" >Reset</button>
+                            </div>
+                        </div>
                     </div>
                     <pre><code id="output" class="language-cpp"></code></pre>
                 </div>

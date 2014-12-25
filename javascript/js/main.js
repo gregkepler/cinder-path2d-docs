@@ -13,6 +13,7 @@
 	var COLOR_CUBIC_TO = '#FF00FF';
 	var COLOR_CLOSE = '#FF0000';
 	var COLOR_PATH = '#000000';
+	var COLOR_CENTER = '#f48a00';
 
 	var SEGMENT_TYPES = [
 		"MOVETO",
@@ -60,7 +61,7 @@
 		}
 	}
 
-	function convertToCiNum( number ) {
+	function toCiNum( number ) {
 		var places = number.getDecimals();
 		if( places <= 1 ) {
 			return number.toFixed( 1 );
@@ -221,11 +222,12 @@
 		this.path = new Path();
 		this.path.pivot = new Point();
 
-		this.moveToTemplate = _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
-		this.lineToTemplate = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
-		this.quadToTemplate = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-		this.curveToTemplate = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-		this.closeTemplate = _.template( "mPath.close()\n" );
+		this.moveToTemplate 	= _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
+		this.lineToTemplate 	= _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
+		this.quadToTemplate 	= _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
+		this.curveToTemplate 	= _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
+		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>f, <%= endRadians %>f, <%= forward %> );\n" );
+		this.closeTemplate 		= _.template( "mPath.close()\n" );
 		
 		this.ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
 		
@@ -235,6 +237,10 @@
 		star.type = 'star';
 		star.rotation = 180;
 		this.ptStar = new Symbol( star );
+
+		var circle = new Path.Circle( new Point( 0, 0 ), 3 );
+		circle.strokeColor = COLOR_CENTER;
+		this.ptCircle = new Symbol( circle );
 	}
 
 	cidocs.Path2d.prototype = {
@@ -318,47 +324,25 @@
 
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
-			var pt = new Shape.Rectangle( this.ptRect );
+			var pt = this.ptCircle.place();
 			pt.translate( center );
-			pt.strokeColor = 'blue';
 
 			// get pt at start radians
 			var startPt = new Shape.Rectangle( this.ptRect );
 			startPt.translate( new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center ) );
 			startPt	.strokeColor = 'blue';
 
+			// get pt at end radians
 			var endPt = new Shape.Rectangle( this.ptRect );
 			endPt.translate( new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center ) );
 			endPt.strokeColor = 'blue';
-			// get pt at end radians
 
-			// this.points.push( pt );
 			this.points.push( pt, startPt, endPt );
-			// var h1 = new Shape.Rectangle( )
 
 			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians );
 			this.segs.push( segment );
 			this.drawPath();
-/*
-			// 
-			// var startPt = new Point( Math.cos( startRadians ) * radius, Math.sin( startRadians ) * radius );
-			var startPt = new Shape.Rectangle( this.ptRect );
-			startPt.translate( new Point( Math.cos( startRadians ) * radius, Math.sin( startRadians ) * radius ) );
-			var endPt = new Shape.Rectangle( this.ptRect );
-			endPt.translate( new Point( Math.cos( endRadians ) * radius, Math.sin( endRadians ) * radius ) );
-			// var endPt = new Point( cos( endRadians ) * radius, sin( endRadians ) * radius );
-
-			var pt = new Shape.Rectangle( this.ptRect );
-			pt.translate( centerPt );
-
-			this.points.push( pt, startPt, endPt );
-			this.segments.push( SEGMENT_TYPES[5] );*/
-
-
-
 		},
-
-		
 
 		arcHelper: function( path, center, radius, startRadians, endRadians, forward )
 		{
@@ -507,8 +491,7 @@
 						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];
 
-						// if startPt is selected, move the end point the same distance
-						// if endPt is selected, move the start point the same distance
+						// TODO: Refactor this function
 
 						var rad, angle1, angle2, startPt, endPt;
 						if( selectedPoint == points[ptIndex + 1] ) {
@@ -523,6 +506,10 @@
 							points[ptIndex + 1].position = startPt;
 							points[ptIndex + 2].position = endPt;
 
+							segment.radius = rad;
+							segment.startRadians = angle1;
+							segment.endRadians = angle2;
+
 						} else if( selectedPoint == points[ptIndex + 2] ) {
 
 							rad = points[ptIndex+2].position.getDistance( points[ptIndex].position );
@@ -534,6 +521,11 @@
 
 							points[ptIndex + 1].position = startPt;
 							points[ptIndex + 2].position = endPt;
+							segment.radius = rad;
+
+							segment.radius = rad;
+							segment.startRadians = angle1;
+							segment.endRadians = angle2;
 
 						} else{
 
@@ -582,39 +574,39 @@
 			var code = "";
 			var self = this;
 
-			_.each( this.segments, function( segment ){
+			// _.each( this.segments, function( segment ){
+			_.each( this.segs, function( segment ){
 
-				switch( segment ) {
+				switch( segment.type ) {
 					
 					case SEGMENT_TYPES[0]:
-						code += self.moveToTemplate( { pointX: convertToCiNum( points[ptIndex].position.x ), pointY: convertToCiNum( points[ptIndex].position.y ) } );
+						code += self.moveToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ) } );
 						ptIndex++;
 						break;
 
 					case SEGMENT_TYPES[1]:
-						code += self.lineToTemplate( { pointX: convertToCiNum( points[ptIndex].position.x ), pointY: convertToCiNum( points[ptIndex].position.y ) } );
+						code += self.lineToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ) } );
 						ptIndex++;
 						break;
 
 					case SEGMENT_TYPES[2]:
-						code += self.quadToTemplate( { h1x: convertToCiNum( points[ptIndex].position.x ), h1y: convertToCiNum( points[ptIndex].position.y ), 
-														p2x: convertToCiNum( points[ptIndex+1].position.x ), p2y: convertToCiNum( points[ptIndex+1].position.y ) } );
+						code += self.quadToTemplate( { h1x: toCiNum( points[ptIndex].position.x ), h1y: toCiNum( points[ptIndex].position.y ), 
+														p2x: toCiNum( points[ptIndex+1].position.x ), p2y: toCiNum( points[ptIndex+1].position.y ) } );
 						ptIndex+=2;
 						break;
 
 					case SEGMENT_TYPES[3]:
-						code += self.curveToTemplate( { h1x: convertToCiNum( points[ptIndex].position.x ), h1y: convertToCiNum( points[ptIndex].position.y ), 
-														h2x: convertToCiNum( points[ptIndex+1].position.x ), h2y: convertToCiNum( points[ptIndex+1].position.y ), 
-														p2x: convertToCiNum( points[ptIndex+2].position.x ), p2y: convertToCiNum( points[ptIndex+2].position.y ) } );
+						code += self.curveToTemplate( { h1x: toCiNum( points[ptIndex].position.x ), h1y: toCiNum( points[ptIndex].position.y ), 
+														h2x: toCiNum( points[ptIndex+1].position.x ), h2y: toCiNum( points[ptIndex+1].position.y ), 
+														p2x: toCiNum( points[ptIndex+2].position.x ), p2y: toCiNum( points[ptIndex+2].position.y ) } );
 						ptIndex+=3;
 						break;
 
 					case SEGMENT_TYPES[5]:
-						// code += self.curveToTemplate( { h1x: convertToCiNum( points[ptIndex].position.x ), h1y: convertToCiNum( points[ptIndex].position.y ), 
-						// 								h2x: convertToCiNum( points[ptIndex+1].position.x ), h2y: convertToCiNum( points[ptIndex+1].position.y ), 
-						// 								p2x: convertToCiNum( points[ptIndex+2].position.x ), p2y: convertToCiNum( points[ptIndex+2].position.y ) } );
+						code += self.arcTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
+													radius: toCiNum( segment.radius ), startRadians: toCiNum( segment.startRadians ), 
+													endRadians: toCiNum( segment.endRadians ), forward: 'true' } );
 						
-						code += "INSERT ARC TEMPLET \n"
 						ptIndex += 3;
 						break;
 
@@ -1060,10 +1052,9 @@
 		};
 		this.movePath = false;
 		this.handlesOn = true;
+		this.buttons = [];
 
 		this.initialize( options );
-
-		var test = "test";
 	}
 
 	cidocs.Path2dSketch.prototype = {
@@ -1199,6 +1190,7 @@
 		},
 
 		show: function() {
+
 			this.canvas.removeClass( "inactive" );
 			this.canvas.addClass( "active" );
 			this.updatePath();
@@ -1207,6 +1199,10 @@
 			$("#handle-toggle").click( $.proxy( this.toggleHandles, this) );
 			$("#reset").click( $.proxy( this.reset, this) );
 
+			// show buttons
+			_.each( this.buttons, function( button ) {
+				button.removeClass( 'invisible' );
+			} );
 		},
 
 		hide: function() {
@@ -1215,6 +1211,35 @@
 			this.canvas.addClass( "inactive" );
 			$("#handle-toggle").unbind('click')
 			$("#reset").unbind('click')
+
+			// hide buttons
+			// show buttons
+			_.each( this.buttons, function( button ) {
+				button.addClass( 'invisible' );
+			} );
+		},
+
+		addButton: function( id, name ) {
+
+			var exists = _.find( $('.canvasButtons .right button'), function( button ) { return button.id === id  } );
+			console.log( "BUTTON EXISTS", exists );
+
+			// if the button doesn't already exist, add it
+			// for all of the buttons canvasButtons.right, 
+			// _.each( $('.canvasButtons .right button'), function( button ) {
+			// 	console.log( button.id );
+
+			// } );
+
+			if( !exists ) {
+				var button = $('<button>', {
+					id: id,
+					text: name
+				});
+				button.addClass( 'invisible' );
+				this.buttons.push( button );
+				$('.canvasButtons .right').append( button );
+			}
 		}
 	};
 

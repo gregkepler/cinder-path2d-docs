@@ -132,6 +132,9 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
+
+			this.addButton( 'reverseArc', "Reverse Arc" );
+			// <button id="reset" >Reset</button>
 		},
 
 		drawInitialPath: function( ) {
@@ -147,6 +150,10 @@
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
+		},
+
+		reverseArc: function() {
+
 		}
 	};
 	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
@@ -214,7 +221,6 @@
 			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
 			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, combinedSketch );	
-
 
 			this.superclass.init.call( this );
 		}
