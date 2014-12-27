@@ -356,8 +356,42 @@
 			this.drawPath();
 		},
 
-		arcHelper: function( path, center, radius, startRadians, endRadians, forward )
-		{
+		drawArcSegment: function( path, segment ) {
+
+			var center = segment.points[0].position;
+			var startPt = segment.points[1].position;
+			var endPt = segment.points[2].position;
+			var radius = startPt.getDistance( center );
+			var startRadians = startPt.subtract( center ).angleInRadians;
+			var endRadians = endPt.subtract( center ).angleInRadians;
+			var forward = segment.forward;
+			var points = this.points;
+
+			if( forward ) {
+				while( endRadians < startRadians )
+					endRadians += 2 * Math.PI;
+			}
+			else {
+				while( endRadians > startRadians )
+					endRadians -= 2 * Math.PI;
+			}
+
+			if( points.length === 0 ) {
+				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+				path.moveTo( start );
+			} else {
+				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+				path.lineTo( start );
+			}
+
+			if( forward )
+				this.arcHelper( path, center, radius, startRadians, endRadians, forward );
+			else
+				this.arcHelper( path, center, radius, endRadians, startRadians, forward );
+		},
+
+		arcHelper: function( path, center, radius, startRadians, endRadians, forward ) {
+
 			// wrap the angle difference around to be in the range [0, 4*pi]
 		    while( endRadians - startRadians > 4 * Math.PI )
 				endRadians -= 2 * Math.PI;
@@ -942,6 +976,16 @@
 
 					case SEGMENT_TYPES[5]:
 
+						self.drawArcSegment( self.path, segment );
+
+						var seg = new Path();
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						self.drawArcSegment( seg, segment );
+						self.extras.push( seg );
+
+
+						/*
 						// var forward = true;
 						// var startRadians = segment.startRadians;
 						// var endRadians = segment.endRadians;
@@ -979,7 +1023,7 @@
 							self.arcHelper( self.path, center, radius, startRadians, endRadians, forward );
 						else
 							self.arcHelper( self.path, center, radius, endRadians, startRadians, forward );
-						
+						*/
 
 						ptIndex += 3;
 
