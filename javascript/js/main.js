@@ -172,13 +172,14 @@
 	cidocs.CubicToSegment.extend( cidocs.Segment );
 
 
-	cidocs.ArcSegment = function( path2d, type, points, radius, startRadians, endRadians ){
+	cidocs.ArcSegment = function( path2d, type, points, radius, startRadians, endRadians, forward ){
 
 		cidocs.Segment.call( this, path2d, type, points );
 		this.radius = radius;
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
-		this.template = _.template( "mPath.arc( vec2( <%= centerX %>f, <%= centerY %>f ), <%= radius %>, <%= startRadians %>, <%= endRadians %> );\n" );
+		this.forward = forward;
+		this.template = _.template( "mPath.arc( vec2( <%= centerX %>f, <%= centerY %>f ), <%= radius %>, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
 	}
 
 	cidocs.ArcSegment.prototype = {
@@ -322,6 +323,17 @@
 			this.drawPath();
 		},
 
+		reverseArc: function() {
+
+			// for all the segments in the path, reverse the arc directions
+			_.each( this.segs, function( segment ) {
+				if( segment.type === 'ARC' ) {
+					segment.forward = !segment.forward;
+				};
+			} );
+			this.drawPath();
+		},
+
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
 			var pt = this.ptCircle.place();
@@ -339,7 +351,7 @@
 
 			this.points.push( pt, startPt, endPt );
 
-			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians );
+			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians, frwd );
 			this.segs.push( segment );
 			this.drawPath();
 		},
@@ -605,7 +617,7 @@
 					case SEGMENT_TYPES[5]:
 						code += self.arcTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
 													radius: toCiNum( segment.radius ), startRadians: toCiNum( segment.startRadians ), 
-													endRadians: toCiNum( segment.endRadians ), forward: 'true' } );
+													endRadians: toCiNum( segment.endRadians ), forward: segment.forward } );
 						
 						ptIndex += 3;
 						break;
@@ -930,7 +942,7 @@
 
 					case SEGMENT_TYPES[5]:
 
-						var forward = true;
+						// var forward = true;
 						// var startRadians = segment.startRadians;
 						// var endRadians = segment.endRadians;
 						var center = segment.points[0].position;
@@ -938,7 +950,8 @@
 						var endPt = segment.points[2].position;
 						var radius = startPt.getDistance( center );
 						var startRadians = startPt.subtract( center ).angleInRadians;
-						var endRadians = endPt.subtract( center ).angleInRadians;;
+						var endRadians = endPt.subtract( center ).angleInRadians;
+						var forward = segment.forward;
 
 						// radius will be based on distance between center and pt 1
 
@@ -1222,7 +1235,6 @@
 		addButton: function( id, name ) {
 
 			var exists = _.find( $('.canvasButtons .right button'), function( button ) { return button.id === id  } );
-			console.log( "BUTTON EXISTS", exists );
 
 			// if the button doesn't already exist, add it
 			// for all of the buttons canvasButtons.right, 
@@ -1238,9 +1250,28 @@
 				});
 				button.addClass( 'invisible' );
 				this.buttons.push( button );
+
 				$('.canvasButtons .right').append( button );
 			}
-		}
+		},
+
+		activateButton: function( buttonId, func ) {
+
+			var btn = _.find( this.buttons, function( btn ){ return btn[0].id === buttonId } );
+			if( btn ) {
+				btn.click( $.proxy( func, this) );
+			}
+
+		},
+
+		deactivateButton: function( buttonId ) {
+
+			var btn = _.find( this.buttons, function( btn ){ return btn[0].id === buttonId } );
+			if( btn ) {
+				btn.unbind('click');
+			}
+
+		},
 	};
 
 

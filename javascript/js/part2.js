@@ -134,7 +134,6 @@
 			this.drawInitialPath();
 
 			this.addButton( 'reverseArc', "Reverse Arc" );
-			// <button id="reset" >Reset</button>
 		},
 
 		drawInitialPath: function( ) {
@@ -143,7 +142,7 @@
 			var path2d = new cidocs.Path2d( this.curPaper );
 			// path2d.moveTo( new Point( 0.0, 0.0 ) );
 
-			path2d.arc( new Point( 25.0, 25.0 ), 100.0, 0, Math.PI );
+			path2d.arc( new Point( 25.0, 25.0 ), 100.0, 0, Math.PI, true );
 				// path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
 			// path2d.cubicTo( new Point( 100.0, 250.0 ), new Point( 300.0, 250.0 ), new Point( 300.0, 100.0 ) );
 			// path2d.cubicTo( new Point( 300.0, 50.0 ), new Point( 350.0, 0.0 ), new Point( 400.0, 0.0 ) );
@@ -154,7 +153,24 @@
 
 		reverseArc: function() {
 
+			this.paths[0].reverseArc();
+			this.updatePath();
+
+		},
+
+		show: function() {
+
+			this.superclass.show.call( this );
+			this.activateButton( 'reverseArc', this.reverseArc );
+
+		},
+
+		hide: function() {
+
+			this.superclass.hide.call( this );
+			this.deactivateButton( 'reverseArc' );
 		}
+
 	};
 	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
 
