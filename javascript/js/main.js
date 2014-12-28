@@ -239,9 +239,7 @@
 		this.curveToTemplate 	= _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>f, <%= endRadians %>f, <%= forward %> );\n" );
 		this.closeTemplate 		= _.template( "mPath.close()\n" );
-		
-		this.ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
-		
+				
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
 		star.fillColor = COLOR_MOVE_TO;
 		star.strokeColor = COLOR_MOVE_TO;
@@ -258,7 +256,6 @@
 		
 		moveTo: function( point ) {
 
-			// var pt = new Shape.Rectangle( this.ptRect );
 			// var pt = this.ptStar.clone();
 			// pt.addChild( this.ptStar.place() );
 			// var pt = new Shape.Rectangle( this.ptStar );
@@ -278,9 +275,8 @@
 
 		lineTo: function( point ) {
 
-			var pt = new Shape.Rectangle( this.ptRect );
-			pt.translate( point );
-			pt.strokeColor = 'blue';
+			var pt = new cidocs.PathPoint( point, 'blue' );
+
 			this.points.push( pt );
 			this.segments.push( SEGMENT_TYPES[1] );
 
@@ -293,14 +289,8 @@
 
 		quadTo: function( handlePt, endPt ) {
 
-			var h1 = new Shape.Rectangle( this.ptRect );
-			h1.translate( handlePt );
-			h1.strokeColor = 'cyan';
-
-			var pt = new Shape.Rectangle( this.ptRect );
-			pt.translate( endPt );
-			pt.strokeColor = 'blue';
-
+			var h1 = new cidocs.PathPoint( handlePt, 'cyan' );
+			var pt = new cidocs.PathPoint( endPt, 'blue' );
 			this.points.push( h1, pt );
 			this.segments.push( SEGMENT_TYPES[2] );
 
@@ -312,18 +302,9 @@
 
 		cubicTo: function( handlePt1, handlePt2, endPt ) {
 
-			var h1 = new Shape.Rectangle( this.ptRect );
-			h1.translate( handlePt1 );
-			h1.strokeColor = 'cyan';
-
-			var h2 = new Shape.Rectangle( this.ptRect );
-			h2.translate( handlePt2 );
-			h2.strokeColor = 'cyan';
-
-			var pt = new Shape.Rectangle( this.ptRect );
-			pt.translate( endPt );
-			pt.strokeColor = 'blue';
-
+			var h1 = new cidocs.PathPoint( handlePt1, 'cyan' );
+			var h2 = new cidocs.PathPoint( handlePt2, 'cyan' );
+			var pt = new cidocs.PathPoint( endPt, 'blue' );
 			this.points.push( h1, h2, pt );
 			this.segments.push( SEGMENT_TYPES[3] );
 
@@ -350,14 +331,12 @@
 			pt.translate( center );
 
 			// get pt at start radians
-			var startPt = new Shape.Rectangle( this.ptRect );
-			startPt.translate( new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center ) );
-			startPt	.strokeColor = 'blue';
+			var start = new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+			var startPt = new cidocs.PathPoint( start, 'blue' );
 
 			// get pt at end radians
-			var endPt = new Shape.Rectangle( this.ptRect );
-			endPt.translate( new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center ) );
-			endPt.strokeColor = 'blue';
+			var end = new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center );
+			endPt = new cidocs.PathPoint( end, 'blue' );
 
 			this.points.push( pt, startPt, endPt );
 
@@ -490,19 +469,6 @@
 			var h2 = new Point( center.x + r_cos_B + h * r_sin_B, center.y + r_sin_B - h * r_cos_B );
 			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
 			// path.cubicCurveTo( h1, h2, pt );
-
-			// var tempSeg = new cidocs.CubicToSegment( path, "type", points )
-			// h1, h1, and pt need to be rect points
-			// var h1Pt = new Shape.Rectangle( this.ptRect );
-			// h1Pt.translate( h1 );
-			// h1Pt.strokeColor = 'cyan';
-			// var h2Pt = new Shape.Rectangle( this.ptRect );
-			// h2Pt.translate( h2 );
-			// h2Pt.strokeColor = 'cyan';
-
-			// var ptPt = new Shape.Rectangle( this.ptRect );
-			// ptPt.translate( pt );
-			// ptPt.strokeColor = 'cyan';
 
 			var h1Pt = new cidocs.PathPoint( h1, 'cyan', false );
 			var h2Pt = new cidocs.PathPoint( h2, 'cyan', false );
