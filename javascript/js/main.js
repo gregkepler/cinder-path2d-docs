@@ -70,6 +70,23 @@
 		}
 	}
 
+	function toCiRadians( radians ) {
+	
+		if( radians < 0 ) radians += (Math.PI * 2.0);
+		var piRadians = toCiNum( radians / Math.PI );
+		console.log( piRadians );
+
+		var displayRadians;
+		if( piRadians == 0.0 ) {
+			displayRadians = toCiNum( 0.0 );
+		} else if( piRadians == 1.0 ) {
+			displayRadians = "M_PI";
+		} else {
+			displayRadians = "M_PI * " + piRadians + 'f';
+		}
+		return displayRadians;
+	}
+
 
 
 	// +———————————————————————————————————————+
@@ -237,7 +254,7 @@
 		this.lineToTemplate 	= _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
 		this.quadToTemplate 	= _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		this.curveToTemplate 	= _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>f, <%= endRadians %>f, <%= forward %> );\n" );
+		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
 		this.closeTemplate 		= _.template( "mPath.close()\n" );
 				
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
@@ -696,8 +713,8 @@
 
 					case SEGMENT_TYPES[5]:
 						code += self.arcTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
-													radius: toCiNum( segment.radius ), startRadians: toCiNum( segment.startRadians ), 
-													endRadians: toCiNum( segment.endRadians ), forward: segment.forward } );
+													radius: toCiNum( segment.radius ), startRadians: toCiRadians( segment.startRadians ), 
+													endRadians: toCiRadians( segment.endRadians ), forward: segment.forward } );
 						
 						ptIndex += 3;
 						break;
