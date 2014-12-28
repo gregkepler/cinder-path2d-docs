@@ -73,10 +73,10 @@
 	function toCiRadians( radians ) {
 	
 		if( radians < 0 ) radians += (Math.PI * 2.0);
-		var piRadians = toCiNum( radians / Math.PI );
-		console.log( piRadians );
 
+		var piRadians = toCiNum( radians / Math.PI );
 		var displayRadians;
+		
 		if( piRadians == 0.0 ) {
 			displayRadians = toCiNum( 0.0 );
 		} else if( piRadians == 1.0 ) {
@@ -412,11 +412,11 @@
 					endRadians -= 2 * Math.PI;
 			}
 
+			var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
+			var startMid =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius / 2 ).add( center );
 			if( points.length === 0 ) {
-				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
 				path.moveTo( start );
 			} else {
-				var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
 				path.lineTo( start );
 			}
 
@@ -425,7 +425,14 @@
 			else
 				this.arcHelper( path, center, radius, endRadians, startRadians, forward, options );
 
-			this.drawPointText.call( this, [center, startPt, endPt] );
+			var radiusLine = new Path.Line( center, start );
+			radiusLine.strokeColor = COLOR_CENTER;
+			this.extras.push( radiusLine );
+
+			this.drawPointText.call( this, [center] );
+			this.drawTextAtPoint.call( this, startPt, toCiRadians( startRadians ) );
+			this.drawTextAtPoint.call( this, endPt, toCiRadians( endRadians ) );
+			this.drawTextAtPoint.call( this, startMid, toCiNum( radius ) + 'f' );
 		},
 
 		arcHelper: function( path, center, radius, startRadians, endRadians, forward, options ) {
@@ -997,6 +1004,19 @@
 				});
 				self.extras.push( text );
 			});
+		},
+
+		drawTextAtPoint: function( pt, text ) {
+
+			var self = this;
+			var text = new PointText({
+				point: [pt.x + 5, pt.y],
+				content: text,
+				fillColor: 'black',
+				fontFamily: 'Courier New',
+				fontSize: 8
+			});
+			self.extras.push( text );
 		},
 
 		reset: function(){
