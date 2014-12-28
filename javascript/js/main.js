@@ -206,6 +206,16 @@
 	cidocs.CloseSegment.extend( cidocs.Segment );
 
 
+	cidocs.PathPoint = function( pos, color, active )
+	{
+		var ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
+		var pt = new Shape.Rectangle( ptRect );
+		pt.translate( pos );
+		pt.strokeColor = color;
+		pt.active = ( _.isBoolean( active ) ) ? active : true;
+		return pt;
+	}
+
 	// +———————————————————————————————————————+
 	//	Path2d     
 	//	wrap a paperjs path to perform more
@@ -356,7 +366,37 @@
 			this.drawPath();
 		},
 
-		drawArcSegment: function( path, segment ) {
+		drawCubicSegment: function( path, segment, options ) {
+
+			var segmentPoints = segment.points;
+			var h1 = segmentPoints[0].position;
+			var h2 = segmentPoints[1].position;
+			var pt = segmentPoints[2].position;
+
+			path.cubicCurveTo(
+				new Point( h1 ),
+				new Point( h2 ),
+				new Point( pt )
+			);
+
+			if( options.extras ) {
+
+				var l1 = new Path.Line( options.prevPoint, new Point( h1 ) );
+				var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
+				l1.strokeColor = 'cyan';
+				l2.strokeColor = 'cyan';
+				l1.sendToBack();
+				l2.sendToBack();
+				this.extras.push( l1, l2 );
+			}
+
+			if( options.drawPointText != false ) {
+				this.drawPointText.call( this, [h1, h2, pt] );
+			}
+			
+		},
+
+		drawArcSegment: function( path, segment, options ) {
 
 			var center = segment.points[0].position;
 			var startPt = segment.points[1].position;
@@ -385,12 +425,14 @@
 			}
 
 			if( forward )
-				this.arcHelper( path, center, radius, startRadians, endRadians, forward );
+				this.arcHelper( path, center, radius, startRadians, endRadians, forward, options );
 			else
-				this.arcHelper( path, center, radius, endRadians, startRadians, forward );
+				this.arcHelper( path, center, radius, endRadians, startRadians, forward, options );
+
+			this.drawPointText.call( this, [center, startPt, endPt] );
 		},
 
-		arcHelper: function( path, center, radius, startRadians, endRadians, forward ) {
+		arcHelper: function( path, center, radius, startRadians, endRadians, forward, options ) {
 
 			// wrap the angle difference around to be in the range [0, 4*pi]
 		    while( endRadians - startRadians > 4 * Math.PI )
@@ -402,12 +444,12 @@
 
 				var midRadians = startRadians + (endRadians - startRadians) * 0.5;
 				if( forward ) {
-					this.arcHelper( path, center, radius, startRadians, midRadians, forward );
-					this.arcHelper( path, center, radius, midRadians, endRadians, forward );
+					this.arcHelper( path, center, radius, startRadians, midRadians, forward, options );
+					this.arcHelper( path, center, radius, midRadians, endRadians, forward, options );
 				}
 				else {
-					this.arcHelper( path, center, radius, midRadians, endRadians, forward );
-					this.arcHelper( path, center, radius, startRadians, midRadians, forward );
+					this.arcHelper( path, center, radius, midRadians, endRadians, forward, options );
+					this.arcHelper( path, center, radius, startRadians, midRadians, forward, options );
 				}
 		    } 
 			else if( Math.abs( endRadians - startRadians ) > 0.000001 ) {
@@ -423,12 +465,14 @@
 				}
 
 				for( var seg = 0; seg < segments; seg++, angle += angleDelta ) {
-					this.arcSegmentAsCubicBezier( path, center, radius, angle, angle + angleDelta );
+					// drawArcSegment
+					options.prevPoint = path.getLastSegment().point;
+					this.arcSegmentAsCubicBezier( path, center, radius, angle, angle + angleDelta, options );
 				}
 		    }	
 		},
 
-		arcSegmentAsCubicBezier: function( path, center, radius, startRadians, endRadians )
+		arcSegmentAsCubicBezier: function( path, center, radius, startRadians, endRadians, options )
 		{
 			var r_sin_A, r_cos_A;
 			var r_sin_B, r_cos_B;
@@ -441,10 +485,44 @@
 
 			h = 4.0/3.0 * Math.tan( (endRadians - startRadians) / 4 );
 
+
 			var h1 = new Point( center.x + r_cos_A - h * r_sin_A, center.y + r_sin_A + h * r_cos_A );
 			var h2 = new Point( center.x + r_cos_B + h * r_sin_B, center.y + r_sin_B - h * r_cos_B );
 			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
-			path.cubicCurveTo( h1, h2, pt );
+			// path.cubicCurveTo( h1, h2, pt );
+
+			// var tempSeg = new cidocs.CubicToSegment( path, "type", points )
+			// h1, h1, and pt need to be rect points
+			// var h1Pt = new Shape.Rectangle( this.ptRect );
+			// h1Pt.translate( h1 );
+			// h1Pt.strokeColor = 'cyan';
+			// var h2Pt = new Shape.Rectangle( this.ptRect );
+			// h2Pt.translate( h2 );
+			// h2Pt.strokeColor = 'cyan';
+
+			// var ptPt = new Shape.Rectangle( this.ptRect );
+			// ptPt.translate( pt );
+			// ptPt.strokeColor = 'cyan';
+
+			var h1Pt = new cidocs.PathPoint( h1, 'cyan', false );
+			var h2Pt = new cidocs.PathPoint( h2, 'cyan', false );
+			var ptPt = new cidocs.PathPoint( pt, 'cyan', false );
+			this.extras.push( h1Pt, h2Pt, ptPt );
+
+			var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1Pt, h2Pt, ptPt] );
+			options.drawPointText = false;
+			this.drawCubicSegment( path, tempSeg, options );
+		},
+
+		drawLineExtra: function( pt1, pt2 )
+		{
+			var l1 = new Path.Line( pt1, pt2 );
+			// var l2 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex - 1].position ) );
+			l1.strokeColor = 'cyan';
+			// l2.strokeColor = 'cyan';
+			l1.sendToBack();
+			// l2.sendToBack();
+			this.extras.push( l1 );
 		},
 
 		close: function() {
@@ -546,8 +624,10 @@
 							angle1 = points[ptIndex+1].position.subtract( points[ptIndex].position ).angleInRadians;
 							angle2 = points[ptIndex+2].position.subtract( points[ptIndex].position ).angleInRadians;
 
-							startPt = new Point( Math.cos( angle1 ) * rad, Math.sin( angle1 ) * rad ).add( points[ptIndex].position );
-							endPt = new Point( Math.cos( angle2 ) * rad, Math.sin( angle2 ) * rad ).add( points[ptIndex].position );
+							startPt = new Point( Math.round( Math.cos( angle1 ) * rad ), 
+								Math.round( Math.sin( angle1 ) * rad ) ).add( points[ptIndex].position );
+							endPt = new Point( Math.round( Math.cos( angle2 ) * rad ), 
+								Math.round( Math.sin( angle2 ) * rad ) ).add( points[ptIndex].position );
 
 							points[ptIndex + 1].position = startPt;
 							points[ptIndex + 2].position = endPt;
@@ -705,147 +785,6 @@
 				extra.remove();
 			});
 			this.extras = [];
-
-
-			/*_.each( segments, function( segment ){
-				switch( segment ) {
-					
-					case SEGMENT_TYPES[0]:
-						// console.log( "MOVE TO", points[ptIndex].position.x, points[ptIndex].position.y );
-						// self.moveTo( points[ptIndex] );
-						// var pt = new paper.Point( points[ptIndex].position.x, points[ptIndex].position.y );
-
-						// var start = new Path.
-
-						// var star = self.ptStar.place();
-						// star.position = points[ptIndex].position;
-						// self.extras.push(star);
-						var pt = points[ptIndex].position;
-						self.path.moveTo( new Point( pt ) );
-						self.drawPointText.call( self, [pt] );
-						ptIndex++;
-						break;
-
-					case SEGMENT_TYPES[1]:
-
-
-						
-						// console.log( "LINE TO", points[ptIndex].position.x, points[ptIndex].position.y );
-						// self.lineTo( points[ptIndex] );
-
-						var pt = points[ptIndex].position;
-
-						// path line
-						self.path.lineTo( new Point( pt ) );
-
-						// segment line
-						var seg = new Path();
-						seg.moveTo( points[ptIndex-1].position );
-						seg.strokeColor = COLOR_LINE_TO;
-						seg.strokeWidth = 3.0;
-						seg.lineTo( new Point( pt ) );
-						self.extras.push( seg );
-
-						self.drawPointText.call( self, [pt] );
-						ptIndex++;
-						break;
-
-					case SEGMENT_TYPES[2]:
-
-						// var pt = points[ptIndex].position;
-						var l1 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex + 1].position ) );
-						var l2 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex - 1].position ) );
-						l1.strokeColor = 'cyan';
-						l2.strokeColor = 'cyan';
-						l1.sendToBack();
-						l2.sendToBack();
-						self.extras.push( l1, l2 );
-
-						// self.quadTo(points[ptIndex], points[ptIndex+1] );
-						// self.path.strokeColor = COLOR_QUAD_TO;
-						self.path.quadraticCurveTo(
-							new Point( points[ptIndex].position ),
-							new Point( points[ptIndex + 1].position )
-						);
-
-						
-						// segment line
-						var seg = new Path();
-						seg.moveTo( points[ptIndex-1].position );
-						seg.strokeColor = COLOR_QUAD_TO;
-						seg.strokeWidth = 3.0;
-						seg.quadraticCurveTo(
-							new Point( points[ptIndex].position ),
-							new Point( points[ptIndex + 1].position )
-						);
-						self.extras.push( seg );
-
-						self.drawPointText.call( self, [points[ptIndex].position, points[ptIndex+1].position] );
-						ptIndex+=2;
-						break;
-
-					case SEGMENT_TYPES[3]:
-
-						var h1 = points[ptIndex].position;
-						var h2 = points[ptIndex+1].position;
-						var pt = points[ptIndex+2].position;
-
-						var l1 = new Path.Line( new Point( points[ptIndex - 1].position ), new Point( h1 ) );
-						var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
-						l1.strokeColor = 'cyan';
-						l2.strokeColor = 'cyan';
-						l1.sendToBack();
-						l2.sendToBack();
-						self.extras.push( l1, l2 );
-
-
-						self.path.cubicCurveTo(
-							new Point( h1 ),
-							new Point( h2 ),
-							new Point( pt )
-						);
-
-
-						// segment line
-						var seg = new Path();
-						seg.moveTo( points[ptIndex-1].position );
-						seg.strokeColor = COLOR_CUBIC_TO;
-						seg.strokeWidth = 3.0;
-						seg.cubicCurveTo(
-							new Point( h1 ),
-							new Point( h2 ),
-							new Point( pt )
-						);
-						self.extras.push( seg );
-
-						self.drawPointText.call( self, [h1, h2, pt] );
-
-						ptIndex+=3;
-						break;
-
-					case SEGMENT_TYPES[5]:
-
-						
-
-						
-						break;
-
-					case SEGMENT_TYPES[4]:
-
-						self.path.closed = true;
-
-						// segment line
-						var seg = new Path();
-						seg.strokeColor = COLOR_CLOSE;
-						seg.strokeWidth = 3.0;
-						seg.moveTo( points[points.length-1].position );
-						seg.lineTo(
-							points[0].position
-						);
-						self.extras.push( seg );
-						break;
-				}
-			} );*/
 	
 			_.each( this.segs, function( segment, index ) {
 
@@ -873,10 +812,7 @@
 						break;
 
 					case SEGMENT_TYPES[1]:
-
-
 						
-						// console.log( "LINE TO", points[ptIndex].position.x, points[ptIndex].position.y );
 						// self.lineTo( points[ptIndex] );
 
 						var pt = segmentPoints[0].position;
@@ -937,7 +873,7 @@
 
 					case SEGMENT_TYPES[3]:
 
-						var h1 = segmentPoints[0].position;
+						/*var h1 = segmentPoints[0].position;
 						var h2 = segmentPoints[1].position;
 						var pt = segmentPoints[2].position;
 
@@ -970,18 +906,29 @@
 						self.extras.push( seg );
 
 						self.drawPointText.call( self, [h1, h2, pt] );
+*/
+						var seg = new Path();
+						seg.moveTo( prevPoint );
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						self.extras.push( seg );
+
+						self.drawCubicSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
+						self.drawCubicSegment( seg, segment, prevPoint, { prevPoint: prevPoint, extras:false } );
 
 						ptIndex+=3;
 						break;
 
 					case SEGMENT_TYPES[5]:
 
-						self.drawArcSegment( self.path, segment );
+						// main path segment
+						self.drawArcSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
 
+						// special segment
 						var seg = new Path();
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
-						self.drawArcSegment( seg, segment );
+						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
 						self.extras.push( seg );
 
 
@@ -1152,7 +1099,9 @@
 			}*/
 
 			var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
-			if( hitResult && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
+			var active = ( hitResult && _.isBoolean( hitResult.item.active ) ) ? hitResult.item.active : undefined;
+			
+			if( hitResult && active != false && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
 				hitResult.item.fullySelected = true;
 			}
 
@@ -1174,7 +1123,8 @@
 					this.selectedSegment = hitResult.segment;
 				}*/
 
-				if (hitResult.item.type === 'rectangle' || hitResult.type === "segment") {
+				// if (hitResult.item.type === 'rectangle' || hitResult.type === "segment") {
+				if( hitResult.item.active !== false && (hitResult.item.type === 'rectangle' || hitResult.type === "segment") ) {
 					// console.log( "SELECT ME" )
 					this.selectedPoint = hitResult.item;
 				}
