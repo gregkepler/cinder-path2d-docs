@@ -24,7 +24,17 @@
 		"ARC",
 		"ARCTO"
 	]
-
+/*
+	var SEGMENT_TYPES = Object.freeze({
+		"MOVETO": 1,
+		"LINETO": 2,
+		"QUADTO": 3,
+		"CUBICTO": 4,
+		"ARC": 5,
+		"ARCTO": 6
+		"CLOSE": 7
+	})
+*/
 
 	//
 	// from http://codepen.io/MyHatIsAwesome/pen/DaptL
@@ -264,6 +274,7 @@
 		this.quadToTemplate 	= _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		this.curveToTemplate 	= _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
+		this.arcToTemplate 		= _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
 		this.closeTemplate 		= _.template( "mPath.close()\n" );
 				
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
@@ -528,7 +539,7 @@
 		drawArcToSegment: function( path, segment, options ) {
 
 			if( path.closed || path.isEmpty() ) {
-				console.error( "can onlt arcTo as non-first point" );
+				console.error( "can only arcTo as non-first point" );
 				return;
 			}
 
@@ -536,9 +547,9 @@
 			var radius = segment.radius;
 			
 			// Get current point.
-			var p0 = this.getCurrentPoint();
-			var p1 = segment.points[0].position;
-			var t = segment.points[1].position;
+			var p0 = this.getCurrentPoint( path );
+			var p1 = new Point( segment.points[0].position );
+			var t = new Point( segment.points[1].position );
 			
 			// Calculate the tangent vectors tangent1 and tangent2.
 			var p0t = p0.subtract( t );
@@ -564,6 +575,7 @@
 			
 			// The denominator is zero <=> p0 and p1 are colinear.
 			if( Math.abs( denominator ) < epsilon ) {
+				console.log( denominator, epsilon, "LINE" );
 				path.lineTo( t );
 			}
 			else {
@@ -818,10 +830,18 @@
 						ptIndex+=3;
 						break;
 
-					case SEGMENT_TYPES[5]:
+					case "ARC":
 						code += self.arcTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
 													radius: toCiNum( segment.radius ), startRadians: toCiRadians( segment.startRadians ), 
 													endRadians: toCiRadians( segment.endRadians ), forward: segment.forward } );
+						
+						ptIndex += 3;
+						break;
+
+					case "ARCTO":
+						code += self.arcToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
+													tanX: toCiNum( points[ptIndex + 1].position.x ), tanY: toCiNum( points[ptIndex + 1].position.y ),
+													radius: toCiNum( segment.radius ) } );
 						
 						ptIndex += 3;
 						break;
@@ -996,6 +1016,15 @@
 						// main path segment
 						self.drawArcToSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
 
+						// overlay segment
+						var seg = new Path();
+						seg.moveTo( prevPoint );
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						self.drawArcToSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
+						self.extras.push( seg );
+						
+
 						/*// special segment
 						var seg = new Path();
 						seg.strokeColor = COLOR_CUBIC_TO;
@@ -1060,9 +1089,9 @@
 			self.extras.push( text );
 		},
 
-		getCurrentPoint: function() {
+		getCurrentPoint: function( path ) {
 
-			return this.path.getLastSegment().point;
+			return path.getLastSegment().point;
 		},
 
 		reset: function() {
