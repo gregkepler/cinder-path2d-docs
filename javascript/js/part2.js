@@ -118,7 +118,7 @@
 
 
 	// +———————————————————————————————————————+
-	//	CubicToSketch
+	//	ArcSketch
 	// +———————————————————————————————————————+
 
 	cidocs.ArcSketch = function( options ) {
@@ -140,12 +140,8 @@
 			
 			var curPaper = this.curPaper;		
 			var path2d = new cidocs.Path2d( this.curPaper );
-			// path2d.moveTo( new Point( 0.0, 0.0 ) );
 
 			path2d.arc( new Point( 25.0, 25.0 ), 100.0, Math.PI * 0.5, Math.PI * 2.0, true );
-				// path4.arc( vec2( 25.0, 25.0 ), 25.0, 0.0, M_PI );
-			// path2d.cubicTo( new Point( 100.0, 250.0 ), new Point( 300.0, 250.0 ), new Point( 300.0, 100.0 ) );
-			// path2d.cubicTo( new Point( 300.0, 50.0 ), new Point( 350.0, 0.0 ), new Point( 400.0, 0.0 ) );
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
@@ -175,7 +171,59 @@
 	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
 
 
+	// +———————————————————————————————————————+
+	//	ArcToSketch
+	// +———————————————————————————————————————+
 	
+	cidocs.ArcToSketch = function( options ) {
+
+		cidocs.Path2dSketch.call( this, options );
+	}
+
+	cidocs.ArcToSketch.prototype = {
+
+		initialize: function( options ) {
+
+			this.superclass.initialize.call( this, options );
+			this.drawInitialPath();
+
+			// this.addButton( 'reverseArc', "Reverse Arc" );
+		},
+
+		drawInitialPath: function( ) {
+			
+			var curPaper = this.curPaper;		
+			var path2d = new cidocs.Path2d( this.curPaper );
+
+			path2d.moveTo( new Point( 0.0, 150.0 ) );
+			path2d.arcTo( new Point( 150.0, 0.0 ), new Point( 0.0, 0.0 ), 25.0 );
+			this.paths.push( path2d );
+
+			path2d.centerInCanvas( this.canvas );
+		}
+
+		/*reverseArc: function() {
+
+			this.paths[0].reverseArc();
+			this.updatePath();
+
+		},
+
+		show: function() {
+
+			this.superclass.show.call( this );
+			this.activateButton( 'reverseArc', this.reverseArc );
+
+		},
+
+		hide: function() {
+
+			this.superclass.hide.call( this );
+			this.deactivateButton( 'reverseArc' );
+		}*/
+
+	};
+	cidocs.ArcToSketch.extend( cidocs.Path2dSketch );
 
 
 	// +———————————————————————————————————————+
@@ -235,8 +283,9 @@
 			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
 			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
+			var arcToSketch		= new cidocs.ArcToSketch( { canvas:'#arcto', name:'arcto', output:this.codeModule } );
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
-			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, combinedSketch );	
+			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, arcToSketch, combinedSketch );	
 
 			this.superclass.init.call( this );
 		}

@@ -21,7 +21,8 @@
 		"QUADTO",
 		"CUBICTO",
 		"CLOSE",
-		"ARC"
+		"ARC",
+		"ARCTO"
 	]
 
 
@@ -73,6 +74,7 @@
 	function toCiRadians( radians ) {
 	
 		if( radians < 0 ) radians += (Math.PI * 2.0);
+		if( radians >= Math.PI * 2.0 ) radians -= (Math.PI * 2.0);
 
 		var piRadians = toCiNum( radians / Math.PI );
 		var displayRadians;
@@ -200,14 +202,21 @@
 	}
 
 	cidocs.ArcSegment.prototype = {
-
-		draw: function( ){
-
-		}
-
 	}
 
 	cidocs.ArcSegment.extend( cidocs.Segment );
+
+
+	cidocs.ArcToSegment = function( path2d, type, points, radius ){
+
+		cidocs.Segment.call( this, path2d, type, points );
+		this.radius = radius;
+	}
+
+	cidocs.ArcToSegment.prototype = {
+	}
+
+	cidocs.ArcToSegment.extend( cidocs.Segment );
 
 
 	cidocs.CloseSegment = function( path2d, type ){
@@ -331,17 +340,6 @@
 			this.drawPath();
 		},
 
-		reverseArc: function() {
-
-			// for all the segments in the path, reverse the arc directions
-			_.each( this.segs, function( segment ) {
-				if( segment.type === 'ARC' ) {
-					segment.forward = !segment.forward;
-				};
-			} );
-			this.drawPath();
-		},
-
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
 			var pt = this.ptCircle.place();
@@ -353,12 +351,34 @@
 
 			// get pt at end radians
 			var end = new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center );
-			endPt = new cidocs.PathPoint( end, 'blue' );
+			var endPt = new cidocs.PathPoint( end, 'blue' );
 
 			this.points.push( pt, startPt, endPt );
 
 			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians, frwd );
 			this.segs.push( segment );
+			this.drawPath();
+		},
+
+		arcTo: function( targetPt, tangentPt, radius ) {
+
+			var endPt = new cidocs.PathPoint( targetPt, 'blue' );
+			var tanPt = new cidocs.PathPoint( tangentPt, 'blue' );
+			this.points.push( endPt, tanPt );
+
+			var segment = new cidocs.ArcToSegment( this, SEGMENT_TYPES[6], [endPt, tanPt], radius );
+			this.segs.push( segment );
+			this.drawPath();
+		},
+
+		reverseArc: function() {
+
+			// for all the segments in the path, reverse the arc directions
+			_.each( this.segs, function( segment ) {
+				if( segment.type === 'ARC' ) {
+					segment.forward = !segment.forward;
+				};
+			} );
 			this.drawPath();
 		},
 
@@ -502,6 +522,82 @@
 			var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1Pt, h2Pt, ptPt] );
 			options.drawPointText = false;
 			this.drawCubicSegment( path, tempSeg, options );
+		},
+
+		drawArcToSegment: function( path, segment, options ) {
+
+			if( path.closed || path.isEmpty() ) {
+				console.error( "can onlt arcTo as non-first point" );
+				return;
+			}
+
+			var epsilon = 1e-8;
+			console.log(epsilon);
+			
+			// Get current point.
+			/*var p0 = getCurrentPoint();
+			/*
+			// Calculate the tangent vectors tangent1 and tangent2.
+			const vec2 p0t = p0 - t;
+			const vec2 p1t = p1 - t;
+			
+			// Calculate tangent distance squares.
+			const float p0tSquare = length2( p0t );
+			const float p1tSquare = length2( p1t );
+
+			// Calculate tan(a/2) where a is the angle between vectors tangent1 and tangent2.
+			//
+			// Use the following facts:
+			//
+			//  p0t * p1t  = |p0t| * |p1t| * cos(a) <=> cos(a) =  p0t * p1t  / (|p0t| * |p1t|)
+			// |p0t x p1t| = |p0t| * |p1t| * sin(a) <=> sin(a) = |p0t x p1t| / (|p0t| * |p1t|)
+			//
+			// and
+			//
+			// tan(a/2) = sin(a) / ( 1 - cos(a) )
+			
+			const float numerator = p0t.y * p1t.x - p1t.y * p0t.x;
+			const float denominator = math<float>::sqrt( p0tSquare * p1tSquare ) - ( p0t.x * p1t.x + p0t.y * p1t.y );
+			
+			// The denominator is zero <=> p0 and p1 are colinear.
+			if( math<float>::abs( denominator ) < epsilon ) {
+				lineTo( t );
+			}
+			else {
+				// |b0 - t| = |b3 - t| = radius * tan(a/2).
+				const float distanceFromT = math<float>::abs( radius * numerator / denominator );
+				
+				// b0 = t + |b0 - t| * (p0 - t)/|p0 - t|.
+				const vec2 b0 = t + distanceFromT * normalize( p0t );
+				
+				// If b0 deviates from p0, add a line to it.
+				if( math<float>::abs(b0.x - p0.x) > epsilon || math<float>::abs(b0.y - p0.y) > epsilon ) {
+					lineTo( b0 );
+				}
+				
+				// b3 = t + |b3 - t| * (p1 - t)/|p1 - t|.
+				const vec2 b3 = t + distanceFromT * normalize( p1t );
+				
+				// The two bezier-control points are located on the tangents at a fraction
+				// of the distance[ tangent points <-> tangent intersection ].
+				// See "Approxmiation of a Cubic Bezier Curve by Circular Arcs and Vice Versa" by Aleksas Riskus 
+				// http://itc.ktu.lt/itc354/Riskus354.pdf
+				
+				float b0tSquare = (t.x - b0.x) *  (t.x - b0.x) + (t.y - b0.y) *  (t.y - b0.y);
+				float radiusSquare = radius * radius;
+				float fraction;
+				
+				// Assume dist = radius = 0 if the radius is very small.
+				if( math<float>::abs( radiusSquare / b0tSquare ) < epsilon )
+					fraction = 0.0;
+				else
+					fraction = ( 4.0 / 3.0 ) / ( 1.0 + math<float>::sqrt( 1.0 + b0tSquare / radiusSquare ) );
+				
+				const vec2 b1 = b0 + fraction * (t - b0);
+				const vec2 b2 = b3 + fraction * (t - b3);
+				
+				curveTo( b1, b2, b3 );
+			}*/
 		},
 
 		drawLineExtra: function( pt1, pt2 )
@@ -863,40 +959,6 @@
 
 					case SEGMENT_TYPES[3]:
 
-						/*var h1 = segmentPoints[0].position;
-						var h2 = segmentPoints[1].position;
-						var pt = segmentPoints[2].position;
-
-						var l1 = new Path.Line( prevPoint, new Point( h1 ) );
-						var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
-						l1.strokeColor = 'cyan';
-						l2.strokeColor = 'cyan';
-						l1.sendToBack();
-						l2.sendToBack();
-						self.extras.push( l1, l2 );
-
-
-						self.path.cubicCurveTo(
-							new Point( h1 ),
-							new Point( h2 ),
-							new Point( pt )
-						);
-
-
-						// segment line
-						var seg = new Path();
-						seg.moveTo( prevPoint );
-						seg.strokeColor = COLOR_CUBIC_TO;
-						seg.strokeWidth = 3.0;
-						seg.cubicCurveTo(
-							new Point( h1 ),
-							new Point( h2 ),
-							new Point( pt )
-						);
-						self.extras.push( seg );
-
-						self.drawPointText.call( self, [h1, h2, pt] );
-*/
 						var seg = new Path();
 						seg.moveTo( prevPoint );
 						seg.strokeColor = COLOR_CUBIC_TO;
@@ -921,48 +983,23 @@
 						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
 						self.extras.push( seg );
 
-
-						/*
-						// var forward = true;
-						// var startRadians = segment.startRadians;
-						// var endRadians = segment.endRadians;
-						var center = segment.points[0].position;
-						var startPt = segment.points[1].position;
-						var endPt = segment.points[2].position;
-						var radius = startPt.getDistance( center );
-						var startRadians = startPt.subtract( center ).angleInRadians;
-						var endRadians = endPt.subtract( center ).angleInRadians;
-						var forward = segment.forward;
-
-						// radius will be based on distance between center and pt 1
-
-						// start radians will be based on radians for pt 1
-						// end radians will be based on radians for pt 2
-
-						if( forward ) {
-							while( endRadians < startRadians )
-								endRadians += 2 * Math.PI;
-						}
-						else {
-							while( endRadians > startRadians )
-								endRadians -= 2 * Math.PI;
-						}
-
-						if( points.length === 0 ) {
-							var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
-							self.path.moveTo( start );
-						} else {
-							var start =  new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
-							self.path.lineTo( start );
-						}
-
-						if( forward )
-							self.arcHelper( self.path, center, radius, startRadians, endRadians, forward );
-						else
-							self.arcHelper( self.path, center, radius, endRadians, startRadians, forward );
-						*/
-
 						ptIndex += 3;
+
+						break;
+
+					case "ARCTO":
+
+						// main path segment
+						self.drawArcToSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
+
+						/*// special segment
+						var seg = new Path();
+						seg.strokeColor = COLOR_CUBIC_TO;
+						seg.strokeWidth = 3.0;
+						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
+						self.extras.push( seg );*/
+
+						ptIndex += segment.points.length;
 
 						break;
 
@@ -1289,15 +1326,17 @@
 
 		this.update = function( path ){
 
-			var segments = path.segments;
-			var p = "mPath";
-			var code = "Path2d mPath;\n";
-			code += path.getCinderPath();
-			code += "gl::draw( mPath );";
-			// div.html( code );
-			this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
+			var code = "";
 
-			// log( code, Prism.highlight( code, Prism.languages.cpp ) );
+			if( path ) {
+				var segments = path.segments;
+				var p = "mPath";
+				code = "Path2d mPath;\n";
+				code += path.getCinderPath();
+				code += "gl::draw( mPath );";
+			};
+						
+			this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
 		};
 
 		this.init();
