@@ -524,6 +524,7 @@
 			this.drawCubicSegment( path, tempSeg, options );
 		},
 
+		// coverted from cinder's pathTo
 		drawArcToSegment: function( path, segment, options ) {
 
 			if( path.closed || path.isEmpty() ) {
@@ -532,18 +533,20 @@
 			}
 
 			var epsilon = 1e-8;
-			console.log(epsilon);
+			var radius = segment.radius;
 			
 			// Get current point.
-			/*var p0 = getCurrentPoint();
-			/*
+			var p0 = this.getCurrentPoint();
+			var p1 = segment.points[0].position;
+			var t = segment.points[1].position;
+			
 			// Calculate the tangent vectors tangent1 and tangent2.
-			const vec2 p0t = p0 - t;
-			const vec2 p1t = p1 - t;
+			var p0t = p0.subtract( t );
+			var p1t = p1.subtract( t );
 			
 			// Calculate tangent distance squares.
-			const float p0tSquare = length2( p0t );
-			const float p1tSquare = length2( p1t );
+			var p0tSquare = p0t.length * p0t.length;
+			var p1tSquare = p1t.length * p1t.length;
 
 			// Calculate tan(a/2) where a is the angle between vectors tangent1 and tangent2.
 			//
@@ -556,48 +559,49 @@
 			//
 			// tan(a/2) = sin(a) / ( 1 - cos(a) )
 			
-			const float numerator = p0t.y * p1t.x - p1t.y * p0t.x;
-			const float denominator = math<float>::sqrt( p0tSquare * p1tSquare ) - ( p0t.x * p1t.x + p0t.y * p1t.y );
+			var numerator = p0t.y * p1t.x - p1t.y * p0t.x;
+			var denominator = Math.sqrt( p0tSquare * p1tSquare ) - ( p0t.x * p1t.x + p0t.y * p1t.y );
 			
 			// The denominator is zero <=> p0 and p1 are colinear.
-			if( math<float>::abs( denominator ) < epsilon ) {
-				lineTo( t );
+			if( Math.abs( denominator ) < epsilon ) {
+				path.lineTo( t );
 			}
 			else {
 				// |b0 - t| = |b3 - t| = radius * tan(a/2).
-				const float distanceFromT = math<float>::abs( radius * numerator / denominator );
+				var distanceFromT = Math.abs( radius * numerator / denominator );
 				
 				// b0 = t + |b0 - t| * (p0 - t)/|p0 - t|.
-				const vec2 b0 = t + distanceFromT * normalize( p0t );
+				var b0 = t.add( p0t.normalize().multiply( distanceFromT ) );
 				
 				// If b0 deviates from p0, add a line to it.
-				if( math<float>::abs(b0.x - p0.x) > epsilon || math<float>::abs(b0.y - p0.y) > epsilon ) {
-					lineTo( b0 );
+				if( Math.abs(b0.x - p0.x) > epsilon || Math.abs(b0.y - p0.y) > epsilon ) {
+					path.lineTo( b0 );
 				}
 				
 				// b3 = t + |b3 - t| * (p1 - t)/|p1 - t|.
-				const vec2 b3 = t + distanceFromT * normalize( p1t );
+				var b3 = t.add( p1t.normalize().multiply( distanceFromT ) );
 				
 				// The two bezier-control points are located on the tangents at a fraction
 				// of the distance[ tangent points <-> tangent intersection ].
 				// See "Approxmiation of a Cubic Bezier Curve by Circular Arcs and Vice Versa" by Aleksas Riskus 
 				// http://itc.ktu.lt/itc354/Riskus354.pdf
 				
-				float b0tSquare = (t.x - b0.x) *  (t.x - b0.x) + (t.y - b0.y) *  (t.y - b0.y);
-				float radiusSquare = radius * radius;
-				float fraction;
+				var b0tSquare = (t.x - b0.x) *  (t.x - b0.x) + (t.y - b0.y) *  (t.y - b0.y);
+				var radiusSquare = radius * radius;
+				var fraction;
 				
 				// Assume dist = radius = 0 if the radius is very small.
-				if( math<float>::abs( radiusSquare / b0tSquare ) < epsilon )
+				if( Math.abs( radiusSquare / b0tSquare ) < epsilon )
 					fraction = 0.0;
 				else
-					fraction = ( 4.0 / 3.0 ) / ( 1.0 + math<float>::sqrt( 1.0 + b0tSquare / radiusSquare ) );
+					fraction = ( 4.0 / 3.0 ) / ( 1.0 + Math.sqrt( 1.0 + b0tSquare / radiusSquare ) );
 				
-				const vec2 b1 = b0 + fraction * (t - b0);
-				const vec2 b2 = b3 + fraction * (t - b3);
 				
-				curveTo( b1, b2, b3 );
-			}*/
+				var b1 = b0.add( ( t.subtract( b0 ) ).multiply( fraction ) );
+				var b2 = b3.add( ( t.subtract( b3 ) ).multiply( fraction ) );
+				
+				path.cubicCurveTo( b1, b2, b3 );
+			}
 		},
 
 		drawLineExtra: function( pt1, pt2 )
@@ -1056,7 +1060,12 @@
 			self.extras.push( text );
 		},
 
-		reset: function(){
+		getCurrentPoint: function() {
+
+			return this.path.getLastSegment().point;
+		},
+
+		reset: function() {
 
 			_.each( this.points, function( point ) {
 				point.remove();
