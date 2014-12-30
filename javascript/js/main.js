@@ -399,6 +399,7 @@
 			var h1 = segmentPoints[0].position;
 			var h2 = segmentPoints[1].position;
 			var pt = segmentPoints[2].position;
+			var drawPointText = _.isBoolean( options.drawPointText ) ? options.drawPointText : true;
 
 			path.cubicCurveTo(
 				new Point( h1 ),
@@ -417,7 +418,8 @@
 				this.extras.push( l1, l2 );
 			}
 
-			if( options.drawPointText != false ) {
+			// if( options.drawPointText != false ) {
+			if( drawPointText ) {
 				this.drawPointText.call( this, [h1, h2, pt] );
 			}
 			
@@ -612,8 +614,19 @@
 				var b1 = b0.add( ( t.subtract( b0 ) ).multiply( fraction ) );
 				var b2 = b3.add( ( t.subtract( b3 ) ).multiply( fraction ) );
 				
-				path.cubicCurveTo( b1, b2, b3 );
+				// add the points as path points
+				var b1Pt = new cidocs.PathPoint( b1, 'cyan', false );
+				var b2Pt = new cidocs.PathPoint( b2, 'cyan', false );
+				var b3Pt = new cidocs.PathPoint( b3, 'cyan', false );
+				this.extras.push( b1Pt, b2Pt, b3Pt );
+				
+				var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [b1Pt, b2Pt, b3Pt] );
+				options.drawPointText = false;
+				this.drawCubicSegment( path, tempSeg, options );
+				// path.cubicCurveTo( b1, b2, b3 );
 			}
+
+			this.drawPointText.call( this, [p1, t] );
 		},
 
 		drawLineExtra: function( pt1, pt2 )
