@@ -1131,6 +1131,7 @@
 
 	cidocs.Path2dSketch = function( options ) {
 
+		this.sketch = null;
 		this.canvas = null;
 		this.output = null;
 		this.paths = [];
@@ -1148,6 +1149,7 @@
 		this.movePath = false;
 		this.handlesOn = true;
 		this.buttons = [];
+		this.gui = new dat.GUI( { autoPlace: false } );
 
 		this.initialize( options );
 	}
@@ -1171,6 +1173,16 @@
 			this.tool.onMouseMove = _.bind( this.onToolMouseMove, this );
 			this.tool.onMouseDown = _.bind( this.onToolMouseDown, this );
 			this.tool.onMouseDrag = _.bind( this.onToolMouseDrag, this );
+
+			// wrap canvas in div
+			$(this.gui.domElement);//.addClass( this.name );
+			console.log($(this.gui.domElement).find('.close-button').remove());
+			var canvasWrapper = $("<div class='sketch'></div>");
+			canvasWrapper.addClass( options.name );
+			canvasWrapper.append( this.canvas );
+			canvasWrapper.append( this.gui.domElement );
+			$("#tutorial .canvases").append( canvasWrapper );
+			this.sketch = canvasWrapper;
 		},
 
 		onToolMouseMove: function( event ) {
@@ -1289,8 +1301,8 @@
 
 		show: function() {
 
-			this.canvas.removeClass( "inactive" );
-			this.canvas.addClass( "active" );
+			this.sketch.removeClass( "inactive" );
+			this.sketch.addClass( "active" );
 			this.updatePath();
 
 			_.bindAll( this, 'toggleHandles', 'reset' );
@@ -1305,8 +1317,8 @@
 
 		hide: function() {
 
-			this.canvas.removeClass( "active" );
-			this.canvas.addClass( "inactive" );
+			this.sketch.removeClass( "active" );
+			this.sketch.addClass( "inactive" );
 			$("#handle-toggle").unbind('click')
 			$("#reset").unbind('click')
 
@@ -1338,6 +1350,13 @@
 
 				$('.canvasButtons .right').append( button );
 			}
+
+			// add to dat-gui
+			var btn = this.gui.add( this, id );
+			btn.name( name );
+			btn.updateDisplay();
+			//btn.setValue( "TEST" );
+			console.log( "BTN", btn );
 		},
 
 		activateButton: function( buttonId, func ) {

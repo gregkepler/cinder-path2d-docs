@@ -65,13 +65,12 @@ canvas
 	height: 340px
 	outline: #f5f2f0 solid 1px
 
-	&.active
-		display: block
 
-	&.inactive
-		display: none
 
-.invisible
+.active
+	display: block
+		
+.invisible, .inactive
 	
 	display: none
 
@@ -85,7 +84,7 @@ h1
 	color: #333333
 	font-size: 2.25em
 
-.tutorial
+#tutorial
 	margin-top: 3em
 
 	button
@@ -99,6 +98,11 @@ h1
 		&:hover
 			background: #c64b24
 			color: #fff
+			
+	.dg.main
+		position: absolute
+		top: 0;
+		right: 10px;
 
 pre.language-cpp
 	background: #f4f4f2
@@ -113,5 +117,8 @@ pre.language-cpp
 #bottomNav
 	margin: 20px 0
 	text-align: center
+	
+.sketch
+	line-height: 0
 
 

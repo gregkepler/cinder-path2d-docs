@@ -36,7 +36,7 @@
                     <li><strong>arcTo</strong>: Draws a line segment from the current point toward the first point given to draw a rounded corner. This segment terminates in an arc with the specified radius whose end is tangent to the line segment connecting the two points specified. Accepts a target point, a tangent position, and a radius. Results in a path composed of possible LINETO and CUBICTO segments.</li>
                 </ul>
                 
-                <div class="tutorial">
+                <div id="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">
                         <canvas id="lineto" data-name="lineTo" class="active" width="500" height="300"></canvas>
@@ -62,6 +62,7 @@
                 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
         
                 <script type="text/javascript" src="js/prism.js"></script>
+                <script type="text/javascript" src="bower_components/dat-gui/build/dat.gui.js"></script>
                 <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
                 <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
                 <script type="text/javascript" src="js/consolelog.js"></script>

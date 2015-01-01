@@ -177,10 +177,51 @@
 	
 	cidocs.ArcToSketch = function( options ) {
 
+		this._radius = 10.0;
+		/*var radius = 25.0;
+
+		Object.defineProperty(this, "radius", {
+	        get: function(){ return this.radius },
+	        set: function(new_value){
+	            //Some business logic, upperCase, for example
+	            this.radius = new_value;
+	        }
+	    })*/
+
 		cidocs.Path2dSketch.call( this, options );
 	}
 
-	cidocs.ArcToSketch.prototype = {
+	/*cidocs.Test = function(){
+		this._test = "THIS IS A TEST";
+	}
+	Object.defineProperty( cidocs.Test.prototype, "test", {
+	    get: function() {
+	        return this._test;
+	    },
+	    set: function( val ) {
+	    	this._test = val;
+	    }
+	});
+	window.testObj = new cidocs.Test();
+	window.testObj.test = "TESTIES"
+	console.log( "TEST OBJ", testObj );
+	debugger;*/
+
+	
+
+	_.extend( cidocs.ArcToSketch.prototype, {
+
+		radius: 25,
+		// _radius: 25,
+
+		/*get radius(){
+	        return this._radius;
+	    },
+	    set radius( val ){
+	        this._radius = val;
+	        console.log( 'RADIUS', this._radius);
+	       // this.updatePath();
+	    },*/
 
 		initialize: function( options ) {
 
@@ -188,6 +229,8 @@
 			this.drawInitialPath();
 
 			// this.addButton( 'reverseArc', "Reverse Arc" );
+			//this.radius = 25;
+			this.addButton( 'radius', "radius" );
 		},
 
 		drawInitialPath: function( ) {
@@ -196,12 +239,14 @@
 			var path2d = new cidocs.Path2d( this.curPaper );
 
 			path2d.moveTo( new Point( 0.0, 150.0 ) );
-			path2d.arcTo( new Point( 150.0, 0.0 ), new Point( 0.0, 0.0 ), 25.0 );
+			path2d.arcTo( new Point( 150.0, 0.0 ), new Point( 0.0, 0.0 ), this.radius );
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
+			// this.radius = 50.0;
 		}
 
+		
 		/*reverseArc: function() {
 
 			this.paths[0].reverseArc();
@@ -222,7 +267,35 @@
 			this.deactivateButton( 'reverseArc' );
 		}*/
 
-	};
+		
+
+	} );
+
+	/*Object.defineProperty( cidocs.ArcToSketch.prototype, "radius", {
+	    get: function() {
+	        return this._radius;
+	    },
+	    set: function( val ) {
+	    	this._radius = val;
+	    }
+	});
+	/*Object.defineProperty(cidocs.ArcToSketch.prototype, _radius, {
+    	get: function() {return this._radius },
+    	set: function( value ) { this._radius = value }
+	});*/
+
+	/*Object.defineProperties( cidocs.ArcToSketch.prototype, {
+	    "radius": { 
+	    	get: function () { return this._radius; },
+	    	set: function (val) { this._radius = val; } 
+	    }
+
+	});*/
+
+	
+	// window.testObj = new cidocs.Test();
+	// window.testObj.test = "TESTIES"
+	// cidocs.ArcToSketch.prototype.radius = 25;
 	cidocs.ArcToSketch.extend( cidocs.Path2dSketch );
 
 
@@ -268,34 +341,34 @@
 	//	Main App
 	// +———————————————————————————————————————+
 
-	cidocs.Part1App = function() {
+	cidocs.Part2App = function() {
 		cidocs.app.call( this );
 	};
 
-	cidocs.Part1App.prototype = {
+	cidocs.Part2App.prototype = {
 
 		init: function(){
 			
 			var self = this;
 
 			// init all the sketches
-			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', output:this.codeModule } );
-			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', output:this.codeModule } );
-			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', output:this.codeModule } );
+			var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', name:'lineto', output:this.codeModule } );
+			var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', name:'quadto', output:this.codeModule } );
+			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', name:'cubicto', output:this.codeModule } );
 			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			var arcToSketch		= new cidocs.ArcToSketch( { canvas:'#arcto', name:'arcto', output:this.codeModule } );
-			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', output:this.codeModule } );
+			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', name:'combined', output:this.codeModule } );
 			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, arcToSketch, combinedSketch );	
 
 			this.superclass.init.call( this );
 		}
 	}
 
-	cidocs.Part1App.extend( cidocs.app );
+	cidocs.Part2App.extend( cidocs.app );
 
 	$(document).ready( function(){
 		
-		window.app = new cidocs.Part1App();
+		window.app = new cidocs.Part2App();
 		app.init();
 		app.show( "lineto" );
 
