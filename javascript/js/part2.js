@@ -178,6 +178,7 @@
 	cidocs.ArcToSketch = function( options ) {
 
 		this._radius = 10.0;
+		// this._testVal = "TEST1";
 		/*var radius = 25.0;
 
 		Object.defineProperty(this, "radius", {
@@ -190,29 +191,45 @@
 
 		cidocs.Path2dSketch.call( this, options );
 	}
-
-	/*cidocs.Test = function(){
-		this._test = "THIS IS A TEST";
+/*
+	cidocs.Test = function(){
+		this._testVal = "THIS IS A TEST";
 	}
-	Object.defineProperty( cidocs.Test.prototype, "test", {
+	cidocs.Test.prototype = {
+		get testVal(){
+	        return this._testVal;
+	    },
+	    set testVal( val ){
+	        console.log( 'TEST VAL', val);
+	        this._testVal = val;
+	       // this.updatePath();
+	    }
+	}*/
+	/*Object.defineProperty( cidocs.Test.prototype, "test", {
 	    get: function() {
 	        return this._test;
 	    },
 	    set: function( val ) {
 	    	this._test = val;
 	    }
-	});
-	window.testObj = new cidocs.Test();
-	window.testObj.test = "TESTIES"
+	});*/
+/*	window.testObj = new cidocs.Test();
+	window.testObj.testVal = "TESTIES"
 	console.log( "TEST OBJ", testObj );
-	debugger;*/
-
+	// debugger;
+*/
+	
 	
 
-	_.extend( cidocs.ArcToSketch.prototype, {
+	// _.extend( cidocs.ArcToSketch.prototype, {
+	cidocs.ArcToSketch.prototype = {
 
-		radius: 25,
+		// radius: 25,
+
 		// _radius: 25,
+		// _testVal: "TEST1",
+		
+
 
 		/*get radius(){
 	        return this._radius;
@@ -222,6 +239,16 @@
 	        console.log( 'RADIUS', this._radius);
 	       // this.updatePath();
 	    },*/
+
+		//_test: "TEST1",
+		// get testVal(){
+	 //        return this._testVal;
+	 //    },
+	 //    set testVal( val ){
+	 //        console.log( 'TEST VAL', val);
+	 //        this._testVal = val;
+	 //       // this.updatePath();
+	 //    },
 
 		initialize: function( options ) {
 
@@ -244,6 +271,9 @@
 
 			path2d.centerInCanvas( this.canvas );
 			// this.radius = 50.0;
+
+			// this.test = "TEST2";
+			console.log( "ARC TO SKETCH", this );
 		}
 
 		
@@ -269,14 +299,38 @@
 
 		
 
-	} );
+	};
 
-	/*Object.defineProperty( cidocs.ArcToSketch.prototype, "radius", {
+	/*cidocs.ArcToSketch.prototype.getTest = function() {
+	    return this._test;
+	  };
+	  
+	cidocs.ArcToSketch.prototype.setTest = function( value ) {
+	    this._test = value;
+	};
+
+/*
+	cidocs.ArcToSketch.prototype.__get_name = function() {
+
+	  return this.__name + ' oliver';
+	}
+	 
+	cidocs.ArcToSketch.prototype.__set_name = function(val) {
+	  this.__name = val;
+	}
+	
+	
+	*/
+
+	
+
+	/*Object.defineProperty( cidocs.ArcToSketch.prototype, "test", {
 	    get: function() {
-	        return this._radius;
+	        return this._test;
 	    },
 	    set: function( val ) {
-	    	this._radius = val;
+	    	console.log("SET TEST");
+	    	this._test = val;
 	    }
 	});
 	/*Object.defineProperty(cidocs.ArcToSketch.prototype, _radius, {
@@ -296,8 +350,30 @@
 	// window.testObj = new cidocs.Test();
 	// window.testObj.test = "TESTIES"
 	// cidocs.ArcToSketch.prototype.radius = 25;
-	cidocs.ArcToSketch.extend( cidocs.Path2dSketch );
 
+	cidocs.ArcToSketch.extend( cidocs.Path2dSketch );
+	cidocs.ArcToSketch.addGetter( 'radius', function(){return this._radius});
+	cidocs.ArcToSketch.addSetter( 'radius', function( val ){ 
+		this._radius = val;
+		this.paths[0].setArcRadius( this._radius );
+		this.updatePath();
+	});
+
+	// cidocs.ArcToSketch.prototype.
+
+	/*get testVal(){
+	        return this._testVal;
+	    },
+	    set testVal( val ){
+	        console.log( 'TEST VAL', val);
+	        this._testVal = val;
+	       // this.updatePath();
+	    },*/
+
+	/*cidocs.ArcToSketch.generateProperty( 'test', {
+		defaultValue: 'TEST1'
+	});
+*/
 
 	// +———————————————————————————————————————+
 	//	CombinedSketch
@@ -357,6 +433,7 @@
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', name:'cubicto', output:this.codeModule } );
 			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			var arcToSketch		= new cidocs.ArcToSketch( { canvas:'#arcto', name:'arcto', output:this.codeModule } );
+			// arcToSketch.testVal = "TESTIES IN YO MOUTH";
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', name:'combined', output:this.codeModule } );
 			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, arcToSketch, combinedSketch );	
 
