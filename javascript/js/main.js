@@ -452,6 +452,7 @@
 
 			var segment = new cidocs.ArcToSegment( this, SEGMENT_TYPES[6], [endPt, tanPt], radius );
 			this.segs.push( segment );
+			console.log( "ARC TO DRAW PATH" );
 			this.drawPath();
 		},
 
@@ -639,6 +640,7 @@
 			var epsilon = 1e-8;
 			var radius = segment.radius;
 			
+
 			// Get current point.
 			var p0 = this.getCurrentPoint( path );
 			var p1 = new Point( segment.points[0].position );
@@ -982,6 +984,8 @@
 
 		drawPath: function() {
 
+			this.ps.activate();
+
 			// redraw the path using the original directions
 			var ptIndex = 0;
 			var points = this.points;
@@ -1099,7 +1103,7 @@
 						ptIndex+=3;
 						break;
 
-					case SEGMENT_TYPES[5]:
+					case "ARC":
 
 						// main path segment
 						self.drawArcSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
@@ -1266,7 +1270,8 @@
 			this.tool.onMouseDrag = _.bind( this.onToolMouseDrag, this );
 
 			// wrap canvas in div
-			$(this.gui.domElement);//.addClass( this.name );
+			this.gui.name = 'gui_' + this.name;
+			// $(this.gui.domElement);//.addClass( this.name );
 			$(this.gui.domElement).find('.close-button').remove();
 			var canvasWrapper = $("<div class='sketch'></div>");
 			canvasWrapper.addClass( options.name );
@@ -1333,27 +1338,12 @@
 
 		onToolMouseDrag: function( event ) {
 			
-			/*if( this.selectedSegment ) {
-				this.selectedSegment.point = event.point;
-			}*/
-
-			// console.log( "POINT", new paper.Point( event.point.x, event.point.y ).length );
-
 			if( this.selectedPoint ) {
 
-
 				this.paths[0].movePoint( this.selectedPoint, event.point );
-				// this.selectedPoint.position = event.point;
-				// console.log( "DRAG", this.selectedPoint.position.x, this.selectedPoint.position.y );
-				// console.log( this.selectedPoint.position );
 				this.paths[0].drawPath();	
 				this.updatePath();
 			}
-
-			// if( this.movePath ) {
-				// this.selectedPath.position += event.delta;
-			// }
-
 		},
 
 		drawInitialPath: function(){
@@ -1394,6 +1384,8 @@
 
 			this.sketch.removeClass( "inactive" );
 			this.sketch.addClass( "active" );
+			
+			this.paths[0].drawPath();
 			this.updatePath();
 
 			_.bindAll( this, 'toggleHandles', 'reset' );

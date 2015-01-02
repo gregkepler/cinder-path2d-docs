@@ -197,7 +197,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.addButton( 'radius', 'radius', [5, 150] );
+			this.addButton( 'radius', 'radius', [1, 100] );
 		},
 
 		drawInitialPath: function( ) {
