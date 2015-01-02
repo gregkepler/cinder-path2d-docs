@@ -452,7 +452,6 @@
 
 			var segment = new cidocs.ArcToSegment( this, SEGMENT_TYPES[6], [endPt, tanPt], radius );
 			this.segs.push( segment );
-			console.log( "ARC TO DRAW PATH" );
 			this.drawPath();
 		},
 

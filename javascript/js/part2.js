@@ -187,7 +187,8 @@
 	
 	cidocs.ArcToSketch = function( options ) {
 
-		this._radius = 25.0;
+		this.ORIG_RADIUS = 25.0;
+		this._radius = this.ORIG_RADIUS;
 		cidocs.Path2dSketch.call( this, options );
 	}
 
@@ -210,6 +211,11 @@
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
+		},
+
+		reset: function() {
+			this.radius = this.ORIG_RADIUS;
+			this.superclass.reset.call( this );
 		}
 
 	};	
