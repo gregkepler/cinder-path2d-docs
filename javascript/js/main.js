@@ -472,6 +472,11 @@
 			_.each( this.segs, function( segment ) {
 				if( segment.type === 'ARC' ) {
 					segment.radius = radius;
+					var center = segment.points[0].position;
+					var startPt = segment.points[1].position;
+					var endPt = segment.points[2].position;
+					segment.points[1].position =  new Point( Math.cos( segment.startRadians ), Math.sin( segment.startRadians ) ).multiply( segment.radius ).add( center );
+					segment.points[2].position = new Point( Math.cos( segment.endRadians ), Math.sin( segment.endRadians ) ).multiply( segment.radius ).add( center );
 				} else if ( segment.type === 'ARCTO' ) {
 					segment.radius = radius;
 				}
@@ -1262,7 +1267,7 @@
 
 			// wrap canvas in div
 			$(this.gui.domElement);//.addClass( this.name );
-			console.log($(this.gui.domElement).find('.close-button').remove());
+			$(this.gui.domElement).find('.close-button').remove();
 			var canvasWrapper = $("<div class='sketch'></div>");
 			canvasWrapper.addClass( options.name );
 			canvasWrapper.append( this.canvas );
@@ -1415,7 +1420,7 @@
 			} );
 		},
 
-		addButton: function( id, name ) {
+		addButton: function( id, name, options ) {
 
 			var exists = _.find( $('.canvasButtons .right button'), function( button ) { return button.id === id  } );
 
@@ -1426,23 +1431,13 @@
 
 			// } );
 
-			if( !exists ) {
-				var button = $('<button>', {
-					id: id,
-					text: name
-				});
-				button.addClass( 'invisible' );
-				this.buttons.push( button );
-
-				$('.canvasButtons .right').append( button );
-			}
-
+			
 			// add to dat-gui
-			var btn = this.gui.add( this, id );
+			var param1 = ( options && options[0] ) ? options[0] : null; 
+			var param2 = ( options && options[1] ) ? options[1] : null; 
+			var btn = this.gui.add( this, id, param1, param2 );
 			btn.name( name );
 			btn.updateDisplay();
-			//btn.setValue( "TEST" );
-			console.log( "BTN", btn );
 		},
 
 		activateButton: function( buttonId, func ) {

@@ -123,6 +123,7 @@
 
 	cidocs.ArcSketch = function( options ) {
 
+		this._radius = 100.0;
 		cidocs.Path2dSketch.call( this, options );
 	}
 
@@ -133,6 +134,7 @@
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
 
+			this.addButton( 'radius', "radius", [5, 150] );
 			this.addButton( 'reverseArc', "Reverse Arc" );
 		},
 
@@ -170,6 +172,14 @@
 	};
 	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
 
+	// getters and setters
+	cidocs.ArcSketch.addGetter( 'radius', function(){return this._radius});
+	cidocs.ArcSketch.addSetter( 'radius', function( val ){ 
+		this._radius = val;
+		this.paths[0].setArcRadius( this._radius );
+		this.updatePath();
+	});
+
 
 	// +———————————————————————————————————————+
 	//	ArcToSketch
@@ -177,87 +187,17 @@
 	
 	cidocs.ArcToSketch = function( options ) {
 
-		this._radius = 10.0;
-		// this._testVal = "TEST1";
-		/*var radius = 25.0;
-
-		Object.defineProperty(this, "radius", {
-	        get: function(){ return this.radius },
-	        set: function(new_value){
-	            //Some business logic, upperCase, for example
-	            this.radius = new_value;
-	        }
-	    })*/
-
+		this._radius = 25.0;
 		cidocs.Path2dSketch.call( this, options );
 	}
-/*
-	cidocs.Test = function(){
-		this._testVal = "THIS IS A TEST";
-	}
-	cidocs.Test.prototype = {
-		get testVal(){
-	        return this._testVal;
-	    },
-	    set testVal( val ){
-	        console.log( 'TEST VAL', val);
-	        this._testVal = val;
-	       // this.updatePath();
-	    }
-	}*/
-	/*Object.defineProperty( cidocs.Test.prototype, "test", {
-	    get: function() {
-	        return this._test;
-	    },
-	    set: function( val ) {
-	    	this._test = val;
-	    }
-	});*/
-/*	window.testObj = new cidocs.Test();
-	window.testObj.testVal = "TESTIES"
-	console.log( "TEST OBJ", testObj );
-	// debugger;
-*/
-	
-	
 
-	// _.extend( cidocs.ArcToSketch.prototype, {
 	cidocs.ArcToSketch.prototype = {
-
-		// radius: 25,
-
-		// _radius: 25,
-		// _testVal: "TEST1",
-		
-
-
-		/*get radius(){
-	        return this._radius;
-	    },
-	    set radius( val ){
-	        this._radius = val;
-	        console.log( 'RADIUS', this._radius);
-	       // this.updatePath();
-	    },*/
-
-		//_test: "TEST1",
-		// get testVal(){
-	 //        return this._testVal;
-	 //    },
-	 //    set testVal( val ){
-	 //        console.log( 'TEST VAL', val);
-	 //        this._testVal = val;
-	 //       // this.updatePath();
-	 //    },
 
 		initialize: function( options ) {
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-
-			// this.addButton( 'reverseArc', "Reverse Arc" );
-			//this.radius = 25;
-			this.addButton( 'radius', "radius" );
+			this.addButton( 'radius', 'radius', [5, 150] );
 		},
 
 		drawInitialPath: function( ) {
@@ -270,88 +210,13 @@
 			this.paths.push( path2d );
 
 			path2d.centerInCanvas( this.canvas );
-			// this.radius = 50.0;
-
-			// this.test = "TEST2";
-			console.log( "ARC TO SKETCH", this );
 		}
 
-		
-		/*reverseArc: function() {
-
-			this.paths[0].reverseArc();
-			this.updatePath();
-
-		},
-
-		show: function() {
-
-			this.superclass.show.call( this );
-			this.activateButton( 'reverseArc', this.reverseArc );
-
-		},
-
-		hide: function() {
-
-			this.superclass.hide.call( this );
-			this.deactivateButton( 'reverseArc' );
-		}*/
-
-		
-
-	};
-
-	/*cidocs.ArcToSketch.prototype.getTest = function() {
-	    return this._test;
-	  };
-	  
-	cidocs.ArcToSketch.prototype.setTest = function( value ) {
-	    this._test = value;
-	};
-
-/*
-	cidocs.ArcToSketch.prototype.__get_name = function() {
-
-	  return this.__name + ' oliver';
-	}
-	 
-	cidocs.ArcToSketch.prototype.__set_name = function(val) {
-	  this.__name = val;
-	}
-	
-	
-	*/
-
-	
-
-	/*Object.defineProperty( cidocs.ArcToSketch.prototype, "test", {
-	    get: function() {
-	        return this._test;
-	    },
-	    set: function( val ) {
-	    	console.log("SET TEST");
-	    	this._test = val;
-	    }
-	});
-	/*Object.defineProperty(cidocs.ArcToSketch.prototype, _radius, {
-    	get: function() {return this._radius },
-    	set: function( value ) { this._radius = value }
-	});*/
-
-	/*Object.defineProperties( cidocs.ArcToSketch.prototype, {
-	    "radius": { 
-	    	get: function () { return this._radius; },
-	    	set: function (val) { this._radius = val; } 
-	    }
-
-	});*/
-
-	
-	// window.testObj = new cidocs.Test();
-	// window.testObj.test = "TESTIES"
-	// cidocs.ArcToSketch.prototype.radius = 25;
+	};	
 
 	cidocs.ArcToSketch.extend( cidocs.Path2dSketch );
+
+	// getters and setters
 	cidocs.ArcToSketch.addGetter( 'radius', function(){return this._radius});
 	cidocs.ArcToSketch.addSetter( 'radius', function( val ){ 
 		this._radius = val;
@@ -359,22 +224,7 @@
 		this.updatePath();
 	});
 
-	// cidocs.ArcToSketch.prototype.
-
-	/*get testVal(){
-	        return this._testVal;
-	    },
-	    set testVal( val ){
-	        console.log( 'TEST VAL', val);
-	        this._testVal = val;
-	       // this.updatePath();
-	    },*/
-
-	/*cidocs.ArcToSketch.generateProperty( 'test', {
-		defaultValue: 'TEST1'
-	});
-*/
-
+	
 	// +———————————————————————————————————————+
 	//	CombinedSketch
 	// +———————————————————————————————————————+
