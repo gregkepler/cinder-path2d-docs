@@ -1147,6 +1147,8 @@
 			this.points		= [];
 			this.segs		= [];
 			this.extras		= [];
+
+			
 		}
 	}
 
@@ -1279,6 +1281,13 @@
 			this.paths[0].reset();
 			this.paths = [];
 			this.drawInitialPath();
+
+			if( ! this.handlesOn ){
+				_.each( this.paths, function( path ) {
+					path.handlesOff();
+				} );
+			}
+
 			this.updatePath();
 		},
 
