@@ -800,47 +800,38 @@
 						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];
 
+						var center = points[ptIndex];
+						var pt1 = points[ptIndex + 1];
+						var pt2 = points[ptIndex + 2];
+
 						// TODO: Refactor this function
 
 						var rad, angle1, angle2, startPt, endPt;
-						if( selectedPoint == points[ptIndex + 1] ) {
-							
-							rad = points[ptIndex+1].position.getDistance( points[ptIndex].position );
-							angle1 = points[ptIndex+1].position.subtract( points[ptIndex].position ).angleInRadians;
-							angle2 = points[ptIndex+2].position.subtract( points[ptIndex].position ).angleInRadians;
+						if( selectedPoint == pt1 || selectedPoint == pt2 ) {
+							if( selectedPoint == pt1 ) {
+								rad = pt1.position.getDistance( center.position );
+							}else if (selectedPoint == pt2 ) {
+								rad = pt2.position.getDistance( center.position );
+							}
+
+							angle1 = pt1.position.subtract( center.position ).angleInRadians;
+							angle2 = pt2.position.subtract( center.position ).angleInRadians;
 
 							startPt = new Point( Math.round( Math.cos( angle1 ) * rad ), 
-								Math.round( Math.sin( angle1 ) * rad ) ).add( points[ptIndex].position );
+								Math.round( Math.sin( angle1 ) * rad ) ).add( center.position );
 							endPt = new Point( Math.round( Math.cos( angle2 ) * rad ), 
-								Math.round( Math.sin( angle2 ) * rad ) ).add( points[ptIndex].position );
+								Math.round( Math.sin( angle2 ) * rad ) ).add( center.position );
 
-							points[ptIndex + 1].position = startPt;
-							points[ptIndex + 2].position = endPt;
-
-							segment.radius = rad;
-							segment.startRadians = angle1;
-							segment.endRadians = angle2;
-
-						} else if( selectedPoint == points[ptIndex + 2] ) {
-
-							rad = points[ptIndex+2].position.getDistance( points[ptIndex].position );
-							angle1 = points[ptIndex+1].position.subtract(points[ptIndex].position).angleInRadians;
-							angle2 = points[ptIndex+2].position.subtract(points[ptIndex].position).angleInRadians;
-
-							startPt = new Point( Math.cos( angle1 ) * rad, Math.sin( angle1 ) * rad ).add( points[ptIndex].position );
-							endPt = new Point( Math.cos( angle2 ) * rad, Math.sin( angle2 ) * rad ).add( points[ptIndex].position );
-
-							points[ptIndex + 1].position = startPt;
-							points[ptIndex + 2].position = endPt;
-							segment.radius = rad;
+							pt1.position = startPt;
+							pt2.position = endPt;
 
 							segment.radius = rad;
 							segment.startRadians = angle1;
 							segment.endRadians = angle2;
+						}
+						else{
 
-						} else{
-
-							ptsToMove = [points[mainPt], points[ptIndex + 1], points[ptIndex + 2]];
+							ptsToMove = [center, pt1, pt2];
 						}
 
 						if( nextSegment === SEGMENT_TYPES[3] ) {
@@ -953,7 +944,7 @@
 
 					case SEGMENT_TYPES[1]:
 						
-						// self.lineTo( points[ptIndex] );
+						// self.lineTo( center );
 
 						var pt = segmentPoints[0].position;
 
@@ -978,7 +969,7 @@
 						var h1 = segmentPoints[0].position;
 						var pt1 = segmentPoints[1].position;
 
-						// var pt = points[ptIndex].position;
+						// var pt = path2d.curveTo.position;
 						// var l1 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( segmentPoints[ptIndex + 1].position ) );
 						// var l2 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( prevPoint ) );
 						var l1 = new Path.Line( new Point( h1 ), new Point( pt1 ) );
@@ -990,7 +981,7 @@
 						// self.extras.push( l1, l2 );
 						self.addExtras( "handle-line", [l1, l2] );
 
-						// self.quadTo(points[ptIndex], points[ptIndex+1] );
+						// self.quadTo(path2d.curveTo, points[ptIndex+1] );
 						// self.path.strokeColor = COLOR_QUAD_TO;
 						self.path.quadraticCurveTo(
 							new Point( h1 ),
