@@ -154,6 +154,10 @@
 				self.extras.push( text );
 			});
 		},
+
+		getCode: function() {
+			// override
+		}
 	}
 
 
@@ -165,6 +169,9 @@
 
 	cidocs.MoveToSegment.prototype = {
 
+		getCode: function() {
+			return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ) } );
+		}
 		
 	}
 
@@ -179,6 +186,9 @@
 
 	cidocs.LineToSegment.prototype = {
 
+		getCode: function() {
+			return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ) } );		
+		}
 		
 	}
 
@@ -193,6 +203,10 @@
 
 	cidocs.QuadToSegment.prototype = {
 
+		getCode: function() {
+			return this.template( { h1x: toCiNum( this.points[0].position.x ), h1y: toCiNum( this.points[0].position.y ), 
+									p2x: toCiNum( this.points[1].position.x ), p2y: toCiNum( this.points[1].position.y ) } );
+		}
 	}
 
 	cidocs.QuadToSegment.extend( cidocs.Segment );
@@ -206,6 +220,11 @@
 
 	cidocs.CubicToSegment.prototype = {
 
+		getCode: function() {
+			return this.template( { h1x: toCiNum( this.points[0].position.x ), h1y: toCiNum( this.points[0].position.y ), 
+									h2x: toCiNum( this.points[1].position.x ), h2y: toCiNum( this.points[1].position.y ), 
+									p2x: toCiNum( this.points[2].position.x ), p2y: toCiNum( this.points[2].position.y ) } );
+		}
 	}
 
 	cidocs.CubicToSegment.extend( cidocs.Segment );
@@ -218,10 +237,17 @@
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
 		this.forward = forward;
-		this.template = _.template( "mPath.arc( vec2( <%= centerX %>f, <%= centerY %>f ), <%= radius %>, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
+		this.template = _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
 	}
 
 	cidocs.ArcSegment.prototype = {
+
+		getCode: function() {
+			return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ),
+									radius: toCiNum( this.radius ), startRadians: toCiRadians( this.startRadians ), 
+									endRadians: toCiRadians( this.endRadians ), forward: this.forward } );
+		}
+
 	}
 
 	cidocs.ArcSegment.extend( cidocs.Segment );
@@ -231,9 +257,16 @@
 
 		cidocs.Segment.call( this, path2d, type, points );
 		this.radius = radius;
+		this.template = _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
 	}
 
 	cidocs.ArcToSegment.prototype = {
+
+		getCode: function() {
+			return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ),
+									tanX: toCiNum( this.points[1].position.x ), tanY: toCiNum( this.points[1].position.y ),
+									radius: toCiNum( this.radius ) } );
+		}
 	}
 
 	cidocs.ArcToSegment.extend( cidocs.Segment );
@@ -247,6 +280,9 @@
 
 	cidocs.CloseSegment.prototype = {
 
+		getCode: function() {
+			return this.template();
+		}
 	}
 	
 	cidocs.CloseSegment.extend( cidocs.Segment );
@@ -271,21 +307,12 @@
 	cidocs.Path2d = function( paperScope ) {
 
 		this.points		= [];	// to keep track of points
-		this.segments	= [];	// to keep track of segment types
 		this.segs		= [];
 		this.extras		= [];	// array of points, handles and lines
 		this.ps = paperScope;
 
 		this.path = new Path();
 		this.path.pivot = new Point();
-
-		this.moveToTemplate 	= _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
-		this.lineToTemplate 	= _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
-		this.quadToTemplate 	= _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-		this.curveToTemplate 	= _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-		this.arcTemplate 		= _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
-		this.arcToTemplate 		= _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
-		this.closeTemplate 		= _.template( "mPath.close()\n" );
 				
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
 		star.fillColor = COLOR_MOVE_TO;
@@ -312,7 +339,6 @@
 
 
 			this.points.push( pt );
-			this.segments.push( SEGMENT_TYPES[0] );
 
 			var segment = new cidocs.MoveToSegment( this, SEGMENT_TYPES[0], [_.last( this.points )] );
 			this.segs.push( segment );
@@ -325,7 +351,6 @@
 			var pt = new cidocs.PathPoint( point, 'blue' );
 
 			this.points.push( pt );
-			this.segments.push( SEGMENT_TYPES[1] );
 
 			var segment = new cidocs.LineToSegment( this, SEGMENT_TYPES[1], [pt] );
 			this.segs.push( segment );
@@ -339,7 +364,6 @@
 			var h1 = new cidocs.PathPoint( handlePt, 'cyan' );
 			var pt = new cidocs.PathPoint( endPt, 'blue' );
 			this.points.push( h1, pt );
-			this.segments.push( SEGMENT_TYPES[2] );
 
 			var segment = new cidocs.QuadToSegment( this, SEGMENT_TYPES[2], [h1, pt] );
 			this.segs.push( segment );
@@ -353,7 +377,6 @@
 			var h2 = new cidocs.PathPoint( handlePt2, 'cyan' );
 			var pt = new cidocs.PathPoint( endPt, 'blue' );
 			this.points.push( h1, h2, pt );
-			this.segments.push( SEGMENT_TYPES[3] );
 
 			var segment = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1, h2, pt] );
 			this.segs.push( segment );
@@ -685,13 +708,12 @@
 					extra.bringToFront();
 				}
 			});
-			
+
 			return this.extras;
 		},
 
 		close: function() {
 
-			this.segments.push( SEGMENT_TYPES[4] );
 
 			var segment = new cidocs.CloseSegment( this, SEGMENT_TYPES[4] );
 			this.segs.push( segment );
@@ -727,7 +749,6 @@
 			var mainPt = null;
 			var newPos = newPos.round();
 
-			// _.each( this.segments, function( segment, index, segments ) {
 			_.each( this.segs, function( segment, index, segments ) {
 
 				if( mainPt ) 
@@ -864,57 +885,11 @@
 			var code = "";
 			var self = this;
 
-			// _.each( this.segments, function( segment ){
 			_.each( this.segs, function( segment ){
-
-				switch( segment.type ) {
-					
-					case SEGMENT_TYPES[0]:
-						code += self.moveToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ) } );
-						ptIndex++;
-						break;
-
-					case SEGMENT_TYPES[1]:
-						code += self.lineToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ) } );
-						ptIndex++;
-						break;
-
-					case SEGMENT_TYPES[2]:
-						code += self.quadToTemplate( { h1x: toCiNum( points[ptIndex].position.x ), h1y: toCiNum( points[ptIndex].position.y ), 
-														p2x: toCiNum( points[ptIndex+1].position.x ), p2y: toCiNum( points[ptIndex+1].position.y ) } );
-						ptIndex+=2;
-						break;
-
-					case SEGMENT_TYPES[3]:
-						code += self.curveToTemplate( { h1x: toCiNum( points[ptIndex].position.x ), h1y: toCiNum( points[ptIndex].position.y ), 
-														h2x: toCiNum( points[ptIndex+1].position.x ), h2y: toCiNum( points[ptIndex+1].position.y ), 
-														p2x: toCiNum( points[ptIndex+2].position.x ), p2y: toCiNum( points[ptIndex+2].position.y ) } );
-						ptIndex+=3;
-						break;
-
-					case "ARC":
-						code += self.arcTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
-													radius: toCiNum( segment.radius ), startRadians: toCiRadians( segment.startRadians ), 
-													endRadians: toCiRadians( segment.endRadians ), forward: segment.forward } );
-						
-						ptIndex += 3;
-						break;
-
-					case "ARCTO":
-						code += self.arcToTemplate( { pointX: toCiNum( points[ptIndex].position.x ), pointY: toCiNum( points[ptIndex].position.y ),
-													tanX: toCiNum( points[ptIndex + 1].position.x ), tanY: toCiNum( points[ptIndex + 1].position.y ),
-													radius: toCiNum( segment.radius ) } );
-						
-						ptIndex += 3;
-						break;
-
-					case SEGMENT_TYPES[4]:
-						code += self.closeTemplate();
-						break;
-				}
-			} );
-
-			// console.log( "getCinderPath", code);
+				code += segment.getCode();
+				// ptIndex += segment.points.length;
+			});
+			
 			return code;
 		},
 
@@ -945,7 +920,6 @@
 			// redraw the path using the original directions
 			var ptIndex = 0;
 			var points = this.points;
-			var segments = this.segments;
 			var self = this;
 
 			// reset the path and send to below the points
@@ -1171,7 +1145,7 @@
 
 			this.path.remove();
 			this.points		= [];
-			this.segments	= [];
+			this.segs		= [];
 			this.extras		= [];
 		}
 	}
