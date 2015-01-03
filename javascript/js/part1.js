@@ -120,7 +120,7 @@
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
 			path2d.moveTo( new Point( 0.0, 200.0 ) );
-			path2d.cubicTo( new Point( 100.0, 200.0 ), new Point( 100.0, 0.0 ), new Point( 200.0, 0.0 ) );
+			path2d.curveTo( new Point( 100.0, 200.0 ), new Point( 100.0, 0.0 ), new Point( 200.0, 0.0 ) );
 
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );

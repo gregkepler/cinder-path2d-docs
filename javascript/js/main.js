@@ -371,7 +371,7 @@
 			this.drawPath();
 		},
 
-		cubicTo: function( handlePt1, handlePt2, endPt ) {
+		curveTo: function( handlePt1, handlePt2, endPt ) {
 
 			var h1 = new cidocs.PathPoint( handlePt1, 'cyan' );
 			var h2 = new cidocs.PathPoint( handlePt2, 'cyan' );
