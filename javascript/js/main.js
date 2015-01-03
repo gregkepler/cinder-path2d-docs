@@ -1,4 +1,3 @@
-// (function($, window) {
 	
 	var cidocs = {};
 
@@ -62,69 +61,7 @@
 		this.prototype.superclass = base.prototype;
 	};
 
-	/*// see blog post: http://www.hiddentao.com/archives/2013/07/08/generate-overridable-getters-and-setters-in-javascript/
-	Function.prototype.generateProperty = function(name, options) {
-		// internal member variable name
-		var privateName = '__' + name;
-	 
-		options = options || {};
-		options.get = ('undefined' === typeof options.get ? true : options.get );
-		options.set = ('undefined' === typeof options.set ? true : options.set );
-	 
-		// pre-initialise the internal variable?
-		if (options.defaultValue) {
-		  this.prototype[privateName] = options.defaultValue;
-		}
-	 
-		var definePropOptions = {},
-		  getterName = '__get_' + name,
-		  setterName = '__set_' + name;
-	 
-		// generate the getter
-		if(true === options.get) {
-		  this.prototype[getterName] = function() {
-			return this[privateName];
-		  };
-		}
-		// use custom getter
-		else if (options.get) {
-		  this.prototype[getterName] = options.get;
-		}
-		// disable getter
-		else {
-		  this.prototype[getterName] = function() {
-			throw new Error('Cannot get: ' + name);
-		  }
-		}
-	 
-		definePropOptions.get = function() {
-		  return this[getterName].call(this);
-		};
-	 
-		// generate the setter
-		if(true === options.set) {
-		  this.prototype[setterName] = function(val) {
-			this[privateName] = val;
-		  };
-		}
-		// use custom setter
-		else if (options.set) {
-		  this.prototype[setterName] = options.set;
-		}
-		// disable setter
-		else {
-		  this.prototype[setterName] = function() {
-			throw new Error('Cannot set: ' + name)
-		  };
-		}
-	 
-		definePropOptions.set = function(val) {
-		  this[setterName].call(this, val);
-		};
-	 
-		// do it!
-		Object.defineProperty( this.prototype, name, definePropOptions );
-	};*/
+	
 	Function.prototype.addGetter = function(val,fn){
 	    this.prototype.__defineGetter__(val,fn);
 	    return this;    
@@ -506,7 +443,8 @@
 				l2.strokeColor = 'cyan';
 				l1.sendToBack();
 				l2.sendToBack();
-				this.extras.push( l1, l2 );
+				// this.extras.push( l1, l2 );
+				this.addExtras( "handle-line", [l1, l2] );
 			}
 
 			// if( options.drawPointText != false ) {
@@ -551,7 +489,8 @@
 
 			var radiusLine = new Path.Line( center, start );
 			radiusLine.strokeColor = COLOR_CENTER;
-			this.extras.push( radiusLine );
+			// this.extras.push( radiusLine );
+			this.addExtras( "radius-line", [radiusLine] );
 
 			this.drawPointText.call( this, [center] );
 			this.drawTextAtPoint.call( this, startPt, toCiRadians( startRadians ) );
@@ -621,7 +560,8 @@
 			var h1Pt = new cidocs.PathPoint( h1, 'cyan', false );
 			var h2Pt = new cidocs.PathPoint( h2, 'cyan', false );
 			var ptPt = new cidocs.PathPoint( pt, 'cyan', false );
-			this.extras.push( h1Pt, h2Pt, ptPt );
+			// this.extras.push( h1Pt, h2Pt, ptPt );
+			this.addExtras( "point", [h1Pt, h2Pt, ptPt] );
 
 			var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1Pt, h2Pt, ptPt] );
 			options.drawPointText = false;
@@ -707,15 +647,16 @@
 				var b2 = b3.add( ( t.subtract( b3 ) ).multiply( fraction ) );
 				
 				// add the points as path points
+				var curPt = new cidocs.PathPoint( this.getCurrentPoint( path ), 'cyan', false );
 				var b1Pt = new cidocs.PathPoint( b1, 'cyan', false );
 				var b2Pt = new cidocs.PathPoint( b2, 'cyan', false );
 				var b3Pt = new cidocs.PathPoint( b3, 'cyan', false );
-				this.extras.push( b1Pt, b2Pt, b3Pt );
+				this.addExtras( "point", [curPt, b1Pt, b2Pt, b3Pt] );
 				
 				var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [b1Pt, b2Pt, b3Pt] );
 				options.drawPointText = false;
+				options.prevPoint = curPt.position;
 				this.drawCubicSegment( path, tempSeg, options );
-				// path.cubicCurveTo( b1, b2, b3 );
 			}
 
 			this.drawPointText.call( this, [p1, t] );
@@ -724,12 +665,28 @@
 		drawLineExtra: function( pt1, pt2 )
 		{
 			var l1 = new Path.Line( pt1, pt2 );
-			// var l2 = new Path.Line( new Point( points[ptIndex].position ), new Point( points[ptIndex - 1].position ) );
 			l1.strokeColor = 'cyan';
-			// l2.strokeColor = 'cyan';
 			l1.sendToBack();
-			// l2.sendToBack();
-			this.extras.push( l1 );
+			this.addExtras( "line-extra", [l1] );
+		},
+
+		addExtras: function( type, items ) {
+
+			var self = this;
+
+			_.each( items, function( item ){
+				item._extraType = type;
+				self.extras.push( item );
+			} )
+
+			// bring certain points to the front
+			_.each( this.extras, function( extra ){
+				if( extra._extraType === "point" || extra._extraType === "handle-line" ){
+					extra.bringToFront();
+				}
+			});
+			
+			return this.extras;
 		},
 
 		close: function() {
@@ -1013,15 +970,7 @@
 				switch( segment.type ) {
 					
 					case SEGMENT_TYPES[0]:
-						// console.log( "MOVE TO", points[ptIndex].position.x, points[ptIndex].position.y );
-						// self.moveTo( points[ptIndex] );
-						// var pt = new paper.Point( points[ptIndex].position.x, points[ptIndex].position.y );
-
-						// var start = new Path.
-
-						// var star = self.ptStar.place();
-						// star.position = points[ptIndex].position;
-						// self.extras.push(star);
+						
 						var pt = segmentPoints[0].position;
 						self.path.moveTo( new Point( pt ) );
 						self.drawPointText.call( self, [pt] );
@@ -1043,7 +992,8 @@
 						seg.strokeColor = COLOR_LINE_TO;
 						seg.strokeWidth = 3.0;
 						seg.lineTo( new Point( pt ) );
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 
 						self.drawPointText.call( self, [pt] );
 						ptIndex++;
@@ -1063,7 +1013,8 @@
 						l2.strokeColor = 'cyan';
 						l1.sendToBack();
 						l2.sendToBack();
-						self.extras.push( l1, l2 );
+						// self.extras.push( l1, l2 );
+						self.addExtras( "handle-line", [l1, l2] );
 
 						// self.quadTo(points[ptIndex], points[ptIndex+1] );
 						// self.path.strokeColor = COLOR_QUAD_TO;
@@ -1082,7 +1033,8 @@
 							new Point( h1 ),
 							new Point( pt1 )
 						);
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 
 						self.drawPointText.call( self, [h1, pt1] );
 						ptIndex+=2;
@@ -1094,7 +1046,8 @@
 						seg.moveTo( prevPoint );
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 
 						self.drawCubicSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
 						self.drawCubicSegment( seg, segment, prevPoint, { prevPoint: prevPoint, extras:false } );
@@ -1112,7 +1065,8 @@
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
 						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 
 						ptIndex += 3;
 
@@ -1129,7 +1083,8 @@
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
 						self.drawArcToSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 						
 
 						/*// special segment
@@ -1155,7 +1110,8 @@
 						seg.lineTo(
 							points[0].position
 						);
-						self.extras.push( seg );
+						// self.extras.push( seg );
+						self.addExtras( "segment", [seg] );
 						break;
 				}
 			} );
@@ -1179,7 +1135,8 @@
 					fontFamily: 'Courier New',
 					fontSize: 8
 				});
-				self.extras.push( text );
+				// self.extras.push( text );
+				self.addExtras( "text", [text] );
 			});
 		},
 
@@ -1193,7 +1150,8 @@
 				fontFamily: 'Courier New',
 				fontSize: 8
 			});
-			self.extras.push( text );
+			// self.extras.push( text );
+			self.addExtras( "text", [text] );
 		},
 
 		getCurrentPoint: function( path ) {
@@ -1326,13 +1284,7 @@
 					// console.log( "SELECT ME" )
 					this.selectedPoint = hitResult.item;
 				}
-
 			}
-			
-			// this.movePath = hitResult.type == 'fill';
-			// if( this.movePath ) {
-				// project.activeLayer.addChild( hitResult.item );
-			// }
 		},
 
 		onToolMouseDrag: function( event ) {
@@ -1540,14 +1492,3 @@
 		}
 	};
 
-	
-
-	/*$(document).ready( function(){
-		
-		window.app.init();
-		show( "moveto" );
-
-	});*/
-	
-
-// }(jQuery, window));
