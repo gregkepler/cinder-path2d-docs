@@ -23,6 +23,8 @@
 		"ARC",
 		"ARCTO"
 	]
+
+
 /*
 	var SEGMENT_TYPES = Object.freeze({
 		"MOVETO": 1,
@@ -288,15 +290,37 @@
 	cidocs.CloseSegment.extend( cidocs.Segment );
 
 
+	// +———————————————————————————————————————+
+	//	PathPoint     
+	//	Serves as the points along a path.
+	//	Sometimes they are draggable. Sometimes
+	//	they are just visual
+	// +———————————————————————————————————————+
 	cidocs.PathPoint = function( pos, color, active )
 	{
 		var ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
-		var pt = new Shape.Rectangle( ptRect );
+		this.pt = new Shape.Rectangle( ptRect );
+		this.pt.translate( pos );
+		this.pt.strokeColor = color;
+		this.pt.active = ( _.isBoolean( active ) ) ? active : true;
+		return this.pt;
+	}
+
+	cidocs.StartPoint = function( pos, color, active ) {
+
+		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
+		star.fillColor = COLOR_MOVE_TO;
+		star.strokeColor = COLOR_MOVE_TO;
+		star.type = 'star';
+		star.rotation = 180;
+		var ptStar = new Symbol( star );
+		var pt = ptStar.place();
 		pt.translate( pos );
-		pt.strokeColor = color;
-		pt.active = ( _.isBoolean( active ) ) ? active : true;
+
 		return pt;
 	}
+	cidocs.StartPoint.extend( cidocs.PathPoint );
+
 
 	// +———————————————————————————————————————+
 	//	Path2d     
@@ -330,14 +354,7 @@
 		
 		moveTo: function( point ) {
 
-			// var pt = this.ptStar.clone();
-			// pt.addChild( this.ptStar.place() );
-			// var pt = new Shape.Rectangle( this.ptStar );
-			// var pt = new Item( this.ptStar );
-			var pt = this.ptStar.place();
-			pt.translate( point );
-
-
+			var pt = new cidocs.StartPoint( point, COLOR_MOVE_TO );
 			this.points.push( pt );
 
 			var segment = new cidocs.MoveToSegment( this, SEGMENT_TYPES[0], [_.last( this.points )] );
