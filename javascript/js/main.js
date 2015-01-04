@@ -1333,6 +1333,13 @@
 			this.sketch.addClass( "active" );
 			
 			this.paths[0].drawPath();
+
+			if( ! this.handlesOn ){
+				_.each( this.paths, function( path ) {
+					path.handlesOff();
+				} );
+			}
+			
 			this.updatePath();
 
 			_.bindAll( this, 'toggleHandles', 'reset' );
