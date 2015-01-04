@@ -15,7 +15,7 @@
 	var COLOR_CENTER 	= '#f48a00';
 	var COLOR_INACTIVE 	= '#999999';
 
-	var SEGMENT_TYPES = [
+	/*var SEGMENT_TYPES = [
 		"MOVETO",
 		"LINETO",
 		"QUADTO",
@@ -23,20 +23,20 @@
 		"CLOSE",
 		"ARC",
 		"ARCTO"
-	]
+	]*/
 
 
-/*
+
 	var SEGMENT_TYPES = Object.freeze({
 		"MOVETO": 1,
 		"LINETO": 2,
 		"QUADTO": 3,
 		"CUBICTO": 4,
 		"ARC": 5,
-		"ARCTO": 6
+		"ARCTO": 6,
 		"CLOSE": 7
 	})
-*/
+
 
 	//
 	// from http://codepen.io/MyHatIsAwesome/pen/DaptL
@@ -166,7 +166,7 @@
 
 	cidocs.MoveToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[0], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.MOVETO, points );
 		this.template = _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
 	}
 
@@ -183,7 +183,7 @@
 
 	cidocs.LineToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[1], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.LINETO, points );
 		this.template = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
 	}
 
@@ -200,7 +200,7 @@
 
 	cidocs.QuadToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[2], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.QUADTO, points );
 		this.template = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 	}
 
@@ -217,7 +217,7 @@
 
 	cidocs.CubicToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[3], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.CUBICTO, points );
 		this.template = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 	}
 
@@ -235,7 +235,7 @@
 
 	cidocs.ArcSegment = function( path2d, points, radius, startRadians, endRadians, forward ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[5], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.ARC, points );
 		this.radius = radius;
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
@@ -258,7 +258,7 @@
 
 	cidocs.ArcToSegment = function( path2d, points, radius ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[6], points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.ARCTO, points );
 		this.radius = radius;
 		this.template = _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
 	}
@@ -277,7 +277,7 @@
 
 	cidocs.CloseSegment = function( path2d ){
 
-		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[4], [] );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.CLOSE, [] );
 		this.template = _.template( "mPath.close()\n" );
 	}
 
@@ -457,7 +457,7 @@
 
 			// for all the segments in the path, reverse the arc directions
 			_.each( this.segs, function( segment ) {
-				if( segment.type === 'ARC' ) {
+				if( segment.type === SEGMENT_TYPES.ARC ) {
 					segment.forward = !segment.forward;
 				};
 			} );
@@ -468,14 +468,17 @@
 
 			// for all the segments in the path, reverse the arc directions
 			_.each( this.segs, function( segment ) {
-				if( segment.type === 'ARC' ) {
+
+				if( segment.type === SEGMENT_TYPES.ARC ) {
+
 					segment.radius = radius;
 					var center = segment.points[0].position;
 					var startPt = segment.points[1].position;
 					var endPt = segment.points[2].position;
 					segment.points[1].position =  new Point( Math.cos( segment.startRadians ), Math.sin( segment.startRadians ) ).multiply( segment.radius ).add( center );
 					segment.points[2].position = new Point( Math.cos( segment.endRadians ), Math.sin( segment.endRadians ) ).multiply( segment.radius ).add( center );
-				} else if ( segment.type === 'ARCTO' ) {
+				
+				} else if ( segment.type === SEGMENT_TYPES.ARCTO ) {
 					segment.radius = radius;
 				}
 			} );
@@ -794,43 +797,43 @@
 
 				switch( segment.type ) {
 					
-					case SEGMENT_TYPES[0]:
+					case SEGMENT_TYPES.MOVETO:
 						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];						
-						if( nextSegment === SEGMENT_TYPES[3] ) {
+						if( nextSegment === SEGMENT_TYPES.CUBICTO ) {
 							ptsToMove.push( points[ptIndex + 1] );
 						}
 						ptIndex++;
 						break;
 
-					case SEGMENT_TYPES[1]:
+					case SEGMENT_TYPES.LINETO:
 						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];
-						if( nextSegment === SEGMENT_TYPES[3] ) {
+						if( nextSegment === SEGMENT_TYPES.CUBICTO ) {
 							ptsToMove.push( points[ptIndex + 1] );
 						}
 						ptIndex++;
 						break;
 
-					case SEGMENT_TYPES[2]:
+					case SEGMENT_TYPES.QUADTO:
 						mainPt = ptIndex + 1;
 						ptsToMove = [points[mainPt]];						
-						if( nextSegment === SEGMENT_TYPES[3] ) {
+						if( nextSegment === SEGMENT_TYPES.CUBICTO ) {
 							ptsToMove.push( points[ptIndex + 2] );
 						}
 						ptIndex+=2;
 						break;
 
-					case SEGMENT_TYPES[3]:
+					case SEGMENT_TYPES.CUBICTO:
 						mainPt = ptIndex + 2;
 						ptsToMove = [points[mainPt], points[ptIndex + 1]];
-						if( nextSegment === SEGMENT_TYPES[3] ) {
+						if( nextSegment === SEGMENT_TYPES.CUBICTO ) {
 							ptsToMove.push( points[ptIndex + 3] );
 						}
 						ptIndex+=3;
 						break;
 
-					case SEGMENT_TYPES[5]:
+					case SEGMENT_TYPES.ARC:
 						
 						mainPt = ptIndex;
 						ptsToMove = [points[mainPt]];
@@ -838,8 +841,6 @@
 						var center = points[ptIndex];
 						var pt1 = points[ptIndex + 1];
 						var pt2 = points[ptIndex + 2];
-
-						// TODO: Refactor this function
 
 						var rad, angle1, angle2, startPt, endPt;
 						if( selectedPoint == pt1 || selectedPoint == pt2 ) {
@@ -869,7 +870,7 @@
 							ptsToMove = [center, pt1, pt2];
 						}
 
-						if( nextSegment === SEGMENT_TYPES[3] ) {
+						if( nextSegment === SEGMENT_TYPES.CUBICTO ) {
 							ptsToMove.push( points[ptIndex + 3] );
 						}
 						ptIndex+=3;
@@ -969,7 +970,7 @@
 
 				switch( segment.type ) {
 					
-					case SEGMENT_TYPES[0]:
+					case SEGMENT_TYPES.MOVETO:
 						
 						var pt = segmentPoints[0].position;
 						self.path.moveTo( new Point( pt ) );
@@ -977,7 +978,7 @@
 						ptIndex++;
 						break;
 
-					case SEGMENT_TYPES[1]:
+					case SEGMENT_TYPES.LINETO:
 						
 						var pt = segmentPoints[0].position;
 
@@ -996,7 +997,7 @@
 						ptIndex++;
 						break;
 
-					case SEGMENT_TYPES[2]:
+					case SEGMENT_TYPES.QUADTO:
 
 						var h1 = segmentPoints[0].position;
 						var pt1 = segmentPoints[1].position;
@@ -1031,7 +1032,7 @@
 						ptIndex+=2;
 						break;
 
-					case SEGMENT_TYPES[3]:
+					case SEGMENT_TYPES.CUBICTO:
 
 						var seg = new Path();
 						seg.moveTo( prevPoint );
@@ -1045,7 +1046,7 @@
 						ptIndex+=3;
 						break;
 
-					case "ARC":
+					case SEGMENT_TYPES.ARC:
 
 						// main path segment
 						self.drawArcSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
@@ -1061,7 +1062,7 @@
 
 						break;
 
-					case "ARCTO":
+					case SEGMENT_TYPES.ARCTO:
 
 						// main path segment
 						self.drawArcToSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
@@ -1078,7 +1079,7 @@
 
 						break;
 
-					case SEGMENT_TYPES[4]:
+					case SEGMENT_TYPES.CLOSE:
 
 						self.path.closed = true;
 
