@@ -164,9 +164,9 @@
 	}
 
 
-	cidocs.MoveToSegment = function( path2d, type, points ){
+	cidocs.MoveToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[0], points );
 		this.template = _.template( "mPath.moveTo( vec2( <%- pointX %>f, <%- pointY %>f ) );\n" );
 	}
 
@@ -181,9 +181,9 @@
 	cidocs.MoveToSegment.extend( cidocs.Segment );
 
 
-	cidocs.LineToSegment = function( path2d, type, points ){
+	cidocs.LineToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[1], points );
 		this.template = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
 	}
 
@@ -198,9 +198,9 @@
 	cidocs.LineToSegment.extend( cidocs.Segment );
 
 
-	cidocs.QuadToSegment = function( path2d, type, points ){
+	cidocs.QuadToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[2], points );
 		this.template = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 	}
 
@@ -215,9 +215,9 @@
 	cidocs.QuadToSegment.extend( cidocs.Segment );
 
 
-	cidocs.CubicToSegment = function( path2d, type, points ){
+	cidocs.CubicToSegment = function( path2d, points ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[3], points );
 		this.template = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
 	}
 
@@ -233,9 +233,9 @@
 	cidocs.CubicToSegment.extend( cidocs.Segment );
 
 
-	cidocs.ArcSegment = function( path2d, type, points, radius, startRadians, endRadians, forward ){
+	cidocs.ArcSegment = function( path2d, points, radius, startRadians, endRadians, forward ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[5], points );
 		this.radius = radius;
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
@@ -256,9 +256,9 @@
 	cidocs.ArcSegment.extend( cidocs.Segment );
 
 
-	cidocs.ArcToSegment = function( path2d, type, points, radius ){
+	cidocs.ArcToSegment = function( path2d, points, radius ){
 
-		cidocs.Segment.call( this, path2d, type, points );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[6], points );
 		this.radius = radius;
 		this.template = _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
 	}
@@ -275,9 +275,9 @@
 	cidocs.ArcToSegment.extend( cidocs.Segment );
 
 
-	cidocs.CloseSegment = function( path2d, type ){
+	cidocs.CloseSegment = function( path2d ){
 
-		cidocs.Segment.call( this, path2d, type, [] );
+		cidocs.Segment.call( this, path2d, SEGMENT_TYPES[4], [] );
 		this.template = _.template( "mPath.close()\n" );
 	}
 
@@ -377,7 +377,7 @@
 			var pt = new cidocs.StartPoint( point );
 			this.points.push( pt );
 
-			var segment = new cidocs.MoveToSegment( this, SEGMENT_TYPES[0], [_.last( this.points )] );
+			var segment = new cidocs.MoveToSegment( this, [_.last( this.points )] );
 			this.segs.push( segment );
 
 			this.drawPath();
@@ -389,7 +389,7 @@
 
 			this.points.push( pt );
 
-			var segment = new cidocs.LineToSegment( this, SEGMENT_TYPES[1], [pt] );
+			var segment = new cidocs.LineToSegment( this, [pt] );
 			this.segs.push( segment );
 
 
@@ -402,7 +402,7 @@
 			var pt = new cidocs.PathPoint( endPt );
 			this.points.push( h1, pt );
 
-			var segment = new cidocs.QuadToSegment( this, SEGMENT_TYPES[2], [h1, pt] );
+			var segment = new cidocs.QuadToSegment( this, [h1, pt] );
 			this.segs.push( segment );
 
 			this.drawPath();
@@ -415,7 +415,7 @@
 			var pt = new cidocs.PathPoint( endPt );
 			this.points.push( h1, h2, pt );
 
-			var segment = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1, h2, pt] );
+			var segment = new cidocs.CubicToSegment( this, [h1, h2, pt] );
 			this.segs.push( segment );
 
 			this.drawPath();
@@ -437,7 +437,7 @@
 
 			this.points.push( pt, startPt, endPt );
 
-			var segment = new cidocs.ArcSegment( this, SEGMENT_TYPES[5], [pt, startPt, endPt], radius, startRadians, endRadians, frwd );
+			var segment = new cidocs.ArcSegment( this, [pt, startPt, endPt], radius, startRadians, endRadians, frwd );
 			this.segs.push( segment );
 			this.drawPath();
 		},
@@ -448,7 +448,7 @@
 			var tanPt = new cidocs.PathPoint( tangentPt );
 			this.points.push( endPt, tanPt );
 
-			var segment = new cidocs.ArcToSegment( this, SEGMENT_TYPES[6], [endPt, tanPt], radius );
+			var segment = new cidocs.ArcToSegment( this, [endPt, tanPt], radius );
 			this.segs.push( segment );
 			this.drawPath();
 		},
@@ -621,7 +621,7 @@
 			var ptPt = new cidocs.PathPoint( pt, false );
 			this.addExtras( "point", [h1Pt, h2Pt, ptPt] );
 
-			var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1Pt, h2Pt, ptPt] );
+			var tempSeg = new cidocs.CubicToSegment( this, [h1Pt, h2Pt, ptPt] );
 			options.drawPointText = false;
 			this.drawCubicSegment( path, tempSeg, options );
 		},
@@ -711,7 +711,7 @@
 				var b3Pt = new cidocs.PathPoint( b3, false );
 				this.addExtras( "point", [curPt, b1Pt, b2Pt, b3Pt] );
 				
-				var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [b1Pt, b2Pt, b3Pt] );
+				var tempSeg = new cidocs.CubicToSegment( this, [b1Pt, b2Pt, b3Pt] );
 				options.drawPointText = false;
 				options.prevPoint = curPt.position;
 				this.drawCubicSegment( path, tempSeg, options );
@@ -750,7 +750,7 @@
 		close: function() {
 
 
-			var segment = new cidocs.CloseSegment( this, SEGMENT_TYPES[4] );
+			var segment = new cidocs.CloseSegment( this );
 			this.segs.push( segment );
 
 			this.drawPath();
