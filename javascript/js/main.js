@@ -907,14 +907,10 @@
 
 		getCinderPath: function() {
 
-			var ptIndex = 0;
-			var points = this.points;
 			var code = "";
-			var self = this;
 
 			_.each( this.segs, function( segment ){
 				code += segment.getCode();
-				// ptIndex += segment.points.length;
 			});
 			
 			return code;
