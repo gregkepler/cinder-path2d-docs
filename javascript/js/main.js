@@ -6,13 +6,14 @@
 
 	// array of paper scope
 	var papers = [];
-	var COLOR_MOVE_TO = '#c64b24';
-	var COLOR_LINE_TO = '#00FF00';
-	var COLOR_QUAD_TO = '#0000FF';
-	var COLOR_CUBIC_TO = '#FF00FF';
-	var COLOR_CLOSE = '#FF0000';
-	var COLOR_PATH = '#000000';
-	var COLOR_CENTER = '#f48a00';
+	var COLOR_MOVE_TO 	= '#c64b24';
+	var COLOR_LINE_TO 	= '#00FF00';
+	var COLOR_QUAD_TO 	= '#0000FF';
+	var COLOR_CUBIC_TO 	= '#FF00FF';
+	var COLOR_CLOSE 	= '#FF0000';
+	var COLOR_PATH 		= '#000000';
+	var COLOR_CENTER 	= '#f48a00';
+	var COLOR_INACTIVE 	= '#999999';
 
 	var SEGMENT_TYPES = [
 		"MOVETO",
@@ -296,17 +297,18 @@
 	//	Sometimes they are draggable. Sometimes
 	//	they are just visual
 	// +———————————————————————————————————————+
-	cidocs.PathPoint = function( pos, color, active )
-	{
+	cidocs.PathPoint = function( pos, active, color ) {
+
 		var ptRect = new Rectangle( new Point( -2, -2 ), new Size( 4, 4 ) );
-		this.pt = new Shape.Rectangle( ptRect );
-		this.pt.translate( pos );
-		this.pt.strokeColor = color;
-		this.pt.active = ( _.isBoolean( active ) ) ? active : true;
-		return this.pt;
+		var pt = new Shape.Rectangle( ptRect );
+		pt.translate( pos );
+		pt.active = ( _.isBoolean( active ) ) ? active : true;
+		pt.strokeColor = pt.active ? color || 'blue' : COLOR_INACTIVE;
+
+		return pt;
 	}
 
-	cidocs.StartPoint = function( pos, color, active ) {
+	cidocs.StartPoint = function( pos, active ) {
 
 		var star = new Path.Star( new Point( 0, 0 ), 5, 3, 5 );
 		star.fillColor = COLOR_MOVE_TO;
@@ -316,10 +318,28 @@
 		var ptStar = new Symbol( star );
 		var pt = ptStar.place();
 		pt.translate( pos );
+		pt.active = ( _.isBoolean( active ) ) ? active : true;
 
 		return pt;
 	}
-	cidocs.StartPoint.extend( cidocs.PathPoint );
+
+	cidocs.HandlePoint = function( pos, active ) {
+
+		return new cidocs.PathPoint( pos, active, 'cyan' );
+	}
+
+	cidocs.CenterPoint = function( pos, active ) {
+
+		var circle = new Path.Circle( new Point( 0, 0 ), 3 );
+		circle.strokeColor = COLOR_CENTER;
+		var circleSymbol = new Symbol( circle );
+
+		var pt = circleSymbol.place();
+		pt.translate( pos );
+		pt.active = active;
+
+		return pt;
+	}
 
 
 	// +———————————————————————————————————————+
@@ -354,7 +374,7 @@
 		
 		moveTo: function( point ) {
 
-			var pt = new cidocs.StartPoint( point, COLOR_MOVE_TO );
+			var pt = new cidocs.StartPoint( point );
 			this.points.push( pt );
 
 			var segment = new cidocs.MoveToSegment( this, SEGMENT_TYPES[0], [_.last( this.points )] );
@@ -365,7 +385,7 @@
 
 		lineTo: function( point ) {
 
-			var pt = new cidocs.PathPoint( point, 'blue' );
+			var pt = new cidocs.PathPoint( point );
 
 			this.points.push( pt );
 
@@ -378,8 +398,8 @@
 
 		quadTo: function( handlePt, endPt ) {
 
-			var h1 = new cidocs.PathPoint( handlePt, 'cyan' );
-			var pt = new cidocs.PathPoint( endPt, 'blue' );
+			var h1 = new cidocs.HandlePoint( handlePt );
+			var pt = new cidocs.PathPoint( endPt );
 			this.points.push( h1, pt );
 
 			var segment = new cidocs.QuadToSegment( this, SEGMENT_TYPES[2], [h1, pt] );
@@ -390,9 +410,9 @@
 
 		curveTo: function( handlePt1, handlePt2, endPt ) {
 
-			var h1 = new cidocs.PathPoint( handlePt1, 'cyan' );
-			var h2 = new cidocs.PathPoint( handlePt2, 'cyan' );
-			var pt = new cidocs.PathPoint( endPt, 'blue' );
+			var h1 = new cidocs.HandlePoint( handlePt1 );
+			var h2 = new cidocs.HandlePoint( handlePt2 );
+			var pt = new cidocs.PathPoint( endPt );
 			this.points.push( h1, h2, pt );
 
 			var segment = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1, h2, pt] );
@@ -403,16 +423,17 @@
 
 		arc: function( center, radius, startRadians, endRadians, frwd ) {
 
-			var pt = this.ptCircle.place();
-			pt.translate( center );
+			var pt = new cidocs.CenterPoint( center );
+				// this.ptCircle.place();
+			// pt.translate( center );
 
 			// get pt at start radians
 			var start = new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
-			var startPt = new cidocs.PathPoint( start, 'blue' );
+			var startPt = new cidocs.PathPoint( start );
 
 			// get pt at end radians
 			var end = new Point( Math.cos( endRadians ), Math.sin( endRadians ) ).multiply( radius ).add( center );
-			var endPt = new cidocs.PathPoint( end, 'blue' );
+			var endPt = new cidocs.PathPoint( end );
 
 			this.points.push( pt, startPt, endPt );
 
@@ -423,8 +444,8 @@
 
 		arcTo: function( targetPt, tangentPt, radius ) {
 
-			var endPt = new cidocs.PathPoint( targetPt, 'blue' );
-			var tanPt = new cidocs.PathPoint( tangentPt, 'blue' );
+			var endPt = new cidocs.PathPoint( targetPt );
+			var tanPt = new cidocs.PathPoint( tangentPt );
 			this.points.push( endPt, tanPt );
 
 			var segment = new cidocs.ArcToSegment( this, SEGMENT_TYPES[6], [endPt, tanPt], radius );
@@ -479,15 +500,14 @@
 
 				var l1 = new Path.Line( options.prevPoint, new Point( h1 ) );
 				var l2 = new Path.Line( new Point( h2 ), new Point( pt ) );
-				l1.strokeColor = 'cyan';
-				l2.strokeColor = 'cyan';
+				var strokeColor = segmentPoints[0].active ? 'cyan' : COLOR_INACTIVE;
+				l1.strokeColor = strokeColor;
+				l2.strokeColor = strokeColor;
 				l1.sendToBack();
 				l2.sendToBack();
-				// this.extras.push( l1, l2 );
 				this.addExtras( "handle-line", [l1, l2] );
 			}
 
-			// if( options.drawPointText != false ) {
 			if( drawPointText ) {
 				this.drawPointText.call( this, [h1, h2, pt] );
 			}
@@ -529,7 +549,6 @@
 
 			var radiusLine = new Path.Line( center, start );
 			radiusLine.strokeColor = COLOR_CENTER;
-			// this.extras.push( radiusLine );
 			this.addExtras( "radius-line", [radiusLine] );
 
 			this.drawPointText.call( this, [center] );
@@ -597,10 +616,9 @@
 			var pt = new Point( center.x + r_cos_B, center.y + r_sin_B );
 			// path.cubicCurveTo( h1, h2, pt );
 
-			var h1Pt = new cidocs.PathPoint( h1, 'cyan', false );
-			var h2Pt = new cidocs.PathPoint( h2, 'cyan', false );
-			var ptPt = new cidocs.PathPoint( pt, 'cyan', false );
-			// this.extras.push( h1Pt, h2Pt, ptPt );
+			var h1Pt = new cidocs.HandlePoint( h1, false );
+			var h2Pt = new cidocs.HandlePoint( h2, false );
+			var ptPt = new cidocs.PathPoint( pt, false );
 			this.addExtras( "point", [h1Pt, h2Pt, ptPt] );
 
 			var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [h1Pt, h2Pt, ptPt] );
@@ -687,10 +705,10 @@
 				var b2 = b3.add( ( t.subtract( b3 ) ).multiply( fraction ) );
 				
 				// add the points as path points
-				var curPt = new cidocs.PathPoint( this.getCurrentPoint( path ), 'cyan', false );
-				var b1Pt = new cidocs.PathPoint( b1, 'cyan', false );
-				var b2Pt = new cidocs.PathPoint( b2, 'cyan', false );
-				var b3Pt = new cidocs.PathPoint( b3, 'cyan', false );
+				var curPt = new cidocs.PathPoint( this.getCurrentPoint( path ), false );
+				var b1Pt = new cidocs.HandlePoint( b1, false );
+				var b2Pt = new cidocs.HandlePoint( b2, false );
+				var b3Pt = new cidocs.PathPoint( b3, false );
 				this.addExtras( "point", [curPt, b1Pt, b2Pt, b3Pt] );
 				
 				var tempSeg = new cidocs.CubicToSegment( this, SEGMENT_TYPES[3], [b1Pt, b2Pt, b3Pt] );
@@ -961,8 +979,6 @@
 
 					case SEGMENT_TYPES[1]:
 						
-						// self.lineTo( center );
-
 						var pt = segmentPoints[0].position;
 
 						// path line
@@ -974,7 +990,6 @@
 						seg.strokeColor = COLOR_LINE_TO;
 						seg.strokeWidth = 3.0;
 						seg.lineTo( new Point( pt ) );
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
 
 						self.drawPointText.call( self, [pt] );
@@ -986,20 +1001,14 @@
 						var h1 = segmentPoints[0].position;
 						var pt1 = segmentPoints[1].position;
 
-						// var pt = path2d.curveTo.position;
-						// var l1 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( segmentPoints[ptIndex + 1].position ) );
-						// var l2 = new Path.Line( new Point( segmentPoints[ptIndex].position ), new Point( prevPoint ) );
 						var l1 = new Path.Line( new Point( h1 ), new Point( pt1 ) );
 						var l2 = new Path.Line( new Point( h1 ), new Point( prevPoint ) );
 						l1.strokeColor = 'cyan';
 						l2.strokeColor = 'cyan';
 						l1.sendToBack();
 						l2.sendToBack();
-						// self.extras.push( l1, l2 );
 						self.addExtras( "handle-line", [l1, l2] );
 
-						// self.quadTo(path2d.curveTo, points[ptIndex+1] );
-						// self.path.strokeColor = COLOR_QUAD_TO;
 						self.path.quadraticCurveTo(
 							new Point( h1 ),
 							new Point( pt1 )
@@ -1009,13 +1018,13 @@
 						// segment line
 						var seg = new Path();
 						seg.moveTo( prevPoint );
-						seg.strokeColor = COLOR_QUAD_TO;
+						var strokeColor = segmentPoints[0].active ? COLOR_QUAD_TO : COLOR_INACTIVE;
+						seg.strokeColor = strokeColor;
 						seg.strokeWidth = 3.0;
 						seg.quadraticCurveTo(
 							new Point( h1 ),
 							new Point( pt1 )
 						);
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
 
 						self.drawPointText.call( self, [h1, pt1] );
@@ -1028,7 +1037,6 @@
 						seg.moveTo( prevPoint );
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
 
 						self.drawCubicSegment( self.path, segment, { prevPoint: prevPoint, extras:true } );
@@ -1047,7 +1055,6 @@
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
 						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
 
 						ptIndex += 3;
@@ -1065,16 +1072,7 @@
 						seg.strokeColor = COLOR_CUBIC_TO;
 						seg.strokeWidth = 3.0;
 						self.drawArcToSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
-						
-
-						/*// special segment
-						var seg = new Path();
-						seg.strokeColor = COLOR_CUBIC_TO;
-						seg.strokeWidth = 3.0;
-						self.drawArcSegment( seg, segment, { prevPoint: prevPoint, extras:false } );
-						self.extras.push( seg );*/
 
 						ptIndex += segment.points.length;
 
@@ -1092,7 +1090,6 @@
 						seg.lineTo(
 							points[0].position
 						);
-						// self.extras.push( seg );
 						self.addExtras( "segment", [seg] );
 						break;
 				}
@@ -1117,7 +1114,6 @@
 					fontFamily: 'Courier New',
 					fontSize: 8
 				});
-				// self.extras.push( text );
 				self.addExtras( "text", [text] );
 			});
 		},
@@ -1132,7 +1128,6 @@
 				fontFamily: 'Courier New',
 				fontSize: 8
 			});
-			// self.extras.push( text );
 			self.addExtras( "text", [text] );
 		},
 
