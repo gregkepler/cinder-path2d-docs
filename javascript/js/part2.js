@@ -6,9 +6,7 @@
 
 	cidocs.LineToSketch = function( options ) {
 
-		// LineToSketch.superclass.call( this, options );
 		cidocs.Path2dSketch.call( this, options );
-
 		this.name = "lineto";
 	}
 
@@ -136,6 +134,10 @@
 
 			this.addButton( 'radius', "radius", [5, 150] );
 			this.addButton( 'reverseArc', "Reverse Arc" );
+
+			// $(this.paths[0]).on( "change_radius", function() {
+			//     console.log( "CHANGE RADIUS" );
+			// });
 		},
 
 		drawInitialPath: function( ) {
@@ -173,7 +175,7 @@
 	cidocs.ArcSketch.extend( cidocs.Path2dSketch );
 
 	// getters and setters
-	cidocs.ArcSketch.addGetter( 'radius', function(){return this._radius});
+	cidocs.ArcSketch.addGetter( 'radius', function(){ return this._radius } );
 	cidocs.ArcSketch.addSetter( 'radius', function( val ){ 
 		this._radius = val;
 		this.paths[0].setArcRadius( this._radius );
@@ -289,7 +291,6 @@
 			var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', name:'cubicto', output:this.codeModule } );
 			var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			var arcToSketch		= new cidocs.ArcToSketch( { canvas:'#arcto', name:'arcto', output:this.codeModule } );
-			// arcToSketch.testVal = "TESTIES IN YO MOUTH";
 			var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', name:'combined', output:this.codeModule } );
 			this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, arcToSketch, combinedSketch );	
 

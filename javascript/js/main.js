@@ -88,22 +88,26 @@
 	function toCiNum( number ) {
 		var places = number.getDecimals();
 		if( places <= 1 ) {
-			return number.toFixed( 1 );
+			return Number( number.toString().match( /^\d+(?:\.\d{0,1})?/ ) );
+			// return number.toFixed( 1 );
 		} else {
-			return number.toFixed( 2 );
+			return Number( number.toString().match( /^\d+(?:\.\d{0,2})?/ ) );
+			// return number.toFixed( 2 ); // this here rounds before lopping off everything after the hundredths place
 		}
 	}
 
 	function toCiRadians( radians ) {
-	
-		if( radians < 0 ) radians += (Math.PI * 2.0);
-		if( radians >= Math.PI * 2.0 ) radians -= (Math.PI * 2.0);
+		
+		var PI2 = ( Math.PI * 2.0 )
+		if( radians < 0 ) radians += PI2;
+		if( radians >= PI2 ) radians -= PI2;
+		radians = Number( toCiNum( radians ) );
 
 		var piRadians = toCiNum( radians / Math.PI );
 		var displayRadians;
 		
 		if( piRadians == 0.0 ) {
-			displayRadians = toCiNum( 0.0 );
+			displayRadians = '0.0f';
 		} else if( piRadians == 1.0 ) {
 			displayRadians = "M_PI";
 		} else {
@@ -236,7 +240,8 @@
 	cidocs.ArcSegment = function( path2d, points, radius, startRadians, endRadians, forward ){
 
 		cidocs.Segment.call( this, path2d, SEGMENT_TYPES.ARC, points );
-		this.radius = radius;
+		this._radius = radius;
+		// this.radius = radius;
 		this.startRadians = startRadians;
 		this.endRadians = endRadians;
 		this.forward = forward;
@@ -254,6 +259,14 @@
 	}
 
 	cidocs.ArcSegment.extend( cidocs.Segment );
+
+	// getters and setters
+	cidocs.ArcSegment.addGetter( 'radius', function() { return this._radius } );
+	cidocs.ArcSegment.addSetter( 'radius', function( val ){ 
+		this._radius = val;
+		// console.log( "SET ARC RADIUS, SO DISPATCH AN UPDATE");
+		// $(this).trigger( "change_radius" );
+	});
 
 
 	cidocs.ArcToSegment = function( path2d, points, radius ){
@@ -670,7 +683,7 @@
 			
 			// The denominator is zero <=> p0 and p1 are colinear.
 			if( Math.abs( denominator ) < epsilon ) {
-				console.log( denominator, epsilon, "LINE" );
+				// console.log( denominator, epsilon, "LINE" );
 				path.lineTo( t );
 			}
 			else {
@@ -1350,14 +1363,6 @@
 
 			var exists = _.find( $('.canvasButtons .right button'), function( button ) { return button.id === id  } );
 
-			// if the button doesn't already exist, add it
-			// for all of the buttons canvasButtons.right, 
-			// _.each( $('.canvasButtons .right button'), function( button ) {
-			// 	console.log( button.id );
-
-			// } );
-
-			
 			// add to dat-gui
 			var param1 = ( options && options[0] ) ? options[0] : null; 
 			var param2 = ( options && options[1] ) ? options[1] : null; 
@@ -1372,7 +1377,6 @@
 			if( btn ) {
 				btn.click( $.proxy( func, this) );
 			}
-
 		},
 
 		deactivateButton: function( buttonId ) {
@@ -1381,7 +1385,6 @@
 			if( btn ) {
 				btn.unbind('click');
 			}
-
 		},
 	};
 
