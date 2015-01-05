@@ -55,6 +55,8 @@
                         </div>
                     </div>
                     <pre><code id="output" class="language-cpp"></code></pre>
+                    <!-- <a id="copy-code" href="#">copy to clipboard</a> -->
+                    
                 </div>
 
                 <div id="bottomNav">
@@ -63,8 +65,32 @@
         
                 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
                 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
-        
+                    
+                <script>
+                    $(document).ready(function(){
+
+                        $('a#copy-code').zclip({
+                            path:'js/vendor/ZeroClipboard.swf',
+                            copy:$('code#output').text()
+                        });
+
+                        // The link with ID "copy-description" will copy
+                        // the text of the paragraph with ID "description"
+
+                        /*
+                        $('a#copy-dynamic').zclip({
+                            path:'js/ZeroClipboard.swf',
+                            copy:function(){return $('input#dynamic').val();}
+                        });*/
+
+                        // The link with ID "copy-dynamic" will copy the current value
+                        // of a dynamically changing input with the ID "dynamic"
+
+                    });
+                </script>
+
                 <script type="text/javascript" src="js/prism.js"></script>
+                <script type="text/javascript" src="js/vendor/jquery.zclip.min.js"></script>
                 <script type="text/javascript" src="bower_components/dat-gui/build/dat.gui.js"></script>
                 <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
                 <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
