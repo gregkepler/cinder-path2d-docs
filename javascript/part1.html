@@ -35,7 +35,7 @@
                         <li><strong>CLOSE</strong>: A line created between the first and last points of a path.</li>
                     </ul>
                 </p>
-
+                <a id="copy-button" href="#">copy to clipboard</a>
                 <div id="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">
@@ -55,9 +55,9 @@
                         </div>
                     </div>
                     <pre><code id="output" class="language-cpp"></code></pre>
-                    <!-- <a id="copy-code" href="#">copy to clipboard</a> -->
                     
                 </div>
+                    
 
                 <div id="bottomNav">
                     &raquo; <a href="part2.html">Part 2: Drawing Functions</a>
@@ -66,13 +66,40 @@
                 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
                 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
                     
+
+
+                <script type="text/javascript" src="js/prism.js"></script>
+                <script type="text/javascript" src="js/vendor/jquery.zclip.min.js"></script>
+                <script type="text/javascript" src="bower_components/dat-gui/build/dat.gui.js"></script>
+                <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
+                <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+                <script type="text/javascript" src="js/consolelog.js"></script>
+                <!--<script type="text/javascript" src="node_modules/consolelog.js"></script>-->
+                <script src="js/main.js"></script>
+                <script src="js/part1.js"></script>
+
                 <script>
                     $(document).ready(function(){
 
-                        $('a#copy-code').zclip({
-                            path:'js/vendor/ZeroClipboard.swf',
-                            copy:$('code#output').text()
+                        
+                        $('a#copy-button').zclip( {
+                            path: 'js/vendor/ZeroClipboard.swf',
+                            copy: function(){ 
+                                console.log( "COPY", $( 'code#output' ).text() );
+                                var output = $( 'code#output' ).text();
+                                return output;
+                            },
+                            beforeCopy: function(){
+                                console.log( "BEFORE COPY" );
+                                return "";
+                            },
+                            afterCopy: function(){
+                               console.log( "COPIED", $( 'code#output' ).text() );
+                               return "";
+                            }                           
                         });
+
+
 
                         // The link with ID "copy-description" will copy
                         // the text of the paragraph with ID "description"
@@ -88,16 +115,6 @@
 
                     });
                 </script>
-
-                <script type="text/javascript" src="js/prism.js"></script>
-                <script type="text/javascript" src="js/vendor/jquery.zclip.min.js"></script>
-                <script type="text/javascript" src="bower_components/dat-gui/build/dat.gui.js"></script>
-                <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
-                <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
-                <script type="text/javascript" src="js/consolelog.js"></script>
-                <!--<script type="text/javascript" src="node_modules/consolelog.js"></script>-->
-                <script src="js/main.js"></script>
-                <script src="js/part1.js"></script>
             </div>
     </body>
 </html>
