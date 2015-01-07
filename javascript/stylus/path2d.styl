@@ -11,6 +11,15 @@ p, ul, a
 a
 	color: cinder-orange
 
+	&#copy-button
+		color: #cccccc
+		text-decoration: none
+		font-size: 0.8em
+		
+		&.hover
+			text-decoration: underline
+
+
 .content
 
 	max-width: 680px
@@ -107,6 +116,14 @@ h1
 		top: 0;
 		right: 10px;
 
+.codeModule
+	position: relative
+	
+	a#copy-button
+		position: absolute
+		top: 5px
+		right: 10px
+
 pre.language-cpp
 	background: #f4f4f2
 
@@ -115,6 +132,7 @@ pre.language-cpp
 
 	.number
 		color: #c62469
+
 
 
 #bottomNav

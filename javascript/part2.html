@@ -55,7 +55,10 @@
                             </div>
                         </div>
                     </div>
-                    <pre><code id="output" class="language-cpp"></code></pre>
+                    <div class="codeModule">
+                        <pre><code id="output" class="language-cpp"></code></pre>
+                        <a id="copy-button" href="#">copy to clipboard</a>
+                    </div>
                 </div>
 
                 <div id="bottomNav">
@@ -66,6 +69,7 @@
                 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
         
                 <script type="text/javascript" src="js/prism.js"></script>
+                <script type="text/javascript" src="js/vendor/jquery.zclip.min.js"></script>
                 <script type="text/javascript" src="bower_components/dat-gui/build/dat.gui.js"></script>
                 <script type="text/javascript" src="bower_components/paper/dist/paper-full.min.js"></script>
                 <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
@@ -73,6 +77,45 @@
                 <!--<script type="text/javascript" src="node_modules/consolelog.js"></script>-->
                 <script src="js/main.js"></script>
                 <script src="js/part2.js"></script>
+
+                <script>
+                    $(document).ready(function(){
+
+                        
+                        $('a#copy-button').zclip( {
+                            path: 'js/vendor/ZeroClipboard.swf',
+                            copy: function(){ 
+                                console.log( "COPY", $( 'code#output' ).text() );
+                                var output = $( 'code#output' ).text();
+                                return output;
+                            },
+                            beforeCopy: function(){
+                                console.log( "BEFORE COPY" );
+                                return "";
+                            },
+                            afterCopy: function(){
+                               console.log( "COPIED", $( 'code#output' ).text() );
+                               return "";
+                            }                           
+                        });
+
+
+
+                        // The link with ID "copy-description" will copy
+                        // the text of the paragraph with ID "description"
+
+                        /*
+                        $('a#copy-dynamic').zclip({
+                            path:'js/ZeroClipboard.swf',
+                            copy:function(){return $('input#dynamic').val();}
+                        });*/
+
+                        // The link with ID "copy-dynamic" will copy the current value
+                        // of a dynamically changing input with the ID "dynamic"
+
+                    });
+                </script>
+            </div>
             </div>
     </body>
 </html>
