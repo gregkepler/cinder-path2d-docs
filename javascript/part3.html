@@ -23,28 +23,26 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
         <div class="content">
-                <h1>Part 2: Path2d Drawing Functions</h1>
-                <p>There is a variety of Path2d drawing functions which result in paths that are constructed of the same segment types explained in the previous section.</p>
+                <h1>Part 3: Advanced Functions</h1>
+                <p>Advanced functions blah blah blah</p>
                 <ul>
-                    <li><strong>moveTo</strong>: Moves the path2d to a start point for a point to continue drawing your path. Accepts 1 coordinate and results in a MOVETO segment.<br>
-                        <!-- <code>moveTo (const vec2 &amp;p)</code><br>
-                        <code>moveTo (float x, float y)</code> --></li>
-                    <li><strong>lineTo</strong>: Accepts 1 coordinate and draws a line from the current point in the path to the given one. Results in a LINETO segment.</li>
-                    <li><strong>quadTo</strong>: Accepts 1 central handle point and 1 end point to create a quadratic bezier curve resulting in a QUADTO segment.</li>
-                    <li><strong>curveTo</strong>: Accepts 2 handle points and 1 end point to create a cubic bezier curve resulting in a CUBICTO segment </li>
-                    <li><strong>arc</strong>: Accepts a center point, a radius, start angle (in radians), end angle (in radians), and optional boolean for direction of the arc (defaults to true for forward). This results in a CUBICTO segment.</li>
-                    <li><strong>arcTo</strong>: Draws a line segment from the current point toward the first point given to draw a rounded corner. This segment terminates in an arc with the specified radius whose end is tangent to the line segment connecting the two points specified. Accepts a target point, a tangent position, and a radius. Results in a path composed of possible LINETO and CUBICTO segments.</li>
+                    <li><strong>calcBoundBox()</strong>: .<br></li>
+                    <li><strong>calcPreciseBoundBox()</strong>: .<br></li>
+                    <li><strong>contains()</strong>: Accepts 1 coordinate and draws a line from the current point in the path to the given one. Results in a LINETO segment.</li>
+                    <li><strong>transformCopy()</strong>: Accepts 1 central handle point and 1 end point to create a quadratic bezier curve resulting in a QUADTO segment.</li>
+                    <li><strong>subdivide()</strong>: Accepts 2 handle points and 1 end point to create a cubic bezier curve resulting in a CUBICTO segment </li>
+                    <li><strong>Path2dCalcCache</strong>: Accepts a center point, a radius, start angle (in radians), end angle (in radians), and optional boolean for direction of the arc (defaults to true for forward). This results in a CUBICTO segment.</li>
                 </ul>
                 
                 <div id="tutorial">
                     <ul id="sketchLinks"></ul>
                     <div class="canvases">
-                        <canvas id="lineto" data-name="lineTo" class="active" width="500" height="300"></canvas>
-                        <canvas id="quadto" data-name="quadTo" width="500" height="300"></canvas>
-                        <canvas id="cubicto" data-name="curveTo" width="500" height="300"></canvas>
-                        <canvas id="arc" data-name="arc" width="500" height="300"></canvas>
-                        <canvas id="arcto" data-name="arcTo" width="500" height="300"></canvas>
-                        <canvas id="combined" width="500" data-name="Combined" height="300"></canvas>
+                        <canvas id="calcbound"      data-name="calcBoundBox" class="active" width="500" height="300"></canvas>
+                        <canvas id="calcprecise"    data-name="calcPreciseBoundBox" width="500" height="300"></canvas>
+                        <canvas id="contains"       data-name="contains" width="500" height="300"></canvas>
+                        <canvas id="transformcopy"  data-name="transformCopy" width="500" height="300"></canvas>
+                        <canvas id="subdivide"      data-name="subdivide" width="500" height="300"></canvas>
+                        <canvas id="calccache"      data-name="Path2dCalcCache" width="500" height="300"></canvas>
 
                         <div class="canvasButtons">
                             <div class="left">
@@ -62,8 +60,7 @@
                 </div>
 
                 <div id="bottomNav">
-                    &laquo; <a href="part1.html">Part 1: Path2d Basics</a> | 
-                    &raquo; <a href="part1.html">Part 3: Andvanced Functions</a>
+                    &laquo; <a href="part1.html">Part 2: Path2d Functions</a>
                 </div>
         
                 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
@@ -77,7 +74,7 @@
                 <script type="text/javascript" src="js/consolelog.js"></script>
                 <!--<script type="text/javascript" src="node_modules/consolelog.js"></script>-->
                 <script src="js/main.js"></script>
-                <script src="js/part2.js"></script>
+                <script src="js/part3.js"></script>
 
                 <script>
                     $(document).ready(function(){
@@ -100,19 +97,6 @@
                             }                           
                         });
 
-
-
-                        // The link with ID "copy-description" will copy
-                        // the text of the paragraph with ID "description"
-
-                        /*
-                        $('a#copy-dynamic').zclip({
-                            path:'js/ZeroClipboard.swf',
-                            copy:function(){return $('input#dynamic').val();}
-                        });*/
-
-                        // The link with ID "copy-dynamic" will copy the current value
-                        // of a dynamically changing input with the ID "dynamic"
 
                     });
                 </script>
