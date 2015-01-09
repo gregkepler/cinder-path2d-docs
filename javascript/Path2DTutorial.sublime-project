@@ -2,7 +2,8 @@
 	"folders":
 	[
 		{
-			"path": "/Users/grego/Documents/CodeDepot/C++/cinder-path2d-docs/javascript"
+			"follow_symlinks": true,
+			"path": "."
 		}
 	]
 }

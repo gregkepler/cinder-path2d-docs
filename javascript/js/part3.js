@@ -4,13 +4,12 @@
 	//	LineToSketch
 	// +———————————————————————————————————————+
 
-	cidocs.LineToSketch = function( options ) {
+	cidocs.CalcBoundsSketch = function( options ) {
 
 		cidocs.Path2dSketch.call( this, options );
-		this.name = "lineto";
 	}
 
-	cidocs.LineToSketch.prototype = {
+	cidocs.CalcBoundsSketch.prototype = {
 
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
@@ -22,17 +21,16 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50.0, 50.0 ) );
-			path2d.lineTo( new Point( 150.0, 150.0 ) );
-			path2d.lineTo( new Point( 250.0, 50.0 ) );
-			path2d.lineTo( new Point( 350.0, 150.0 ) );
-			path2d.lineTo( new Point( 450.0, 50.0 ) );
-
+			path2d.moveTo( new Point( 50, 50 ) );
+			path2d.quadTo( new Point( 80.0, 0.0 ), new Point( 150.0, 0 ) );
+			path2d.quadTo( new Point( 200.0, 25.0 ), new Point( 200.0, 50 ) );
+			path2d.quadTo( new Point( 250.0, 100.0 ), new Point( 300.0, 100 ) );
+			path2d.close();
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
 		}
 	};
-	cidocs.LineToSketch.extend( cidocs.Path2dSketch );
+	cidocs.CalcBoundsSketch.extend( cidocs.Path2dSketch );
 
 
 	// +———————————————————————————————————————+
@@ -286,14 +284,14 @@
 			var self = this;
 
 			// init all the sketches
-			// var lineToSketch	= new cidocs.LineToSketch( { canvas:'#lineto', name:'lineto', output:this.codeModule } );
+			var calcBoundsSketch	= new cidocs.CalcBoundsSketch( { canvas:'#calcbounds', name:'calcbounds', output:this.codeModule } );
 			// var quadToSketch	= new cidocs.QuadToSketch( { canvas:'#quadto', name:'quadto', output:this.codeModule } );
 			// var cubicToSketch	= new cidocs.CubicToSketch( { canvas:'#cubicto', name:'cubicto', output:this.codeModule } );
 			// var arcSketch		= new cidocs.ArcSketch( { canvas:'#arc', name:'arc', output:this.codeModule } );
 			// var arcToSketch		= new cidocs.ArcToSketch( { canvas:'#arcto', name:'arcto', output:this.codeModule } );
 			// var combinedSketch	= new cidocs.CombinedSketch( { canvas:'#combined', name:'combined', output:this.codeModule } );
 			// this.sketches.push( lineToSketch, quadToSketch, cubicToSketch, arcSketch, arcToSketch, combinedSketch );	
-
+			this.sketches.push( calcBoundsSketch );
 			
 			this.superclass.init.call( this );
 		}
@@ -305,7 +303,7 @@
 		
 		window.app = new cidocs.Part2App();
 		app.init();
-		app.show( "lineto" );
+		app.show( "calcbounds" );
 
 	});
 	

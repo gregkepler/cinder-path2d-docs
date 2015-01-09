@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"proto",
+				"prototype"
+			],
+			[
+				"super",
+				"superclass"
+			],
+			[
 				"prot",
 				"prototype"
 			],
@@ -506,14 +514,6 @@
 			[
 				"androidP",
 				"androidPool"
-			],
-			[
-				"subwayAni",
-				"subwayAnimation2"
-			],
-			[
-				"rest",
-				"restoreSubwayAnimation"
 			]
 		]
 	},
@@ -531,7 +531,7 @@
 			"file": "path2d.html",
 			"settings":
 			{
-				"buffer_size": 3520,
+				"buffer_size": 3410,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +539,15 @@
 			"file": "js/main.js",
 			"settings":
 			{
-				"buffer_size": 8998,
+				"buffer_size": 38412,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "part1.html",
+			"settings":
+			{
+				"buffer_size": 6733,
 				"line_ending": "Unix"
 			}
 		}
@@ -873,6 +881,22 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"newPos",
+			"update",
+			"quadto",
+			"curPaper =",
+			"curPaper",
+			"output.update",
+			"output",
+			"curPaper.view.draw",
+			"curPaper.dra",
+			"curPaper",
+			"curPaper	`",
+			"curPaper",
+			"ctor",
+			"extend",
+			"Path2dSketch",
+			"extend",
 			"proto",
 			"loadSpriteSheet",
 			"actor",
@@ -984,23 +1008,7 @@
 			"AndyService.on",
 			"resize",
 			"AndyService.renderer",
-			"AndyService.render",
-			"AndyService",
-			"AndySer",
-			"AndyService.off",
-			"AndyService",
-			"resize",
-			"AndyService",
-			"AndyService.c",
-			"AndyService",
-			"CreatorService",
-			"destroy",
-			"start",
-			"resizeHandler",
-			"resize",
-			"andy",
-			"loop",
-			"sortCompareIndex"
+			"AndyService.render"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1139,7 +1147,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1264,7 +1272,7 @@
 					"file": "path2d.html",
 					"settings":
 					{
-						"buffer_size": 3520,
+						"buffer_size": 3410,
 						"regions":
 						{
 						},
@@ -1381,15 +1389,15 @@
 					"file": "js/main.js",
 					"settings":
 					{
-						"buffer_size": 8998,
+						"buffer_size": 38412,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								25261,
+								25261
 							]
 						],
 						"settings":
@@ -1487,7 +1495,124 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1606.0,
+						"translation.y": 10938.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "part1.html",
+					"settings":
+					{
+						"buffer_size": 6733,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2561,
+								2561
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 476.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1859,6 +1984,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 311.0,
+	"side_bar_width": 389.0,
 	"status_bar_visible": true
 }
