@@ -777,6 +777,7 @@ cidocs.Path2d.prototype = {
 
 	centerInCanvas: function( canvas ) {
 
+		console.log( this.path.bounds.width, this.path.bounds.height );
 		var posX = Math.round( (canvas[0].clientWidth - this.path.bounds.width) / 2 );
 		var posY = Math.round( (canvas[0].clientHeight - this.path.bounds.height) / 2 );
 		this.setPosition( new Point( posX, posY ) );
