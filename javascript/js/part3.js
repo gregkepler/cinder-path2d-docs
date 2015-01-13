@@ -21,10 +21,13 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50, 50 ) );
-			path2d.quadTo( new Point( 80.0, 0.0 ), new Point( 150.0, 0 ) );
-			path2d.quadTo( new Point( 200.0, 25.0 ), new Point( 200.0, 50 ) );
-			path2d.quadTo( new Point( 250.0, 100.0 ), new Point( 300.0, 100 ) );
+			path2d.moveTo( new Point( 126, 222 ) );
+			path2d.curveTo( new Point( 82, 171 ), new Point( 173, 163 ), new Point( 189, 131 ) );
+			path2d.curveTo( new Point( 200, 109 ), new Point( 209, 60 ), new Point( 254, 60 ) );
+			path2d.curveTo( new Point( 299, 60 ), new Point( 307, 92 ), new Point( 315, 122 ) );
+			path2d.curveTo( new Point( 327, 165 ), new Point( 414, 195 ), new Point( 375, 227 ) );
+			path2d.curveTo( new Point( 336, 259 ), new Point( 293, 215 ), new Point( 250, 215 ) );
+			path2d.curveTo( new Point( 211, 215 ), new Point( 150, 250 ), new Point( 126, 222 ) );
 			path2d.close();
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
