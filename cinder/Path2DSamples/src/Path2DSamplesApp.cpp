@@ -5,7 +5,6 @@
 #include "cinder/Text.h"
 #include "cinder/CinderMath.h"
 #include "cinder/Rand.h"
-//#include "cinder/CinderGlm.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -38,6 +37,7 @@ void Path2DSamplesApp::prepareSettings( Settings *settings )
 
 void Path2DSamplesApp::setup()
 {
+	
 	// lineTo
 	path1.moveTo( vec2( 0.0, 0.0 ) );
 	path1.lineTo( vec2( 100.0, 100.0 ) );
@@ -356,6 +356,7 @@ void Path2DSamplesApp::drawPath( const cinder::Path2d &path )
 	gl::color( 1, 1, 1, 0.2 );
 //	gl::drawSolidRect( path.calcBoundingBox() );			// box around everything (including points)
 	gl::drawSolidRect( path.calcPreciseBoundingBox() );		// box around just the path itself
+//	gl::drawStrokedRect(path.calcPreciseBoundingBox());
 	
 	// calculate length of path
 	gl::drawString( "length: " + to_string( path.calcLength() ), vec2( 0.0, -10.0 ) );

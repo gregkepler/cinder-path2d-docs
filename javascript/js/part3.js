@@ -29,6 +29,7 @@
 			path2d.curveTo( new Point( 336, 259 ), new Point( 293, 215 ), new Point( 250, 215 ) );
 			path2d.curveTo( new Point( 211, 215 ), new Point( 150, 250 ), new Point( 126, 222 ) );
 			path2d.close();
+			path2d.drawBoundingBox();
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
 		}

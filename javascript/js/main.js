@@ -368,10 +368,7 @@ cidocs.Path2d = function( paperScope ) {
 	star.rotation = 180;
 	this.ptStar = new Symbol( star );
 
-	var circle = new Path.Circle( new Point( 0, 0 ), 3 );
-	circle.strokeColor = COLOR_CENTER;
-	this.ptCircle = new Symbol( circle );
-}
+};
 
 cidocs.Path2d.prototype = {
 	
@@ -394,7 +391,6 @@ cidocs.Path2d.prototype = {
 
 		var segment = new cidocs.LineToSegment( this, [pt] );
 		this.segs.push( segment );
-
 
 		this.drawPath();
 	},
@@ -427,8 +423,6 @@ cidocs.Path2d.prototype = {
 	arc: function( center, radius, startRadians, endRadians, frwd ) {
 
 		var pt = new cidocs.CenterPoint( center );
-			// this.ptCircle.place();
-		// pt.translate( center );
 
 		// get pt at start radians
 		var start = new Point( Math.cos( startRadians ), Math.sin( startRadians ) ).multiply( radius ).add( center );
@@ -724,6 +718,16 @@ cidocs.Path2d.prototype = {
 		}
 
 		this.drawPointText.call( this, [p1, t] );
+	},
+
+	drawBoundingBox: function()
+	{
+		var rect = this.path.bounds;
+		var box = new Path.Rectangle( rect );
+		box.strokeColor = 'red';
+		this.addExtras( "bounds", [box] );
+		console.log( "DRAW BOUNDS", box );
+		// this.drawPath();
 	},
 
 	drawLineExtra: function( pt1, pt2 )
@@ -1183,6 +1187,7 @@ cidocs.Path2dSketch = function( options ) {
 	this.handlesOn = true;
 	this.buttons = [];
 	this.gui = new dat.GUI( { autoPlace: false } );
+	this.boundingBoxEnabled = false;
 
 	this.initialize( options );
 };
@@ -1300,6 +1305,7 @@ cidocs.Path2dSketch.prototype = {
 
 		this.curPaper.view.draw();
 		this.output.update( this.paths[0] );
+
 	},
 
 	toggleHandles: function() {
