@@ -246,12 +246,12 @@ cidocs.ArcSegment.prototype = {
 								endRadians: toCiRadians( this.endRadians ), forward: this.forward } );
 	}
 
-}
+};
 
 cidocs.ArcSegment.extend( cidocs.Segment );
 
 // getters and setters
-cidocs.ArcSegment.addGetter( 'radius', function() { return this._radius } );
+cidocs.ArcSegment.addGetter( 'radius', function() { return this._radius; } );
 cidocs.ArcSegment.addSetter( 'radius', function( val ){ 
 	this._radius = val;
 	// console.log( "SET ARC RADIUS, SO DISPATCH AN UPDATE");
@@ -264,7 +264,7 @@ cidocs.ArcToSegment = function( path2d, points, radius ){
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.ARCTO, points );
 	this.radius = radius;
 	this.template = _.template( "mPath.arcTo( vec2( <%= pointX %>f, <%= pointY %>f ), vec2( <%= tanX %>f, <%= tanY %>f ), <%= radius %>f );\n" );
-}
+};
 
 cidocs.ArcToSegment.prototype = {
 
@@ -273,7 +273,7 @@ cidocs.ArcToSegment.prototype = {
 								tanX: toCiNum( this.points[1].position.x ), tanY: toCiNum( this.points[1].position.y ),
 								radius: toCiNum( this.radius ) } );
 	}
-}
+};
 
 cidocs.ArcToSegment.extend( cidocs.Segment );
 
@@ -282,14 +282,14 @@ cidocs.CloseSegment = function( path2d ){
 
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.CLOSE, [] );
 	this.template = _.template( "mPath.close()\n" );
-}
+};
 
 cidocs.CloseSegment.prototype = {
 
 	getCode: function() {
 		return this.template();
 	}
-}
+};
 
 cidocs.CloseSegment.extend( cidocs.Segment );
 
@@ -309,7 +309,7 @@ cidocs.PathPoint = function( pos, active, color ) {
 	pt.strokeColor = pt.active ? color || 'blue' : COLOR_INACTIVE;
 
 	return pt;
-}
+};
 
 cidocs.StartPoint = function( pos, active ) {
 
@@ -913,7 +913,7 @@ cidocs.Path2d.prototype = {
 		return paperPoints;
 	},
 
-	getCinderPath: function() {
+	getCinderCode: function() {
 
 		var code = "";
 
@@ -1187,7 +1187,7 @@ cidocs.Path2dSketch = function( options ) {
 	this.handlesOn = true;
 	this.buttons = [];
 	this.gui = new dat.GUI( { autoPlace: false } );
-	this.boundingBoxEnabled = false;
+	this.extraCommands = [];
 
 	this.initialize( options );
 };
@@ -1278,8 +1278,8 @@ cidocs.Path2dSketch.prototype = {
 		if( this.selectedPoint ) {
 
 			this.paths[0].movePoint( this.selectedPoint, event.point );
-			this.paths[0].drawPath();
-			this.updatePath();
+			this.drawPath();
+			this.updateSketch();
 		}
 	},
 
@@ -1298,14 +1298,13 @@ cidocs.Path2dSketch.prototype = {
 			} );
 		}
 
-		this.updatePath();
+		this.updateSketch();
 	},
 
-	updatePath: function() {
+	updateSketch: function() {
 
 		this.curPaper.view.draw();
 		this.output.update( this.paths[0] );
-
 	},
 
 	toggleHandles: function() {
@@ -1322,7 +1321,7 @@ cidocs.Path2dSketch.prototype = {
 			} );
 		}
 
-		this.updatePath();
+		this.updateSketch();
 	},
 
 	show: function() {
@@ -1330,7 +1329,7 @@ cidocs.Path2dSketch.prototype = {
 		this.sketch.removeClass( "inactive" );
 		this.sketch.addClass( "active" );
 		
-		this.paths[0].drawPath();
+		this.drawPath();
 
 		if( ! this.handlesOn ){
 			_.each( this.paths, function( path ) {
@@ -1338,7 +1337,7 @@ cidocs.Path2dSketch.prototype = {
 			} );
 		}
 		
-		this.updatePath();
+		this.updateSketch();
 
 		_.bindAll( this, 'toggleHandles', 'reset' );
 		$("#handle-toggle").click( $.proxy( this.toggleHandles, this) );
@@ -1391,10 +1390,34 @@ cidocs.Path2dSketch.prototype = {
 			btn.unbind('click');
 		}
 	},
+
+	drawPath: function() {
+
+		this.paths[0].drawPath();
+	}
 };
 
 
+// +———————————————————————————————————————+
+//	Extra Commands     
+//	Additional commands for the sketch
+//	such as drawBoundbox calls
+// +———————————————————————————————————————+
 
+cidocs.BoundingBox = function() {
+	this.template = "";
+};
+
+cidocs.BoundingBox.prototype = {
+
+	this.draw = function() {
+
+	},
+
+	this.getCinderCode = function() {
+
+	}
+}
 
 // +———————————————————————————————————————+
 //	Path2dCode     
@@ -1417,7 +1440,7 @@ cidocs.CodeModule = function() {
 			var segments = path.segments;
 			var p = "mPath";
 			code = "Path2d mPath;\n";
-			code += path.getCinderPath();
+			code += path.getCinderCode();
 			code += "gl::draw( mPath );";
 		}
 
