@@ -781,7 +781,6 @@ cidocs.Path2d.prototype = {
 
 	centerInCanvas: function( canvas ) {
 
-		console.log( this.path.bounds.width, this.path.bounds.height );
 		var posX = Math.round( (canvas[0].clientWidth - this.path.bounds.width) / 2 );
 		var posY = Math.round( (canvas[0].clientHeight - this.path.bounds.height) / 2 );
 		this.setPosition( new Point( posX, posY ) );
@@ -1298,7 +1297,11 @@ cidocs.Path2dSketch.prototype = {
 	},
 
 	reset: function(){
+
 		this.paths[0].reset();
+		_.each( this.extras, function( extra ) {
+			extra.reset();
+		} );
 		this.paths = [];
 		this.extras = [];
 		this.drawInitialPath();
@@ -1309,6 +1312,7 @@ cidocs.Path2dSketch.prototype = {
 			} );
 		}
 
+		this.drawPath();
 		this.updateSketch();
 	},
 
@@ -1435,11 +1439,15 @@ cidocs.BoundingBox.prototype = {
 		var box = new Path.Rectangle( bounds );
 		box.strokeColor = 'red';
 		this.box = box;
-		console.log( "DRAW BOUNDS", box );
 	},
 
 	getCinderCode: function() {
 
+	},
+
+	reset: function() {
+		this.box.remove();
+		this.box = null;
 	}
 };
 
@@ -1464,6 +1472,11 @@ cidocs.PreciseBoundingBox.prototype = {
 
 	getCinderCode: function() {
 
+	},
+
+	reset: function() {
+		this.box.remove();
+		this.box = null;
 	}
 };
 
