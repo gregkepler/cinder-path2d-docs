@@ -179,7 +179,7 @@ cidocs.LineToSegment = function( path2d, points ){
 
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.LINETO, points );
 	this.template = _.template( "mPath.lineTo( vec2( <%= pointX %>f, <%= pointY %>f ) );\n" );
-}
+};
 
 cidocs.LineToSegment.prototype = {
 
@@ -187,7 +187,7 @@ cidocs.LineToSegment.prototype = {
 		return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ) } );		
 	}
 	
-}
+};
 
 cidocs.LineToSegment.extend( cidocs.Segment );
 
@@ -196,7 +196,7 @@ cidocs.QuadToSegment = function( path2d, points ){
 
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.QUADTO, points );
 	this.template = _.template( "mPath.quadTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-}
+};
 
 cidocs.QuadToSegment.prototype = {
 
@@ -204,7 +204,7 @@ cidocs.QuadToSegment.prototype = {
 		return this.template( { h1x: toCiNum( this.points[0].position.x ), h1y: toCiNum( this.points[0].position.y ), 
 								p2x: toCiNum( this.points[1].position.x ), p2y: toCiNum( this.points[1].position.y ) } );
 	}
-}
+};
 
 cidocs.QuadToSegment.extend( cidocs.Segment );
 
@@ -213,7 +213,7 @@ cidocs.CubicToSegment = function( path2d, points ){
 
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.CUBICTO, points );
 	this.template = _.template( "mPath.curveTo( vec2( <%= h1x %>f, <%= h1y %>f ), vec2( <%= h2x %>f, <%= h2y %>f ), vec2( <%= p2x %>f, <%= p2y %>f ) );\n" );
-}
+};
 
 cidocs.CubicToSegment.prototype = {
 
@@ -222,7 +222,7 @@ cidocs.CubicToSegment.prototype = {
 								h2x: toCiNum( this.points[1].position.x ), h2y: toCiNum( this.points[1].position.y ), 
 								p2x: toCiNum( this.points[2].position.x ), p2y: toCiNum( this.points[2].position.y ) } );
 	}
-}
+};
 
 cidocs.CubicToSegment.extend( cidocs.Segment );
 
@@ -236,7 +236,7 @@ cidocs.ArcSegment = function( path2d, points, radius, startRadians, endRadians, 
 	this.endRadians = endRadians;
 	this.forward = forward;
 	this.template = _.template( "mPath.arc( vec2( <%= pointX %>f, <%= pointY %>f ), <%= radius %>f, <%= startRadians %>, <%= endRadians %>, <%= forward %> );\n" );
-}
+};
 
 cidocs.ArcSegment.prototype = {
 
@@ -324,12 +324,12 @@ cidocs.StartPoint = function( pos, active ) {
 	pt.active = ( _.isBoolean( active ) ) ? active : true;
 
 	return pt;
-}
+};
 
 cidocs.HandlePoint = function( pos, active ) {
 
 	return new cidocs.PathPoint( pos, active, 'cyan' );
-}
+};
 
 cidocs.CenterPoint = function( pos, active ) {
 
@@ -342,7 +342,7 @@ cidocs.CenterPoint = function( pos, active ) {
 	pt.active = active;
 
 	return pt;
-}
+};
 
 
 // +———————————————————————————————————————+
@@ -720,14 +720,9 @@ cidocs.Path2d.prototype = {
 		this.drawPointText.call( this, [p1, t] );
 	},
 
-	drawBoundingBox: function()
+	calcBounds: function()
 	{
-		var rect = this.path.bounds;
-		var box = new Path.Rectangle( rect );
-		box.strokeColor = 'red';
-		this.addExtras( "bounds", [box] );
-		console.log( "DRAW BOUNDS", box );
-		// this.drawPath();
+		return this.path.bounds;
 	},
 
 	drawLineExtra: function( pt1, pt2 )
@@ -1172,6 +1167,7 @@ cidocs.Path2dSketch = function( options ) {
 	this.canvas = null;
 	this.output = null;
 	this.paths = [];
+	this.extras = [];
 	this.curPaper = null;
 	this.tool = null;
 	this.selectedSegment = null;
@@ -1187,7 +1183,6 @@ cidocs.Path2dSketch = function( options ) {
 	this.handlesOn = true;
 	this.buttons = [];
 	this.gui = new dat.GUI( { autoPlace: false } );
-	this.extraCommands = [];
 
 	this.initialize( options );
 };
@@ -1283,13 +1278,19 @@ cidocs.Path2dSketch.prototype = {
 		}
 	},
 
-	drawInitialPath: function(){
+	drawInitialPath: function() {
 		// overwrite
+	},
+
+	drawBoundingBox: function() {
+		var boundingBox = new cidocs.BoundingBox( this.paths[0] );
+		this.extras.push( boundingBox );
 	},
 
 	reset: function(){
 		this.paths[0].reset();
 		this.paths = [];
+		this.extras = [];
 		this.drawInitialPath();
 
 		if( ! this.handlesOn ){
@@ -1394,30 +1395,43 @@ cidocs.Path2dSketch.prototype = {
 	drawPath: function() {
 
 		this.paths[0].drawPath();
+
+		_.every( this.extras, function( extra ){
+			extra.draw();
+		} );
 	}
 };
 
 
 // +———————————————————————————————————————+
-//	Extra Commands     
+//	Extra drawing commands     
 //	Additional commands for the sketch
 //	such as drawBoundbox calls
 // +———————————————————————————————————————+
 
-cidocs.BoundingBox = function() {
+cidocs.BoundingBox = function( path2d ) {
+	this.path2d = path2d;
 	this.template = "";
+	this.box = null;
 };
 
 cidocs.BoundingBox.prototype = {
 
-	this.draw = function() {
-
+	draw: function() {
+		if( this.box ) {
+			this.box.remove();
+		}
+		var bounds = this.path2d.calcBounds();
+		var box = new Path.Rectangle( bounds );
+		box.strokeColor = 'red';
+		this.box = box;
+		console.log( "DRAW BOUNDS", box );
 	},
 
-	this.getCinderCode = function() {
+	getCinderCode: function() {
 
 	}
-}
+};
 
 // +———————————————————————————————————————+
 //	Path2dCode     

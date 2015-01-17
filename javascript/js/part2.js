@@ -15,7 +15,7 @@
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.updatePath();
+			this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -95,7 +95,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			// this.updatePath();
+			// this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -154,7 +154,7 @@
 		reverseArc: function() {
 
 			this.paths[0].reverseArc();
-			this.updatePath();
+			this.updateSketch();
 
 		},
 
@@ -179,7 +179,7 @@
 	cidocs.ArcSketch.addSetter( 'radius', function( val ){ 
 		this._radius = val;
 		this.paths[0].setArcRadius( this._radius );
-		this.updatePath();
+		this.updateSketch();
 	});
 
 
@@ -229,7 +229,7 @@
 	cidocs.ArcToSketch.addSetter( 'radius', function( val ){ 
 		this._radius = val;
 		this.paths[0].setArcRadius( this._radius );
-		this.updatePath();
+		this.updateSketch();
 	});
 
 	

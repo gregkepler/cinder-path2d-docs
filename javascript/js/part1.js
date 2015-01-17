@@ -16,7 +16,7 @@
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.updatePath();
+			this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -46,7 +46,7 @@
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.updatePath();
+			this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -79,7 +79,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.updatePath();
+			this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -112,7 +112,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.updatePath();
+			this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
@@ -146,7 +146,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			// this.updatePath();
+			// this.updateSketch();
 		},
 
 		drawInitialPath: function( ) {
