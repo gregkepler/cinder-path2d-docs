@@ -720,7 +720,12 @@ cidocs.Path2d.prototype = {
 		this.drawPointText.call( this, [p1, t] );
 	},
 
-	calcBounds: function()
+	calcBoundingBox: function()
+	{
+		return this.path.handleBounds;
+	},
+
+	calcPreciseBoundingBox: function()
 	{
 		return this.path.bounds;
 	},
@@ -1287,6 +1292,11 @@ cidocs.Path2dSketch.prototype = {
 		this.extras.push( boundingBox );
 	},
 
+	drawPreciseBoundingBox: function() {
+		var boundingBox = new cidocs.PreciseBoundingBox( this.paths[0] );
+		this.extras.push( boundingBox );
+	},
+
 	reset: function(){
 		this.paths[0].reset();
 		this.paths = [];
@@ -1421,7 +1431,31 @@ cidocs.BoundingBox.prototype = {
 		if( this.box ) {
 			this.box.remove();
 		}
-		var bounds = this.path2d.calcBounds();
+		var bounds = this.path2d.calcBoundingBox();
+		var box = new Path.Rectangle( bounds );
+		box.strokeColor = 'red';
+		this.box = box;
+		console.log( "DRAW BOUNDS", box );
+	},
+
+	getCinderCode: function() {
+
+	}
+};
+
+cidocs.PreciseBoundingBox = function( path2d ) {
+	this.path2d = path2d;
+	this.template = "";
+	this.box = null;
+};
+
+cidocs.PreciseBoundingBox.prototype = {
+
+	draw: function() {
+		if( this.box ) {
+			this.box.remove();
+		}
+		var bounds = this.path2d.calcPreciseBoundingBox();
 		var box = new Path.Rectangle( bounds );
 		box.strokeColor = 'red';
 		this.box = box;
