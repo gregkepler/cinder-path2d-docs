@@ -1319,7 +1319,7 @@ cidocs.Path2dSketch.prototype = {
 	updateSketch: function() {
 
 		this.curPaper.view.draw();
-		this.output.update( this.paths[0] );
+		this.output.update( this.paths[0], this.extras );
 	},
 
 	toggleHandles: function() {
@@ -1427,6 +1427,7 @@ cidocs.BoundingBox = function( path2d ) {
 	this.path2d = path2d;
 	this.template = "";
 	this.box = null;
+	this.template = _.template( "gl::drawStrokedRect( mPath.calcBoundingBox() );" );
 };
 
 cidocs.BoundingBox.prototype = {
@@ -1442,7 +1443,7 @@ cidocs.BoundingBox.prototype = {
 	},
 
 	getCinderCode: function() {
-
+		return this.template();
 	},
 
 	reset: function() {
@@ -1455,6 +1456,7 @@ cidocs.PreciseBoundingBox = function( path2d ) {
 	this.path2d = path2d;
 	this.template = "";
 	this.box = null;
+	this.template = _.template( "gl::drawStrokedRect( mPath.calcPreciseBoundingBox() );" );
 };
 
 cidocs.PreciseBoundingBox.prototype = {
@@ -1467,11 +1469,10 @@ cidocs.PreciseBoundingBox.prototype = {
 		var box = new Path.Rectangle( bounds );
 		box.strokeColor = 'red';
 		this.box = box;
-		console.log( "DRAW BOUNDS", box );
 	},
 
 	getCinderCode: function() {
-
+	return this.template();
 	},
 
 	reset: function() {
@@ -1493,7 +1494,7 @@ cidocs.CodeModule = function() {
 		this.div = $( '#output' );
 	};
 
-	this.update = function( path ){
+	this.update = function( path, extras ){
 
 		var code = "";
 
@@ -1502,7 +1503,14 @@ cidocs.CodeModule = function() {
 			var p = "mPath";
 			code = "Path2d mPath;\n";
 			code += path.getCinderCode();
-			code += "gl::draw( mPath );";
+			code += "gl::draw( mPath );\n";
+		}
+
+		if( extras.length ) {
+			_.each( extras, function( extra ) {
+				code += extra.getCinderCode();
+			} );
+			
 		}
 
 		this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
