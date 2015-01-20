@@ -82,6 +82,20 @@
 	cidocs.ContainsSketch = function( options ) {
 
 		cidocs.Path2dSketch.call( this, options );
+
+		var cols = Math.floor( this.canvas.width() / 15 ) - 1;
+		var rows = Math.floor( (this.canvas.height() - 40) / 15 ) - 1;
+		this.dots = [];
+
+		for( var i = 0; i < cols; i++ ) {
+			for( var j = 0; j < rows; j ++ ) {
+				var pt = new Point( 15 + ( i * 15 ), 15 + (j * 15) );
+				var circle = new Path.Circle( pt, 5 );
+				circle.sendToBack();
+				circle.fillColor = '#acacac';
+				this.dots.push( circle );
+			}
+		}
 	};
 
 	cidocs.ContainsSketch.prototype = {
@@ -96,10 +110,49 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50, 50 ) );
-			// draw here
+			path2d.moveTo( new Point( 126, 222 ) );
+			path2d.curveTo( new Point( 82, 171 ), new Point( 173, 163 ), new Point( 189, 131 ) );
+			path2d.curveTo( new Point( 200, 109 ), new Point( 209, 60 ), new Point( 254, 60 ) );
+			path2d.curveTo( new Point( 299, 60 ), new Point( 307, 92 ), new Point( 315, 122 ) );
+			path2d.curveTo( new Point( 327, 165 ), new Point( 414, 195 ), new Point( 375, 227 ) );
+			path2d.curveTo( new Point( 336, 259 ), new Point( 293, 215 ), new Point( 250, 215 ) );
+			path2d.curveTo( new Point( 211, 215 ), new Point( 150, 250 ), new Point( 126, 222 ) );
+			path2d.close();
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
+		},
+
+		drawPath: function() {
+			this.superclass.drawPath.call( this );
+
+/*			_.each( this.dots, function( dot ){
+				dot.remove();
+			});
+			this.dots = [];
+
+			// this.curPaper
+			var cols = Math.floor( this.canvas.width() / 15 ) - 1;
+			var rows = Math.floor( (this.canvas.height() - 40) / 15 ) - 1;
+			// console.log( this.canvas.height() );
+			for( var i = 0; i < cols; i++ ) {
+				
+				for( var j = 0; j < rows; j ++ ) {
+					var pt = new Point( 15 + ( i * 15 ), 15 + (j * 15) );
+					var circle = new Path.Circle( pt, 5 );
+					circle.sendToBack();
+					console.log( this.paths[0].path.contains(pt) );
+					circle.fillColor = this.paths[0].path.contains( pt ) ? 'red' : '#acacac';
+					this.dots.push( circle );
+				}
+			}
+*/
+			var self = this;
+			_.each( this.dots, function( dot ) {
+				dot.fillColor = self.paths[0].path.contains( dot.position ) ? 'red' : '#acacac';
+				dot.sendToBack();
+				// console.log(self.paths[0].path.contains( dot.position ));
+			} );
+
 		}
 	};
 
