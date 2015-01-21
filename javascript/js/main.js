@@ -730,6 +730,11 @@ cidocs.Path2d.prototype = {
 		return this.path.bounds;
 	},
 
+	contains: function( pt )
+	{
+		return this.path.contains( pt );
+	},
+
 	drawLineExtra: function( pt1, pt2 )
 	{
 		var l1 = new Path.Line( pt1, pt2 );
@@ -1242,7 +1247,8 @@ cidocs.Path2dSketch.prototype = {
 		var hitResult = this.curPaper.project.hitTest( event.point, this.hitOptions );
 		var active = ( hitResult && _.isBoolean( hitResult.item.active ) ) ? hitResult.item.active : undefined;
 		
-		if( hitResult && active !== false && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
+		// if( hitResult && active !== false && ( hitResult.item.type === 'rectangle' || hitResult.type === "segment" ) ){
+		if( hitResult && active  ){
 			hitResult.item.fullySelected = true;
 		}
 
@@ -1265,7 +1271,8 @@ cidocs.Path2dSketch.prototype = {
 			}*/
 
 			// if (hitResult.item.type === 'rectangle' || hitResult.type === "segment") {
-			if( hitResult.item.active !== false && (hitResult.item.type === 'rectangle' || hitResult.type === "segment") ) {
+			// if( hitResult.item.active !== false && (hitResult.item.type === 'rectangle' || hitResult.type === "segment") ) {
+			if( hitResult.item.active ) {
 				// console.log( "SELECT ME" )
 				this.selectedPoint = hitResult.item;
 			}
@@ -1294,6 +1301,10 @@ cidocs.Path2dSketch.prototype = {
 	drawPreciseBoundingBox: function() {
 		var boundingBox = new cidocs.PreciseBoundingBox( this.paths[0] );
 		this.extras.push( boundingBox );
+	},
+
+	contains: function( pt ) {
+		return this.paths[0].contains( pt );
 	},
 
 	reset: function(){
@@ -1438,7 +1449,7 @@ cidocs.BoundingBox.prototype = {
 		}
 		var bounds = this.path2d.calcBoundingBox();
 		var box = new Path.Rectangle( bounds );
-		box.strokeColor = 'red';
+		box.strokeColor = COLOR_INACTIVE;
 		this.box = box;
 	},
 
@@ -1467,7 +1478,7 @@ cidocs.PreciseBoundingBox.prototype = {
 		}
 		var bounds = this.path2d.calcPreciseBoundingBox();
 		var box = new Path.Rectangle( bounds );
-		box.strokeColor = 'red';
+		box.strokeColor = COLOR_INACTIVE;
 		this.box = box;
 	},
 

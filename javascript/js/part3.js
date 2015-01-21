@@ -125,32 +125,11 @@
 		drawPath: function() {
 			this.superclass.drawPath.call( this );
 
-/*			_.each( this.dots, function( dot ){
-				dot.remove();
-			});
-			this.dots = [];
-
-			// this.curPaper
-			var cols = Math.floor( this.canvas.width() / 15 ) - 1;
-			var rows = Math.floor( (this.canvas.height() - 40) / 15 ) - 1;
-			// console.log( this.canvas.height() );
-			for( var i = 0; i < cols; i++ ) {
-				
-				for( var j = 0; j < rows; j ++ ) {
-					var pt = new Point( 15 + ( i * 15 ), 15 + (j * 15) );
-					var circle = new Path.Circle( pt, 5 );
-					circle.sendToBack();
-					console.log( this.paths[0].path.contains(pt) );
-					circle.fillColor = this.paths[0].path.contains( pt ) ? 'red' : '#acacac';
-					this.dots.push( circle );
-				}
-			}
-*/
 			var self = this;
 			_.each( this.dots, function( dot ) {
-				dot.fillColor = self.paths[0].path.contains( dot.position ) ? 'red' : '#acacac';
+				dot.fillColor = self.contains( dot.position ) ? 'red' : '#acacac';
 				dot.sendToBack();
-				// console.log(self.paths[0].path.contains( dot.position ));
+				console.log(dot);
 			} );
 
 		}
