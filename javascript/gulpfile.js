@@ -1,11 +1,11 @@
 var gulp = require('gulp');
-var stylus = require( 'gulp-stylus' )
-var nib = require( 'nib' )
+var stylus = require( 'gulp-stylus' );
+var nib = require( 'nib' );
 
 gulp.task( 'scripts', function() {
 
 	return gulp.src( 'js/main.js' );
-})
+});
 
 gulp.task( 'styles', function() {
     
@@ -16,14 +16,14 @@ gulp.task( 'styles', function() {
             use: [ nib() ]
         }))
 
-        .pipe( gulp.dest( 'css/' ) )
-})
+        .pipe( gulp.dest( 'css/' ) );
+});
 
 gulp.task( 'watch', [ 'styles' ], function() {
     
-    gulp.watch( 'stylus/*.styl', [ 'styles' ] )
-    gulp.watch('js/**/*.js', ['scripts']);
+    gulp.watch( 'stylus/*.styl', [ 'styles' ] );
+    gulp.watch( 'js/**/*.js', ['scripts'] );
 
-})
+});
 
-gulp.task( 'default', [ 'watch' ] )
+gulp.task( 'default', [ 'watch' ] );

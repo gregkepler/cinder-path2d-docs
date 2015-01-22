@@ -1500,12 +1500,13 @@ cidocs.PreciseBoundingBox.prototype = {
 cidocs.CodeModule = function() {
 
 	this.div = null;
+	this.code = "";
 
-	this.init = function(){
+	this.init = function() {
 		this.div = $( '#output' );
 	};
 
-	this.update = function( path, extras ){
+	this.update = function( path, extras ) {
 
 		var code = "";
 
@@ -1521,10 +1522,20 @@ cidocs.CodeModule = function() {
 			_.each( extras, function( extra ) {
 				code += extra.getCinderCode();
 			} );
-			
 		}
 
-		this.div.html( Prism.highlight( code, Prism.languages.cpp ) );
+		this.code = code;
+
+		console.log("UPDATE");
+		this.div.html( Prism.highlight( this.code, Prism.languages.cpp ) );
+	};
+
+	this.inject = function( str ) {
+
+		this.code += str;
+		console.log("this.code", this.code);
+
+		this.div.html( Prism.highlight( this.code, Prism.languages.cpp ) );
 	};
 
 	this.init();

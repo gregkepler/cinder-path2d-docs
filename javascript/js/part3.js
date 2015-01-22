@@ -104,6 +104,19 @@
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
 			this.updateSketch();
+
+			this.loop = '\n' +
+				'int cols = floor( getWindowWidth() / 15 ) - 1;\n' +
+				'int rows = floor( getWindowHeight() / 15 ) - 1;\n' +
+				'\n' +
+				'for( int i = 0; i < cols; i++ ) {\n' +
+				'	for( int j = 0; j < rows; j ++ ) {\n' +
+				'		vec2 pt( 15.0 + ( i * 15.0 ), 15.0 + ( j * 15.0 ) );\n' +
+				'		Color fillColor = mPath.contains( pt ) ? Color( 1.0, 0.0, 0.0 ) : Color( 0.8, 0.8, 0.8 );\n' +
+				'		gl::color( fillColor );\n' +
+				'		gl::drawSolidCircle( pt, 5 );\n' +
+				'	}\n' +
+				'}\n';				
 		},
 
 		drawInitialPath: function( ) {
@@ -129,10 +142,15 @@
 			_.each( this.dots, function( dot ) {
 				dot.fillColor = self.contains( dot.position ) ? 'red' : '#acacac';
 				dot.sendToBack();
-				console.log(dot);
 			} );
 
+		},
+
+		updateSketch: function() {
+			this.superclass.updateSketch.call( this );
+			this.output.inject( this.loop );
 		}
+
 	};
 
 	cidocs.ContainsSketch.extend( cidocs.Path2dSketch );
