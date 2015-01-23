@@ -75,15 +75,20 @@ if ( !Number.prototype.getDecimals ) {
 	};
 }
 
-function toCiNum( number ) {
+function toCiNum( number, type ) {
+
+	var returnType = type || "string";
+
 	var places = number.getDecimals();
+	var output;
+
 	if( places <= 1 ) {
-		return Number( number.toString().match( /^\d+(?:\.\d{0,1})?/ ) );
-		// return number.toFixed( 1 );
+		output = number.toString().match( /^\d+(?:\.\d{0,1})?/ ).toString() + '.0';		
 	} else {
-		return Number( number.toString().match( /^\d+(?:\.\d{0,2})?/ ) );
-		// return number.toFixed( 2 ); // this here rounds before lopping off everything after the hundredths place
+		output = number.toString().match( /^\d+(?:\.\d{0,2})?/ ).toString();
 	}
+	
+	return ( returnType === "string" ) ? output : Number( output );
 }
 
 function toCiRadians( radians ) {
@@ -167,6 +172,7 @@ cidocs.MoveToSegment = function( path2d, points ){
 cidocs.MoveToSegment.prototype = {
 
 	getCode: function() {
+		console.log("CI NUMBER", toCiNum(0) );
 		return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ) } );
 	}
 	
@@ -281,7 +287,7 @@ cidocs.ArcToSegment.extend( cidocs.Segment );
 cidocs.CloseSegment = function( path2d ){
 
 	cidocs.Segment.call( this, path2d, SEGMENT_TYPES.CLOSE, [] );
-	this.template = _.template( "mPath.close()\n" );
+	this.template = _.template( "mPath.close();\n" );
 };
 
 cidocs.CloseSegment.prototype = {
@@ -1525,8 +1531,6 @@ cidocs.CodeModule = function() {
 		}
 
 		this.code = code;
-
-		console.log("UPDATE");
 		this.div.html( Prism.highlight( this.code, Prism.languages.cpp ) );
 	};
 
