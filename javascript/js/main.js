@@ -85,7 +85,7 @@ function toCiNum( number, type ) {
 	if( places <= 1 ) {
 		output = number.toString().match( /^\d+(?:\.\d{0,1})?/ ).toString() + '.0';		
 	} else {
-		output = number.toString().match( /^\d+(?:\.\d{0,2})?/ ).toString();
+		output = number.toString().match( /^\d+(?:\.\d{0,2})?/ );
 	}
 	
 	return ( returnType === "string" ) ? output : Number( output );

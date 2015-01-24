@@ -143,7 +143,6 @@
 				dot.fillColor = self.contains( dot.position ) ? 'red' : '#acacac';
 				dot.sendToBack();
 			} );
-
 		},
 
 		updateSketch: function() {
@@ -163,6 +162,7 @@
 	cidocs.TransformCopySketch = function( options ) {
 
 		cidocs.Path2dSketch.call( this, options );
+		this.copies = [];
 	};
 
 	cidocs.TransformCopySketch.prototype = {
@@ -177,11 +177,49 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50, 50 ) );
+			path2d.moveTo( new Point( 0, 0 ) );
+			// path2d.lineTo( new Point( 50, 50 ) );
+			path2d.curveTo( new Point( 15.0, 15.0 ), new Point( 35.0, 35.0 ), new Point( 50.0, 50.0 ) );
 			// draw here
 			this.paths.push( path2d );
-			path2d.centerInCanvas( this.canvas );
-		}
+			// path2d.centerInCanvas( this.canvas );
+
+			
+
+
+			// gl::pushMatrices();
+			// gl::translate( new Point( this.canvas.width / 2, this.canvas.height / 2 ) );
+			// for( int i = 0; i < 8; i++ ){
+				// MatrixAffine2<float> affineMtrx;
+				// affineMtrx.scale( 0.25 );
+				// affineMtrx.rotate( ( ( M_PI * 2) / 8 ) * i );
+				// auto pathCopy = path.transformCopy( affineMtrx );
+				// gl::draw( pathCopy );
+			// }
+			// gl::popMatrices();
+		},
+
+		drawPath: function() {
+			this.superclass.drawPath.call( this );
+
+			_.each( this.copies, function( copy ) {
+				copy.remove();
+			} );
+
+			this.copies = [];
+
+			var self = this;
+			var path2d = this.paths[0];
+			for( var i = 0; i < 8; i++ ) {
+				var mtrx = new Matrix();
+				mtrx.translate( new Point( self.canvas.width()/2, self.canvas.height() / 2 ) );
+				mtrx.scale( 1.5 );
+				mtrx.rotate( ( ( 360 ) / 8) * i );
+				var pathCopy = path2d.path.clone();
+				pathCopy.transform( mtrx );
+				self.copies.push(pathCopy);
+			}
+		},
 	};
 
 	cidocs.TransformCopySketch.extend( cidocs.Path2dSketch );
