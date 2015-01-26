@@ -215,9 +215,13 @@
 				mtrx.translate( new Point( self.canvas.width()/2, self.canvas.height() / 2 ) );
 				mtrx.scale( 1.5 );
 				mtrx.rotate( ( ( 360 ) / 8) * i );
-				var pathCopy = path2d.path.clone();
-				pathCopy.transform( mtrx );
-				self.copies.push(pathCopy);
+
+				var path2dCopy = path2d.transformCopyPath( mtrx );
+				self.copies.push( path2dCopy );
+
+				// var pathCopy = path2d.path.clone();
+				// pathCopy.transform( mtrx );
+				// self.copies.push(pathCopy);
 			}
 		},
 	};

@@ -741,6 +741,13 @@ cidocs.Path2d.prototype = {
 		return this.path.contains( pt );
 	},
 
+	/** Returns a copy of the path2d's path, not a path2d copy */
+	transformCopyPath: function( mtrx ){
+		var pathCopy = this.path.clone();
+		pathCopy.transform( mtrx );
+		return pathCopy;
+	},
+
 	drawLineExtra: function( pt1, pt2 )
 	{
 		var l1 = new Path.Line( pt1, pt2 );
