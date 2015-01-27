@@ -1402,7 +1402,8 @@ cidocs.Path2dSketch.prototype = {
 		// add to dat-gui
 		var param1 = ( options && options[0] ) ? options[0] : null;
 		var param2 = ( options && options[1] ) ? options[1] : null;
-		var btn = this.gui.add( this, id, param1, param2 );
+		var param3 = ( options && options[2] ) ? options[2] : 0.1;
+		var btn = this.gui.add( this, id, param1, param2 ).step(param3);
 		btn.name( name );
 		btn.updateDisplay();
 	},

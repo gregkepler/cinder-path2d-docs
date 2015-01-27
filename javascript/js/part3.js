@@ -161,6 +161,9 @@
 
 	cidocs.TransformCopySketch = function( options ) {
 
+		this._scale = 1.0;
+		this._copyAmt = 8;
+
 		cidocs.Path2dSketch.call( this, options );
 		this.copies = [];
 	};
@@ -171,6 +174,9 @@
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
 			this.updateSketch();
+
+			this.addButton( 'scale', 'scale', [0.5, 2.0] );
+			this.addButton( 'copyAmt', 'copies', [2, 15, 1] );
 		},
 
 		drawInitialPath: function( ) {
@@ -210,11 +216,11 @@
 
 			var self = this;
 			var path2d = this.paths[0];
-			for( var i = 0; i < 8; i++ ) {
+			for( var i = 0; i < this._copyAmt; i++ ) {
 				var mtrx = new Matrix();
 				mtrx.translate( new Point( self.canvas.width()/2, self.canvas.height() / 2 ) );
-				mtrx.scale( 1.5 );
-				mtrx.rotate( ( ( 360 ) / 8) * i );
+				mtrx.scale( this.scale );
+				mtrx.rotate( ( ( 360 ) / this._copyAmt) * i );
 				var pathCopy = path2d.path.clone();
 				pathCopy.transform( mtrx );
 				self.copies.push(pathCopy);
@@ -223,6 +229,21 @@
 	};
 
 	cidocs.TransformCopySketch.extend( cidocs.Path2dSketch );
+
+	// getters and setters
+	cidocs.TransformCopySketch.addGetter( 'scale', function(){ return this._scale } );
+	cidocs.TransformCopySketch.addSetter( 'scale', function( val ){ 
+		this._scale = val;
+		this.drawPath();
+		this.updateSketch();
+	});
+
+	cidocs.TransformCopySketch.addGetter( 'copyAmt', function(){ return this._copyAmt } );
+	cidocs.TransformCopySketch.addSetter( 'copyAmt', function( val ){ 
+		this._copyAmt = val;
+		this.drawPath();
+		this.updateSketch();
+	});
 
 
 	// +———————————————————————————————————————+
