@@ -161,6 +161,9 @@
 
 	cidocs.TransformCopySketch = function( options ) {
 
+		this._scale = 1.25;
+		this._copyAmt = 8;
+
 		cidocs.Path2dSketch.call( this, options );
 		this.copies = [];
 	};
@@ -169,8 +172,26 @@
 
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
+
+			this.center = new Point( this.canvas.width()/2, this.canvas.height() / 2 );
+			this.template = _.template('\n'+
+				'gl::pushMatrices();\n' +
+				'for( int i = 0; i < <%- amt %>; i++ ){\n' +
+				'	gl::translate( vec2( <%- transX %>f, <%- transY %>f ) );\n' +
+				'	MatrixAffine2<float> mtrx;\n' +
+				'	mtrx.scale( <%- scale %>f );\n' +
+				'	mtrx.rotate( ( ( M_PI * 2) / <%- amt %> ) * i );\n' +
+				'	auto pathCopy = path.transformCopy( mtrx );\n' +
+				'	gl::draw( pathCopy );\n' +
+				'}\n' +
+				'gl::popMatrices();\n'
+			);
+
 			this.drawInitialPath();
 			this.updateSketch();
+
+			this.addButton( 'scale', 'scale', [0.5, 2.0] );
+			this.addButton( 'copyAmt', 'copies', [2, 15, 1] );
 		},
 
 		drawInitialPath: function( ) {
@@ -185,8 +206,6 @@
 			// path2d.centerInCanvas( this.canvas );
 
 			
-
-
 			// gl::pushMatrices();
 			// gl::translate( new Point( this.canvas.width / 2, this.canvas.height / 2 ) );
 			// for( int i = 0; i < 8; i++ ){
@@ -210,23 +229,42 @@
 
 			var self = this;
 			var path2d = this.paths[0];
-			for( var i = 0; i < 8; i++ ) {
+			for( var i = 0; i < this.copyAmt; i++ ) {
 				var mtrx = new Matrix();
-				mtrx.translate( new Point( self.canvas.width()/2, self.canvas.height() / 2 ) );
-				mtrx.scale( 1.5 );
-				mtrx.rotate( ( ( 360 ) / 8) * i );
-
-				var path2dCopy = path2d.transformCopyPath( mtrx );
-				self.copies.push( path2dCopy );
-
-				// var pathCopy = path2d.path.clone();
-				// pathCopy.transform( mtrx );
-				// self.copies.push(pathCopy);
+				mtrx.translate( this.center );
+				mtrx.scale( this.scale );
+				mtrx.rotate( ( ( 360 ) / this.copyAmt) * i );
+				var pathCopy = path2d.path.clone();
+				pathCopy.transform( mtrx );
+				self.copies.push(pathCopy);
 			}
 		},
+
+		updateSketch: function() {
+			this.superclass.updateSketch.call( this );
+			
+			// generate code
+			var code = this.template( { transX: toCiNum( this.center.x ), transY: toCiNum( this.center.y ), scale: toCiNum( this.scale ), amt: this.copyAmt } );
+			this.output.inject( code );
+		}
 	};
 
 	cidocs.TransformCopySketch.extend( cidocs.Path2dSketch );
+
+	// getters and setters
+	cidocs.TransformCopySketch.addGetter( 'scale', function(){ return this._scale } );
+	cidocs.TransformCopySketch.addSetter( 'scale', function( val ){ 
+		this._scale = val;
+		this.drawPath();
+		this.updateSketch();
+	});
+
+	cidocs.TransformCopySketch.addGetter( 'copyAmt', function(){ return this._copyAmt } );
+	cidocs.TransformCopySketch.addSetter( 'copyAmt', function( val ){ 
+		this._copyAmt = val;
+		this.drawPath();
+		this.updateSketch();
+	});
 
 
 	// +———————————————————————————————————————+

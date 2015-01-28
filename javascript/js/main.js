@@ -82,11 +82,17 @@ function toCiNum( number, type ) {
 	var places = number.getDecimals();
 	var output;
 
-	if( places <= 1 ) {
-		output = number.toString().match( /^\d+(?:\.\d{0,1})?/ ).toString() + '.0';		
-	} else {
-		output = number.toString().match( /^\d+(?:\.\d{0,2})?/ );
+	output = number.toString().match( /^-?\d*\.?(?:\d{0,1})?/ ).toString();
+	
+	// add a decimal point if one isn't present
+	if( output.indexOf('.') < 1 ){
+		output += '.'
 	}
+		
+	// add a zero if a decimal is there with nothing after it
+	if( output.split('.')[1].length < 1 ) {
+		output += '0';
+	} 
 	
 	return ( returnType === "string" ) ? output : Number( output );
 }
@@ -1409,7 +1415,8 @@ cidocs.Path2dSketch.prototype = {
 		// add to dat-gui
 		var param1 = ( options && options[0] ) ? options[0] : null;
 		var param2 = ( options && options[1] ) ? options[1] : null;
-		var btn = this.gui.add( this, id, param1, param2 );
+		var param3 = ( options && options[2] ) ? options[2] : 0.05;
+		var btn = this.gui.add( this, id, param1, param2 ).step(param3);
 		btn.name( name );
 		btn.updateDisplay();
 	},
@@ -1449,7 +1456,6 @@ cidocs.Path2dSketch.prototype = {
 
 cidocs.BoundingBox = function( path2d ) {
 	this.path2d = path2d;
-	this.template = "";
 	this.box = null;
 	this.template = _.template( "gl::drawStrokedRect( mPath.calcBoundingBox() );" );
 };
