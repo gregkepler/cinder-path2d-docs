@@ -1413,10 +1413,16 @@ cidocs.Path2dSketch.prototype = {
 		var exists = _.find( $('.canvasButtons .right button'), function( button ) { return button.id === id;  } );
 
 		// add to dat-gui
-		var param1 = ( options && options[0] ) ? options[0] : null;
-		var param2 = ( options && options[1] ) ? options[1] : null;
-		var param3 = ( options && options[2] ) ? options[2] : 0.05;
-		var btn = this.gui.add( this, id, param1, param2 ).step(param3);
+		// var rangeMin = ( options && options.min ) options || null;
+		// var rangeMax = options.max || null;
+		// var step = options.step || 0.05;
+
+		var rangeMin 	= ( options && options.min ) ? options.min : null;
+		var rangeMax 	= ( options && options.max ) ? options.max : null;
+		var step 		= ( options && options.step ) ? options.step : null;
+		var btn 		= this.gui.add( this, id, rangeMin, rangeMax );
+		if( step ) btn.step(step);
+		
 		btn.name( name );
 		btn.updateDisplay();
 	},

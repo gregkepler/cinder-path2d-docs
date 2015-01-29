@@ -132,7 +132,7 @@
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
 
-			this.addButton( 'radius', "radius", [5, 150] );
+			this.addButton( 'radius', "radius", {min:5, max:150} );
 			this.addButton( 'reverseArc', "Reverse Arc" );
 
 			// $(this.paths[0]).on( "change_radius", function() {
@@ -200,7 +200,7 @@
 
 			this.superclass.initialize.call( this, options );
 			this.drawInitialPath();
-			this.addButton( 'radius', 'radius', [1, 100] );
+			this.addButton( 'radius', 'radius', {min:1, max:100} );
 		},
 
 		drawInitialPath: function( ) {

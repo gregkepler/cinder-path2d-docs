@@ -181,7 +181,7 @@
 				'	MatrixAffine2<float> mtrx;\n' +
 				'	mtrx.scale( <%- scale %>f );\n' +
 				'	mtrx.rotate( ( ( M_PI * 2) / <%- amt %> ) * i );\n' +
-				'	auto pathCopy = path.transformCopy( mtrx );\n' +
+				'	auto pathCopy = mPath.transformCopy( mtrx );\n' +
 				'	gl::draw( pathCopy );\n' +
 				'}\n' +
 				'gl::popMatrices();\n'
@@ -190,8 +190,8 @@
 			this.drawInitialPath();
 			this.updateSketch();
 
-			this.addButton( 'scale', 'scale', [0.5, 2.0] );
-			this.addButton( 'copyAmt', 'copies', [2, 15, 1] );
+			this.addButton( 'scale', 'scale', {min:0.5, max:2.0} );
+			this.addButton( 'copyAmt', 'copies', {min:2, max:15, step:1} );
 		},
 
 		drawInitialPath: function( ) {
@@ -199,23 +199,8 @@
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
 			path2d.moveTo( new Point( 0, 0 ) );
-			// path2d.lineTo( new Point( 50, 50 ) );
 			path2d.curveTo( new Point( 15.0, 15.0 ), new Point( 35.0, 35.0 ), new Point( 50.0, 50.0 ) );
-			// draw here
 			this.paths.push( path2d );
-			// path2d.centerInCanvas( this.canvas );
-
-			
-			// gl::pushMatrices();
-			// gl::translate( new Point( this.canvas.width / 2, this.canvas.height / 2 ) );
-			// for( int i = 0; i < 8; i++ ){
-				// MatrixAffine2<float> affineMtrx;
-				// affineMtrx.scale( 0.25 );
-				// affineMtrx.rotate( ( ( M_PI * 2) / 8 ) * i );
-				// auto pathCopy = path.transformCopy( affineMtrx );
-				// gl::draw( pathCopy );
-			// }
-			// gl::popMatrices();
 		},
 
 		drawPath: function() {
@@ -252,14 +237,14 @@
 	cidocs.TransformCopySketch.extend( cidocs.Path2dSketch );
 
 	// getters and setters
-	cidocs.TransformCopySketch.addGetter( 'scale', function(){ return this._scale } );
+	cidocs.TransformCopySketch.addGetter( 'scale', function(){ return this._scale; } );
 	cidocs.TransformCopySketch.addSetter( 'scale', function( val ){ 
 		this._scale = val;
 		this.drawPath();
 		this.updateSketch();
 	});
 
-	cidocs.TransformCopySketch.addGetter( 'copyAmt', function(){ return this._copyAmt } );
+	cidocs.TransformCopySketch.addGetter( 'copyAmt', function(){ return this._copyAmt; } );
 	cidocs.TransformCopySketch.addSetter( 'copyAmt', function( val ){ 
 		this._copyAmt = val;
 		this.drawPath();
