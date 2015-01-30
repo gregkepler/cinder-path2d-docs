@@ -221,7 +221,7 @@
 				mtrx.rotate( ( ( 360 ) / this.copyAmt) * i );
 				var pathCopy = path2d.path.clone();
 				pathCopy.transform( mtrx );
-				self.copies.push(pathCopy);
+				self.copies.push( pathCopy );
 			}
 		},
 
@@ -258,7 +258,9 @@
 
 	cidocs.SubdivideSketch = function( options ) {
 
+		this._scale = 0.1;
 		cidocs.Path2dSketch.call( this, options );
+		this.subs = [];
 	};
 
 	cidocs.SubdivideSketch.prototype = {
@@ -273,14 +275,50 @@
 			
 			// draw the initial path
 			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50, 50 ) );
+			path2d.moveTo( new Point( 100, 100 ) );
+			path2d.curveTo( new Point( 100, 0 ), new Point( -50, 75 ), new Point( 25, 150 ) );
+			path2d.curveTo( new Point( 100, 225 ), new Point( -50, 300 ), new Point( -50, 200 ) );
+
+			// shange to sideways mustache
+			
 			// draw here
 			this.paths.push( path2d );
 			path2d.centerInCanvas( this.canvas );
-		}
+
+			this.addButton( 'scale', 'scale', {min:0.01, max:1.0, step:0.01} );
+		},
+
+		drawPath: function() {
+			this.superclass.drawPath.call( this );
+
+			_.each( this.subs, function( sub ) {
+				sub.remove();
+			} );
+
+			this.subs = [];
+
+			var path2d = this.paths[0];
+			var subPoints = path2d.subdivide( this.scale );
+
+			_.each( subPoints, function( pt ){
+				var circle = new Path.Circle( pt, 5 );
+				circle.sendToBack();
+				circle.fillColor = '#acacac';
+				this.subs.push( circle );
+			}, this );
+
+			
+		},
 	};
 
 	cidocs.SubdivideSketch.extend( cidocs.Path2dSketch );
+
+	cidocs.SubdivideSketch.addGetter( 'scale', function(){ return this._scale; } );
+	cidocs.SubdivideSketch.addSetter( 'scale', function( val ){ 
+		this._scale = val;
+		this.drawPath();
+		this.updateSketch();
+	});
 
 
 	// +———————————————————————————————————————+

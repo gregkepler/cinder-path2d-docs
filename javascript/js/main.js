@@ -17,14 +17,16 @@ var COLOR_INACTIVE	= '#999999';
 
 
 var SEGMENT_TYPES = Object.freeze( {
-	"MOVETO": 1,
-	"LINETO": 2,
-	"QUADTO": 3,
-	"CUBICTO": 4,
+	"MOVETO": 0,
+	"LINETO": 1,
+	"QUADTO": 2,
+	"CUBICTO": 3,
+	"CLOSE": 4,
 	"ARC": 5,
-	"ARCTO": 6,
-	"CLOSE": 7
+	"ARCTO": 6
 } );
+
+var SEGMENT_POINT_COUNTS = [0, 1, 2, 3, 0 ];
 
 
 //
@@ -117,6 +119,9 @@ function toCiRadians( radians ) {
 	return displayRadians;
 }
 
+function distance2( p1, p2 ) {
+	return p1.getDistance( p2, true );
+}
 
 
 // +———————————————————————————————————————+
@@ -731,6 +736,237 @@ cidocs.Path2d.prototype = {
 
 		this.drawPointText.call( this, [p1, t] );
 	},
+
+	/** SUBDIVIDE */
+/*
+	void subdivideQuadratic( float distanceToleranceSqr, const vec2 &p1, const vec2 &p2, const vec2 &p3, int level, vector<vec2> *resultPositions, vector<vec2> *resultTangents )
+{
+	const int recursionLimit = 17;
+	const float collinearEpsilon = 0.0000001f;
+	
+	if( level > recursionLimit ) 
+		return;
+
+	vec2 p12 = ( p1 + p2 ) * 0.5f;
+	vec2 p23 = ( p2 + p3 ) * 0.5f;
+	vec2 p123 = ( p12 + p23 ) * 0.5f;
+
+	float dx = p3.x - p1.x;
+	float dy = p3.y - p1.y;
+	float d = math<float>::abs(((p2.x - p3.x) * dy - (p2.y - p3.y) * dx));
+
+	if( d > collinearEpsilon ) { 
+		if( d * d <= distanceToleranceSqr * (dx*dx + dy*dy) ) {
+			resultPositions->emplace_back( p123 );
+			if( resultTangents )
+				resultTangents->emplace_back( p3 - p1 );
+			return;
+		}
+	}
+	else { // Collinear case
+		float da = dx * dx + dy * dy;
+		if( da == 0 ) {
+			d = distance2( p1, p2 );
+		}
+		else {
+			d = ((p2.x - p1.x)*dx + (p2.y - p1.y)*dy) / da;
+			if( d > 0 && d < 1 ) {
+				// Simple collinear case, 1---2---3 - We can leave just two endpoints
+				return;
+			}
+			
+			if(d <= 0)
+				d = distance2( p2, p1 );
+			else if(d >= 1)
+				d = distance2( p2, p3 );
+			else
+				d = distance2( p2, vec2( p1.x + d * dx, p1.y + d * dy ) );
+		}
+		if( d < distanceToleranceSqr ) {
+			resultPositions->emplace_back( p2 );
+			if( resultTangents )
+				resultTangents->emplace_back( p3 - p1 );
+			return;
+		}
+	}
+
+	// Continue subdivision
+	subdivideQuadratic( distanceToleranceSqr, p1, p12, p123, level + 1, resultPositions, resultTangents );
+	subdivideQuadratic( distanceToleranceSqr, p123, p23, p3, level + 1, resultPositions, resultTangents );
+}*/
+
+	// This technique is due to Maxim Shemanarev but removes his tangent error estimates
+	subdivideCubic: function( distanceToleranceSqr, p1, p2, p3, p4, level, resultPositions, resultTangents ) {
+		var recursionLimit = 17;
+		var collinearEpsilon = 0.0000001;
+		
+		if( level > recursionLimit ) 
+			return;
+		
+		// Calculate all the mid-points of the line segments
+		//----------------------
+
+		var p12 = ( p1.add( p2 ) ).multiply( 0.5 );
+		var p23 = ( p2.add( p3 ) ).multiply( 0.5 );
+		var p34 = ( p3.add( p4 ) ).multiply( 0.5 );
+		var p123 = ( p12.add( p23 ) ).multiply( 0.5 );
+		var p234 = ( p23.add( p34 ) ).multiply( 0.5 );
+		var p1234 = ( p123.add( p234 ) ).multiply( 0.5 );
+
+
+		// Try to approximate the full cubic curve by a single straight line
+		//------------------
+		var dx = p4.x - p1.x;
+		var dy = p4.y - p1.y;
+
+		var d2 = Math.abs(((p2.x - p4.x) * dy - (p2.y - p4.y) * dx));
+		var d3 = Math.abs(((p3.x - p4.x) * dy - (p3.y - p4.y) * dx));
+		var k, da1, da2;
+
+		var collinear = ( (+(d2 > collinearEpsilon)) << 1) + (+(d3 > collinearEpsilon));
+		switch( collinear ) {
+
+			case 0:
+				// All collinear OR p1==p4
+				k = dx*dx + dy*dy;
+				if( k == 0 ) {
+					d2 = distance2( p1, p2 );
+					d3 = distance2( p4, p3 );
+				}
+				else {
+					k   = 1 / k;
+					da1 = p2.x - p1.x;
+					da2 = p2.y - p1.y;
+					d2  = k * ( da1 * dx + da2 * dy );
+					da1 = p3.x - p1.x;
+					da2 = p3.y - p1.y;
+					d3  = k * ( da1 * dx + da2 * dy );
+					if( d2 > 0 && d2 < 1 && d3 > 0 && d3 < 1 ) {
+						// Simple collinear case, 1---2---3---4
+						// We can leave just two endpoints
+						return;
+					}
+						 if(d2 <= 0) d2 = distance2( p2, p1 );
+					else if(d2 >= 1) d2 = distance2( p2, p4 );
+					else             d2 = distance2( p2, new Point( p1.x + d2*dx, p1.y + d2*dy ) );
+
+						 if(d3 <= 0) d3 = distance2( p3, p1 );
+					else if(d3 >= 1) d3 = distance2( p3, p4 );
+					else             d3 = distance2( p3, new Point( p1.x + d3*dx, p1.y + d3*dy ) );
+				}
+				if(d2 > d3) {
+					if( d2 < distanceToleranceSqr ) {
+						resultPositions.push( p2 );
+						if( resultTangents )
+							resultTangents.push( p3.subtract( p1 ) );
+						return;
+					}
+				}
+				else {
+					if( d3 < distanceToleranceSqr ) {
+						resultPositions.push( p3 );
+						if( resultTangents )
+							resultTangents.push( p4.subtract( p2 ) );
+						return;
+					}
+				}
+			break;
+			case 1:
+				// p1,p2,p4 are collinear, p3 is significant
+				if( d3 * d3 <= distanceToleranceSqr * ( dx*dx + dy*dy ) ) {
+					resultPositions.push( p23 );
+					if( resultTangents )
+						resultTangents.push( p3.subtract( p2 ) );
+					return;
+				}
+			break;
+			case 2:
+				// p1,p3,p4 are collinear, p2 is significant
+				if( d2 * d2 <= distanceToleranceSqr * ( dx*dx + dy*dy ) ) {
+					resultPositions.push( p23 );
+					if( resultTangents )
+						resultTangents.push( p3.subtract( p2 ) );
+					return;
+				}
+			break;
+			case 3: 
+				// Regular case
+				if( (d2 + d3)*(d2 + d3) <= distanceToleranceSqr * ( dx*dx + dy*dy ) ) {
+					resultPositions.push( p23 );
+					if( resultTangents )
+						resultTangents.push( p3.subtract( p2 ) );
+					return;
+				}
+			break;
+		}
+
+		// Continue subdivision
+		this.subdivideCubic( distanceToleranceSqr, p1, p12, p123, p1234, level + 1, resultPositions, resultTangents );
+		this.subdivideCubic( distanceToleranceSqr, p1234, p234, p34, p4, level + 1, resultPositions, resultTangents );
+	},
+
+	
+	subdivide: function( approximationScale ) {
+		if( ! this.segs.length )
+			return;
+
+		var resultPositions = [];
+		var resultTangents = [];
+		var distanceToleranceSqr = 0.5 / approximationScale;
+		distanceToleranceSqr *= distanceToleranceSqr;
+		
+		var firstPoint = 0;
+		resultPositions.push( this.points[0].position );
+		if( resultTangents )
+			resultTangents.push( this.points[1].position.subtract( this.points[0].position ) );
+
+		for( var s = 1; s < this.segs.length; ++s ) {
+			switch( this.segs[s].type ) {
+				case SEGMENT_TYPES.CUBICTO:
+					resultPositions.push( this.points[firstPoint].position );
+					if( resultTangents )
+						resultTangents.push( this.points[firstPoint+1].position - this.points[firstPoint].position );
+					this.subdivideCubic( distanceToleranceSqr, this.points[firstPoint].position, this.points[firstPoint+1].position, this.points[firstPoint+2].position, this.points[firstPoint+3].position, 0, resultPositions, resultTangents );
+					resultPositions.push( this.points[firstPoint+3].position );
+					if( resultTangents )
+					 	resultTangents.push( this.points[firstPoint+3].position - this.points[firstPoint+2].position );
+				break;
+				case SEGMENT_TYPES.QUADTO:
+					// resultPositions->emplace_back( mPoints[firstPoint] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[firstPoint+1] - mPoints[firstPoint] );
+					// subdivideQuadratic( distanceToleranceSqr, mPoints[firstPoint], mPoints[firstPoint+1], mPoints[firstPoint+2], 0, resultPositions, resultTangents );
+					// resultPositions->emplace_back( mPoints[firstPoint+2] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[firstPoint+2] - mPoints[firstPoint+1] );
+				break;
+				case SEGMENT_TYPES.LINETO:
+					// resultPositions->emplace_back( mPoints[firstPoint] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[firstPoint+1] - mPoints[firstPoint] );
+					// resultPositions->emplace_back( mPoints[firstPoint+1] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[firstPoint+1] - mPoints[firstPoint] );
+				break;
+				case SEGMENT_TYPES.CLOSE:
+					// resultPositions->emplace_back( mPoints[firstPoint] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[0] - mPoints[firstPoint] );
+					// resultPositions->emplace_back( mPoints[0] );
+					// if( resultTangents )
+					// 	resultTangents->emplace_back( mPoints[0] - mPoints[firstPoint] );
+				break;
+				default:
+					throw "Unexpected segment type: " + this.segs[s].type;
+			}
+			
+			firstPoint += SEGMENT_POINT_COUNTS[this.segs[s].type];
+		}
+
+
+		return resultPositions;
+	},
+
 
 	calcBoundingBox: function()
 	{
@@ -1422,7 +1658,7 @@ cidocs.Path2dSketch.prototype = {
 		var step 		= ( options && options.step ) ? options.step : null;
 		var btn 		= this.gui.add( this, id, rangeMin, rangeMax );
 		if( step ) btn.step(step);
-		
+
 		btn.name( name );
 		btn.updateDisplay();
 	},
