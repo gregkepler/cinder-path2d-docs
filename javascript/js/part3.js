@@ -267,6 +267,14 @@
 
 		initialize: function( options ) {
 			this.superclass.initialize.call( this, options );
+
+			this.template = _.template('\n' + 
+			'auto subdivided = mPath.subdivide( <%- scale %>f );\n' + 
+			'for( auto d : subdivided ) {\n' +
+			'	gl::color( ColorA( 0, 0, 0, 0.4 ) );\n' +
+			'	gl::drawSolidCircle( d, 5.0 );\n' +
+			'};');
+
 			this.drawInitialPath();
 			this.updateSketch();
 		},
@@ -306,9 +314,17 @@
 				circle.fillColor = '#acacac';
 				this.subs.push( circle );
 			}, this );
-
-			
 		},
+
+		updateSketch: function() {
+			this.superclass.updateSketch.call( this );
+			
+			// generate code
+			this.output.prepend( 'gl::enableAlphaBlending();\n' + 
+				'gl::color( 0, 0, 0 );\n\n');
+			var code = this.template( { scale: toCiNum( this.scale ) } );
+			this.output.inject( code );
+		}
 	};
 
 	cidocs.SubdivideSketch.extend( cidocs.Path2dSketch );

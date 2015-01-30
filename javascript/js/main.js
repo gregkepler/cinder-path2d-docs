@@ -1792,10 +1792,14 @@ cidocs.CodeModule = function() {
 	this.inject = function( str ) {
 
 		this.code += str;
-		console.log("this.code", this.code);
-
 		this.div.html( Prism.highlight( this.code, Prism.languages.cpp ) );
 	};
+
+	this.prepend = function( str ) {
+
+		this.code = str + this.code;
+		this.div.html( Prism.highlight( this.code, Prism.languages.cpp ) );
+	}
 
 	this.init();
 };
