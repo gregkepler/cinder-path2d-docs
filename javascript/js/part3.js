@@ -337,35 +337,6 @@
 	});
 
 
-	// +———————————————————————————————————————+
-	//	CalcCacheSketch
-	// +———————————————————————————————————————+	
-
-	cidocs.CalcCacheSketch = function( options ) {
-
-		cidocs.Path2dSketch.call( this, options );
-	};
-
-	cidocs.CalcCacheSketch.prototype = {
-
-		initialize: function( options ) {
-			this.superclass.initialize.call( this, options );
-			this.drawInitialPath();
-			this.updateSketch();
-		},
-
-		drawInitialPath: function( ) {
-			
-			// draw the initial path
-			var path2d = new cidocs.Path2d( this.curPaper );
-			path2d.moveTo( new Point( 50, 50 ) );
-			// draw here
-			this.paths.push( path2d );
-			path2d.centerInCanvas( this.canvas );
-		}
-	};
-
-	cidocs.CalcCacheSketch.extend( cidocs.Path2dSketch );
 
 	// +———————————————————————————————————————+
 	//	Main App
@@ -387,8 +358,7 @@
 			var containsSketch		= new cidocs.ContainsSketch( { canvas:'#contains', name:'contains', output:this.codeModule } );
 			var transformCopySketch	= new cidocs.TransformCopySketch( { canvas:'#transformcopy', name:'transformcopy', output:this.codeModule } );
 			var subdivideSketch		= new cidocs.SubdivideSketch( { canvas:'#subdivide', name:'subdivide', output:this.codeModule } );
-			var calcCacheSketch		= new cidocs.CalcCacheSketch( { canvas:'#calccache', name:'calccache', output:this.codeModule } );
-			this.sketches.push( calcBoundsSketch, calcPreciseSketch, containsSketch, transformCopySketch, subdivideSketch, calcCacheSketch );
+			this.sketches.push( calcBoundsSketch, calcPreciseSketch, containsSketch, transformCopySketch, subdivideSketch );
 			
 			this.superclass.init.call( this );
 		}
