@@ -5,27 +5,6 @@
                 <script type="text/javascript" src="../bower_components/paper/dist/paper-full.min.js"></script>
                 <script type="text/javascript" src="../bower_components/underscore/underscore-min.js"></script>
                 <script src="../js/main.js"></script>
+                <script src="../js/clipboard.js"></script>
                 
-                <script>
-                    $(document).ready(function(){
-
-                        
-                        $('a#copy-button').zclip( {
-                            path: 'js/vendor/ZeroClipboard.swf',
-                            copy: function(){ 
-                                console.log( "COPY", $( 'code#output' ).text() );
-                                var output = $( 'code#output' ).text();
-                                return output;
-                            },
-                            beforeCopy: function(){
-                                console.log( "BEFORE COPY" );
-                                return "";
-                            },
-                            afterCopy: function(){
-                               console.log( "COPIED", $( 'code#output' ).text() );
-                               return "";
-                            }                           
-                        });
-
-                    });
-                </script>
+                

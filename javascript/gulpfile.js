@@ -6,6 +6,8 @@ var uglify 			= require( 'gulp-uglify' );
 var notify 			= require( 'gulp-notify' );
 var fileinclude 	= require( 'gulp-file-include' );
 var useref 			= require( 'gulp-useref' );
+var clean			= require( 'gulp-clean' );
+var Filter 			= require( 'gulp-filter');
 
 gulp.task( 'wrap', function() {
 	
@@ -47,36 +49,50 @@ gulp.task( 'wrap', function() {
 
 gulp.task( 'styles', function() {
     
-    return gulp.src( [ 'stylus/*.styl'] )
+    var filter = Filter('**/*.styl');
 
+    return gulp.src( [ 
+    	'./stylus/*.styl',
+    	'./css/prism.css'
+    	] )
+
+    	.pipe(filter)
         .pipe( stylus({
             import: [ 'nib' ],
             use: [ nib() ]
         }))
-        // .pipe( concat('css/prism.css') )
+        .pipe(filter.restore())
+        .pipe(concat('path2d.css'))
         .pipe( gulp.dest( 'build' ) );
 });
 
 gulp.task( 'copy', function() {
 	return gulp.src( [
 		'js/ZeroClipboard.swf',
-		'html/index.html',
-		'css/prism.css'
+		'html/index.html'
+		// 'css/prism.css'
 		] )
 		.pipe(gulp.dest('build'));
 })
+
+gulp.task('clean', function () {
+
+  return gulp.src('build/*.*', {read: false})
+    .pipe(clean());
+});
 
 gulp.task( 'watch', [ 'styles' ], function() {
     
     gulp.watch( 'stylus/*.styl', [ 'styles' ] );
     // gulp.watch( 'js/**/*.js', ['scripts'] );
-    gulp.watch( 'html/**/*.html', ['wrap'] );
+    gulp.watch( ['html/**/*.html', 'js/**/*.js'], ['wrap'] );
 
 });
 
 gulp.task( 'default', [ 'watch' ] );
 
 gulp.task( 'build', [
+	'clean',
 	'styles', 
 	// 'scripts', 
 	'copy', 
