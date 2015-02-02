@@ -1,0 +1,44 @@
+                @@include('./partials/header.html')
+                <h1>Part 3: Advanced Functions</h1>
+                <p>Advanced functions blah blah blah</p>
+                <ul>
+                    <li><strong>calcBoundBox()</strong>: Calculates the bounding box of the path.</li>
+                    <li><strong>calcPreciseBoundBox()</strong>: Calculates the bounding box of the path.</li>
+                    <li><strong>contains()</strong>: Determines if a given point is within the area of the path.</li>
+                    <li><strong>transformCopy()</strong>: Returns a copy of the path with the specified matrix applied.</li>
+                    <li><strong>subdivide()</strong>: Returns an array of points subdividing the path's curves based on the given tolerance.</li>
+                </ul>
+                
+                <div id="tutorial">
+                    <ul id="sketchLinks"></ul>
+                    <div class="canvases">
+                        <canvas id="calcbounds"     data-name="calcBoundBox" class="active" width="500" height="300"></canvas>
+                        <canvas id="calcprecise"    data-name="calcPreciseBoundBox" width="500" height="300"></canvas>
+                        <canvas id="contains"       data-name="contains" width="500" height="300"></canvas>
+                        <canvas id="transformcopy"  data-name="transformCopy" width="500" height="300"></canvas>
+                        <canvas id="subdivide"      data-name="subdivide" width="500" height="300"></canvas>
+
+                        <div class="canvasButtons">
+                            <div class="left">
+                                <button id="handle-toggle" >Toggle Handles</button>
+                            </div>
+                            <div class="right">
+                                <button id="reset" >Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="codeModule">
+                        <pre><code id="output" class="language-cpp"></code></pre>
+                        <a id="copy-button" href="#">copy to clipboard</a>
+                    </div>
+                </div>
+
+                <div id="bottomNav">
+                    &laquo; <a href="part2.html">Part 2: Path2d Functions</a>
+                </div>
+                
+                <!-- build:js path2dpart3.js -->
+                @@include('./partials/scripts.html')
+                <script src="../js/part3.js"></script>
+                 <!-- endbuild -->
+                @@include('./partials/footer.html')
