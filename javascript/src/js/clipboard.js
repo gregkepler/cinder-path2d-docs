@@ -3,7 +3,7 @@ $(document).ready(function(){
 
     
     $('a#copy-button').zclip( {
-        path: '../js/ZeroClipboard.swf',
+        path: 'ZeroClipboard.swf',
         copy: function(){ 
             console.log( "COPY", $( 'code#output' ).text() );
             var output = $( 'code#output' ).text();

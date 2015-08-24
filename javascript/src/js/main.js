@@ -183,7 +183,7 @@ cidocs.MoveToSegment = function( path2d, points ){
 cidocs.MoveToSegment.prototype = {
 
 	getCode: function() {
-		console.log("CI NUMBER", toCiNum(0) );
+		// console.log("CI NUMBER", toCiNum(0) );
 		return this.template( { pointX: toCiNum( this.points[0].position.x ), pointY: toCiNum( this.points[0].position.y ) } );
 	}
 	

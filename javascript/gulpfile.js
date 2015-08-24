@@ -14,9 +14,12 @@ gulp.task( 'wrap', function() {
 	var assets = useref.assets();
 
 	return gulp.src( [
-		'html/part1.html',
-		'html/part2.html',
-		'html/part3.html'
+		'src/part1.html',
+		'src/part2.html',
+		'src/part3.html',
+		'src/tut_part1.html',
+		'src/tut_part2.html',
+		'src/tut_part3.html'
 		])
 		.pipe( fileinclude({
 			prefix: '@@'
@@ -53,7 +56,7 @@ gulp.task( 'styles', function() {
 
     return gulp.src( [ 
     	'./stylus/*.styl',
-    	'./css/prism.css'
+    	'src/css/prism.css'
     	] )
 
     	.pipe(filter)
@@ -62,16 +65,17 @@ gulp.task( 'styles', function() {
             use: [ nib() ]
         }))
         .pipe(filter.restore())
-        .pipe(concat('path2d.css'))
+        // .pipe(concat('path2d.css'))
         .pipe( gulp.dest( 'build' ) );
 });
 
 gulp.task( 'copy', function() {
 	return gulp.src( [
-		'js/ZeroClipboard.swf',
-		'html/index.html'
-		// 'css/prism.css'
-		] )
+		'src/ZeroClipboard.swf',
+		'src/index.html',
+		'src/js/iframeResizer.min.js',
+		'src/js/iframeResizer.contentWindow.min.js'
+		])
 		.pipe(gulp.dest('build'));
 })
 
@@ -85,11 +89,11 @@ gulp.task( 'watch', [ 'styles' ], function() {
     
     gulp.watch( 'stylus/*.styl', [ 'styles' ] );
     // gulp.watch( 'js/**/*.js', ['scripts'] );
-    gulp.watch( ['html/**/*.html', 'js/**/*.js'], ['wrap'] );
+    gulp.watch( ['src/**/*.html', 'src/js/**/*.js'], ['wrap'] );
 
 });
 
-gulp.task( 'default', [ 'watch' ] );
+gulp.task( 'default', [ 'clean', 'watch', 'copy' ] );
 
 gulp.task( 'build', [
 	'clean',

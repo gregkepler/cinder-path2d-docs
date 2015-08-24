@@ -1,147 +1,168 @@
-cinder-orange = #c64b24
+cinder-red = #a41c12
 
 body
-	font-size: 16px
-	font-family: 'Merriweather', serif;
+	padding: 0
+	margin: 0
+	font-size: 14px;
 
-p, ul, a
-	font-size: .9em
-	line-height: 1.8em
+a 
+	color: cinder-red
+	font-family: 'Open Sans', sans-serif
+	text-decoration: none
+	
+	&:hover
+		text-decoration: underline
 
-a
-	color: cinder-orange
+iframe
+	margin: 20px 0
+	border: 0
 
-	&#copy-button
-		color: #cccccc
-		text-decoration: none
-		font-size: 0.8em
-		
-		&.hover
-			text-decoration: underline
+.path2d
 
-
-.content
-
-	max-width: 680px
+	width: 800px
 	margin: 0 auto
 
 
-ul#sketchLinks
+	ul#sketchLinks
 
-	list-style: none
-	padding: 0
-	background: #232323
-	height: 100%
-	margin: 0
+		list-style: none
+		padding: 0
+		background: #232323
+		height: auto
+		margin: 0
+		text-indent: 0
 
-	li
-		display: inline-block
-		padding: 0 12px
-
-	a
-		color: #e7e7e7
-		font-family: 'Open Sans', sans-serif
-		text-decoration: none
-		padding: 10px 0
-
-		&:hover
-			color: #ffffff
-
-		&.active
-			border-bottom: .4em solid #c64b24
-
-
-
-.canvases
-	position: relative
-
-	.left
-		position: absolute;
-		left: 10px
-		bottom: 10px
-
-	.right
-		position: absolute;
-		right: 10px
-		bottom: 10px
-
-pre[class*="language-"]
-	margin: 0
-
-canvas
-	
-	width: 100%
-	height: 340px
-	outline: #f5f2f0 solid 1px
-
-
-
-.active
-	display: block
+		li
+			display: inline-block
+			padding: 0 12px
+			margin: 0
 		
-.invisible, .inactive
-	
-	display: none
+			&:before
+				content: none
+
+		a
+			color: #e7e7e7
+			font-family: 'Open Sans', sans-serif
+			text-decoration: none
+			padding: 10px 0
+
+			&:hover
+				color: #ffffff
+
+			&.active
+				border-bottom: .4em solid cinder-red
 
 
-button
-	
-	padding: 1em
 
-h1
-	font-family: 'Open Sans', sans-serif
-	color: #333333
-	font-size: 2.25em
+	.canvases
+		position: relative
 
-#tutorial
-	margin-top: 3em
+		.left
+			position: absolute;
+			left: 10px
+			bottom: 10px
+
+		.right
+			position: absolute;
+			right: 10px
+			bottom: 10px
+
+	pre[class*="language-"]
+		margin: 0
+
+	canvas
+		
+		width: 100%
+		height: 340px
+		outline: #f5f2f0 solid 1px
+
+
+	.active
+		display: block
+			
+	.invisible, .inactive
+		
+		display: none
+
 
 	button
-		background: none
-		border: 1px solid #c64b24
-		color: #c64b24
-		text-transform: uppercase
-		font-family: 'Open Sans', sans-serif
-		padding: .75em 1.5em
-
-		&:hover
-			background: #c64b24
-			color: #fff
 		
-		&:focus
-			outline: none
+		padding: 1em
+
+
+	#tutorial
+		// margin-top: 3em
+		// max-width: 640px
+		// margin: 20px auto
+
+		button
+			background: none
+			border: 1px solid cinder-red
+			color: cinder-red
+			text-transform: uppercase
+			font-family: 'Open Sans', sans-serif
+			font-size: .75em
+			padding: .75em 1.5em
+			margin: 0
+			cursor: pointer
+
+			&:hover
+				background: cinder-red
+				color: #fff
 			
-	.dg.main
-		position: absolute
-		top: 0;
-		right: 10px;
+			&:focus
+				outline: none
+				
+		.dg.main
+			position: absolute
+			top: 0;
+			right: 10px;
 
-.codeModule
-	position: relative
-	font-size: .75em
-	line-height: 1.5em
-	
-	a#copy-button
-		position: absolute
-		top: 5px
-		right: 10px
+	.codeModule
+		position: relative
+		// font-size: .75em
+		line-height: 1.5em
+		
+		a#copy-button
+			position: absolute
+			top: 5px
+			right: 10px
 
-pre.language-cpp
-	background: #f4f4f2
+	// pre.language-cpp
+	// 	background: #f4f4f2
 
-	.function
-		color: #c64b24
+	// 	.function
+	// 		color: #c64b24
 
-	.number
-		color: #c62469
+	// 	.number
+	// 		color: #c62469
 
-
+		
+	.sketch
+		line-height: 0
 
 #bottomNav
 	margin: 20px 0
 	text-align: center
+
+
+/* Fixes for dat-gui */
+.dg input[type=text]
+	font-size: inherit !important
+	height: 100% !important
+	box-sizing: content-box !important
 	
-.sketch
-	line-height: 0
-
-
+.dg
+	ul 
+		margin: 0 !important
+		text-indent: 0 !important
+		
+		> li:before
+			content: none !important
+			
+.dg
+	button
+		background: none
+		display: block
+		padding: 0
+		

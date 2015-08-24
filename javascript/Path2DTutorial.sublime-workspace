@@ -4,12 +4,52 @@
 		"selected_items":
 		[
 			[
-				"cur",
-				"curPaper"
+				"result",
+				"resultPositions"
+			],
+			[
+				"po",
+				"position"
+			],
+			[
+				"getD",
+				"getDecimals"
+			],
+			[
+				"se",
+				"segs"
+			],
+			[
+				"subdiv",
+				"subdivide"
+			],
+			[
+				"res",
+				"resultTangents"
+			],
+			[
+				"path2d",
+				"path2dCopy"
+			],
+			[
+				"trna",
+				"transform"
+			],
+			[
+				"Path",
+				"Path2d"
 			],
 			[
 				"bound",
-				"boundingBoxEnabled"
+				"boundingBox"
+			],
+			[
+				"drawBou",
+				"drawBoundingBox"
+			],
+			[
+				"cur",
+				"curPaper"
 			],
 			[
 				"proto",
@@ -474,53 +514,16 @@
 			[
 				"visi",
 				"visible"
-			],
-			[
-				"vis",
-				"visible"
-			],
-			[
-				"client",
-				"clientHeight"
-			],
-			[
-				"androidCon",
-				"androidContainer"
-			],
-			[
-				"removeCh",
-				"removeChild"
-			],
-			[
-				"addC",
-				"addCallback"
-			],
-			[
-				"androidCo",
-				"androidCont"
-			],
-			[
-				"cot",
-				"container"
-			],
-			[
-				"androidCont",
-				"androidContainers"
-			],
-			[
-				"androidId",
-				"androidIdPool"
-			],
-			[
-				"global",
-				"globalPos"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
+			"contents": "<!DOCTYPE html>\n<html class=\"no-js\">\n    <head>\n        <meta charset=\"utf-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n        <title></title>\n        <meta name=\"description\" content=\"\">\n        <meta name=\"viewport\" content=\"width=device-width\">\n            \n        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>\n        <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>\n        <link rel=\"stylesheet\" href=\"css/prism.css\">\n        <link rel=\"stylesheet\" href=\"css/main.css\">\n        <link rel=\"stylesheet\" href=\"css/path2d.css\">\n\n        <!--[if lt IE 9]>\n            <script src=\"//html5shiv.googlecode.com/svn/trunk/html5.js\"></script>\n            <script>window.html5 || document.write('<script src=\"js/vendor/html5shiv.js\"><\\/script>')</script>\n        <![endif]-->\n    </head>\n    <body>\n        <!--[if lt IE 7]>\n            <p class=\"chromeframe\">You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> or <a href=\"http://www.google.com/chromeframe/?redirect=true\">activate Google Chrome Frame</a> to improve your experience.</p>\n        <![endif]-->\n        <div class=\"content\">\n                <h1>Part 1: Path2D Basics</h1>\n                <p>A Path2D instance is constructed of points and segments.</p>\n                <p>A point refers to points where a line segment connects starts and ends as well as handles that define the curve of the path.</p>\n                <p>A segment refers to the line segment as defined by the points and handles. The types of segments are MOVETO, LINETO, QUADTO, and CUBICTO and CLOSE. Every path must start with a MOVETO segment.</p>\n                \n                <div class=\"tutorial\">\n                    <ul id=\"sketchLinks\"></ul>\n                    <div class=\"canvases\">\n                        <canvas id=\"lineto\" data-name=\"LINETO\" class=\"active\" width=\"500\" height=\"300\"></canvas>\n                        <canvas id=\"quadto\" data-name=\"QUADTO\" width=\"500\" height=\"300\"></canvas>\n                        <canvas id=\"cubicto\" data-name=\"CUBICTO\" width=\"500\" height=\"300\"></canvas>\n                        <canvas id=\"combined\" width=\"500\" data-name=\"Combined\" height=\"300\"></canvas>\n\n                        <button id=\"handle-toggle\" >Toggle Handles</button>\n                        <button id=\"reset\" >Reset</button>\n                    </div>\n                    <pre><code id=\"output\" class=\"language-cpp\"></code></pre>\n                </div>\n        \n                <!--<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js\"></script>-->\n                <script>window.jQuery || document.write('<script src=\"js/vendor/jquery-1.10.1.min.js\"><\\/script>')</script>\n        \n                <script type=\"text/javascript\" src=\"js/prism.js\"></script>\n                <script type=\"text/javascript\" src=\"bower_components/paper/dist/paper-full.min.js\"></script>\n                <script type=\"text/javascript\" src=\"bower_components/underscore/underscore-min.js\"></script>\n                <script type=\"text/javascript\" src=\"js/consolelog.js\"></script>\n                <!--<script type=\"text/javascript\" src=\"node_modules/consolelog.js\"></script>-->\n                <script src=\"js/main.js\"></script>\n            </div>\n    </body>\n</html>\n",
 			"file": "path2d.html",
+			"file_size": -1,
+			"file_write_time": -1,
 			"settings":
 			{
 				"buffer_size": 3410,
@@ -531,23 +534,7 @@
 			"file": "part3.html",
 			"settings":
 			{
-				"buffer_size": 5686,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/part3.js",
-			"settings":
-			{
-				"buffer_size": 6969,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/part2.js",
-			"settings":
-			{
-				"buffer_size": 8282,
+				"buffer_size": 5454,
 				"line_ending": "Unix"
 			}
 		},
@@ -555,7 +542,94 @@
 			"file": "js/main.js",
 			"settings":
 			{
-				"buffer_size": 38950,
+				"buffer_size": 49247,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/part3.js",
+			"settings":
+			{
+				"buffer_size": 11352,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/part2.js",
+			"settings":
+			{
+				"buffer_size": 8308,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/part1.js",
+			"settings":
+			{
+				"buffer_size": 5262,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/clipboard.js",
+			"settings":
+			{
+				"buffer_size": 573,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "html/part3.html",
+			"settings":
+			{
+				"buffer_size": 2826,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "part2.html",
+			"settings":
+			{
+				"buffer_size": 7350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "build/part2.html",
+			"settings":
+			{
+				"buffer_size": 4981,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "html/part1.html",
+			"settings":
+			{
+				"buffer_size": 3168,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "html/part2.html",
+			"settings":
+			{
+				"buffer_size": 3927,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "gulpfile.js",
+			"settings":
+			{
+				"buffer_size": 2196,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,15 +637,20 @@
 			"file": "part1.html",
 			"settings":
 			{
-				"buffer_size": 6733,
+				"buffer_size": 6532,
 				"line_ending": "Unix"
 			}
 		}
 	],
 	"build_system": "Packages/JSHint/JSHint.sublime-build",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 392.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -705,11 +784,11 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript",
-		"/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript/js"
+		"/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript"
 	],
 	"file_history":
 	[
+		"/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript/gulpfile.js",
 		"/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript/index.html",
 		"/Users/gkepler/Downloads/0059_Tropicana/_160x600/0059_trop_bounce_160x600_v4.swf",
 		"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments/js/shaders/KaleidoShader.js",
@@ -836,8 +915,7 @@
 		"/Users/gkepler/Documents/Work/Google/androidify/androidify-times-square/prototypes/game-display/script/app/game/jetpack/view/floor.js",
 		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/prototypes/subway-backgroud/index.html",
 		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-jetpacks/index.html",
-		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/assets/submission.json",
-		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/assets/heroes.json"
+		"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-subway/assets/submission.json"
 	],
 	"find":
 	{
@@ -845,9 +923,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
+			"js/vendor",
 			"/Users/gkepler/Documents/Work/TBG/SummerSeries/summer-series-experiments",
 			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc",
 			"/Users/gkepler/Documents/Work/Google/androidify/androidify-ugc/tsq-photo-grid",
@@ -907,6 +986,50 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"subdivide",
+			"Calc",
+			"Path",
+			"subdivideCubic",
+			"distance2",
+			"subdivideCubic",
+			"sSegmentTypePointCounts",
+			"subdivide",
+			"co",
+			"addButton",
+			"addBtn",
+			"gui",
+			"bower_components",
+			"ciNum",
+			"toCiNum",
+			"toCiNu",
+			"extras =",
+			"extras",
+			"toCiNum",
+			"toCiNum( ",
+			"toCiNum",
+			"cinder",
+			"update(",
+			"update",
+			"CodeModule",
+			"console",
+			"tool",
+			"calcBound",
+			"ContainsSketch",
+			"Path",
+			"ContainsSketch",
+			"BoundingBox",
+			"drawPath:",
+			"drawPath",
+			"extras =",
+			"updateSketch",
+			"movePoint",
+			"this.drawPath",
+			"drawPath",
+			"movePoint",
+			"drag",
+			"updatePath",
+			"BoundingBox",
+			"drawBoundingBox",
 			"getCinderPath",
 			"updateSketch",
 			"updatePath",
@@ -990,51 +1113,7 @@
 			"ALREAD",
 			"5000",
 			"sleep",
-			"Androidsburg",
-			"gallery",
-			"FALLBACK_GALLERY",
-			"ugc",
-			"API_BASE",
-			"BASE",
-			"APPSPOT",
-			"appspot",
-			"gweb",
-			"minLength",
-			"PHOTO_PRELOAD_COUNT",
-			"shuffle",
-			"street",
-			"location",
-			"LABEL_POSITIONS",
-			"Label",
-			".jpg",
-			"LABEL_POSITIONS",
-			"Label",
-			"heroAndroid",
-			"Label",
-			"\\",
-			"Label",
-			"heroAndroid",
-			"androidHeight",
-			"height:",
-			"height=",
-			"view.height",
-			"HERO_SCALE",
-			"share_id",
-			"DEFAULT_DATA",
-			"share_id",
-			"share_d",
-			"timeline",
-			"galleryReady",
-			"TOTAL_ITEMS",
-			"LONG_WAIT_TIME",
-			"snapshot",
-			"spanshot",
-			"snapshot",
-			"androidify.com",
-			"snapshot",
-			"No charIds in snapshot array",
-			"snapshot",
-			"galleryFrame"
+			"Androidsburg"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1042,6 +1121,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"js/vendor",
+			"updateSketch",
 			"getCinderCode",
 			"updateSketch",
 			"HolidayCollagePlay",
@@ -1175,7 +1256,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 13,
 			"sheets":
 			[
 				{
@@ -1294,7 +1375,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -1303,15 +1384,398 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5686,
+						"buffer_size": 5454,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2263,
-								2274
+								2003,
+								2003
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 248.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 49247,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								22801,
+								22818
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 11720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "js/part3.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11352,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10090,
+								10090
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4808.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/part2.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8308,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3537,
+								3546
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1586.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/part1.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5262,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2896,
+								2990
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "js/clipboard.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								84,
+								84
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "html/part3.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2826,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								432,
+								432
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/Users/gkepler/Documents/CodeDepot/C++/path2d/javascript/html/partials",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "part2.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1525,
+								3256
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 116.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "build/part2.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4981,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "html/part1.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3168,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								536,
+								1355
 							]
 						],
 						"settings":
@@ -1328,196 +1792,78 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "js/part3.js",
+					"buffer": 12,
+					"file": "html/part2.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6969,
+						"buffer_size": 3927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1145,
-								1160
+								2558,
+								2558
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 123.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "js/part2.js",
-					"semi_transient": false,
+					"buffer": 13,
+					"file": "gulpfile.js",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 8282,
+						"buffer_size": 2196,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1724,
+								1750
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "js/main.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 38950,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								37056,
-								37056
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110.0
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2.0,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 20957.0,
+						"translation.y": 491.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 14,
 					"file": "part1.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6733,
+						"buffer_size": 6532,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2561,
-								2561
+								4827,
+								4827
 							]
 						],
 						"settings":
@@ -1616,10 +1962,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 476.0,
+						"translation.y": 671.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -1627,7 +1973,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -1668,6 +2014,7 @@
 	{
 		"height": 129.0
 	},
+	"pinned_build_system": "",
 	"project": "Path2DTutorial.sublime-project",
 	"replace":
 	{
@@ -1677,6 +2024,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -1985,6 +2333,7 @@
 	"select_project":
 	{
 		"height": 500.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1993,6 +2342,7 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
