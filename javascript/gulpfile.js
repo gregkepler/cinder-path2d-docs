@@ -77,7 +77,7 @@ gulp.task( 'copy', function() {
 		'src/js/iframeResizer.contentWindow.min.js'
 		])
 		.pipe(gulp.dest('build'));
-})
+});
 
 gulp.task('clean', function () {
 
@@ -97,7 +97,7 @@ gulp.task( 'default', [ 'clean', 'watch', 'copy' ] );
 
 gulp.task( 'build', [
 	'clean',
+	'copy',
 	'styles', 
 	// 'scripts', 
-	'copy', 
 	'wrap'] );
